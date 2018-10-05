@@ -20,7 +20,7 @@ def webhook():
 
 	return "ok", 200
 
-if data['name'] == 'Geaux Sheaux' and data['text'] == 'my':
+if data['text'] == 'my':
 	msg = 'here is your score GS...'
 	send_message(msg)
 
