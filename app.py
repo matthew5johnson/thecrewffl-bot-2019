@@ -23,7 +23,7 @@ def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 
 	data = {
-			'bot_id' : 
+			'bot_id' : 'eca4646a2e4f736ab96eefa29e', 
 			'text' : msg
 			}
 
