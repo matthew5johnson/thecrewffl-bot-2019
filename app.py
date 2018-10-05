@@ -18,12 +18,12 @@ def webhook():
 	# 	msg = 'hello world: user: {} data: {}'.format(data['name'], data['text'])
 	# 	send_message(msg)
 
+	if data['text'] == 'my':
+		msg = 'here is your games score'
+		send_message(msg)
+
+
 	return "ok", 200
-
-if data['text'] == 'my':
-	msg = 'here is your score GS...'
-	send_message(msg)
-
 
 
 def send_message(msg):
