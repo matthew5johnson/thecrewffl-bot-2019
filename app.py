@@ -30,9 +30,6 @@ def sendmessage(msg):
 	request = Request(url, urlencode(data).encode())
 	json = urlopen(request).read().decode()
 
-if __name__ == '__main__':
-	app.run()
-
 
 # import os
 # import json
