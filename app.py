@@ -24,7 +24,9 @@ def webhook():
 		#chrome_options.binary_location = GOOGLE_CHROME_BIN
 		# chrome_options.add_argument('--disable-gpu')
 		# chrome_options.add_argument('--no-sandbox')
-		driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, binary_location=GOOGLE_CHROME_BIN, add_argument='--no-sandbox', headless=True)
+		CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
+		GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
+		driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, binary_location=GOOGLE_CHROME_BIN, headless=True)
 		driver.get(url)
 		html = driver.page_source
 
