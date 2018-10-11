@@ -50,7 +50,7 @@ def webhook():
 
 def send_message(points):
 	url = 'https://api.groupme.com/v3/bots/'
-	data = {'text': 'remaining: {}'.format(msg), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
+	data = {'text': 'remaining: {}'.format(points), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
 	request = Request(url, urlencode(data).encode())
 	json = urlopen(request).read().decode()
 
