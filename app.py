@@ -20,12 +20,12 @@ def webhook():
 		season = 2018
 		week = 6
 		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
-		chrome_options = Options()
-		chrome_options.binary_location = GOOGLE_CHROME_BIN
-		chrome_options.add_argument('--disable-gpu')
-		chrome_options.add_argument('--no-sandbox')
-		driver = webdriver.Chrome(executable_path = CHROMEDRIVER_PATH, chrome_options=chrome_options)
-		driver.get(scoreboard_url)
+		#chrome_options = Options()
+		#chrome_options.binary_location = GOOGLE_CHROME_BIN
+		# chrome_options.add_argument('--disable-gpu')
+		# chrome_options.add_argument('--no-sandbox')
+		driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, binary_location=GOOGLE_CHROME_BIN, add_argument='--disable-gpu', add_argument='--no-sandbox', add_argument='--headless')
+		driver.get(url)
 		html = driver.page_source
 
 		soup = BeautifulSoup(html, "lxml")
@@ -36,12 +36,12 @@ def webhook():
 		send_message(points)
 
 
-		ytp = '#team_ytp_%s' % (team)
-		pts = '#tmTotalPts_%s' % (team)
-		proj = '#team_liveproj_%s' % (team)
+		# ytp = '#team_ytp_%s' % (team)
+		# pts = '#tmTotalPts_%s' % (team)
+		# proj = '#team_liveproj_%s' % (team)
 		
 		
-		send_message(points)
+		# send_message(points)
 
 
 	return "ok", 200
