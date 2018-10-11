@@ -5,7 +5,10 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from flask import Flask, request
-from requests_html import HTMLSession
+
+from bs4 import BeautifulSoup
+from selenium import webdriver
+import selenium.webdriver.chrome.service as service
 
 app = Flask(__name__)
 
@@ -17,23 +20,33 @@ def webhook():
 		season = 2018
 		week = 6
 		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
-		session = HTMLSession()
-		r = session.get(url)
-		r.html.render()
+		chrome_options = Options()
+		chrome_options.binary_location = GOOGLE_CHROME_BIN
+		chrome_options.add_argument('--disable-gpu')
+		chrome_options.add_argument('--no-sandbox')
+		driver = webdriver.Chrome(executable_path = CHROMEDRIVER_PATH, chrome_options=chrome_options)
+		driver.get(scoreboard_url)
+		html = driver.page_source
+
+		soup = BeautifulSoup(html, "lxml")
+
+		points = soup.select_one('#tmTotalPts_1').text
+
+
+		send_message(points)
+
+
 		ytp = '#team_ytp_%s' % (team)
 		pts = '#tmTotalPts_%s' % (team)
 		proj = '#team_liveproj_%s' % (team)
-		for tag in r.html.find(ytp):
-			players_remaining = tag.text
-
-		msg = players_remaining
 		
-		send_message(msg)
+		
+		send_message(points)
 
 
 	return "ok", 200
 
-def send_message(msg):
+def send_message(points):
 	url = 'https://api.groupme.com/v3/bots/'
 	data = {'text': 'remaining: {}'.format(msg), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
 	request = Request(url, urlencode(data).encode())
