@@ -17,7 +17,7 @@ app = Flask(__name__)
 def webhook():
 	data = request.get_json()
 	if data['text'] == 'test':
-		team = 1
+		team = 6
 		season = 2018
 		week = 6
 		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
