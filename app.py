@@ -35,11 +35,15 @@ def webhook():
 
 		soup = BeautifulSoup(html, "lxml")
 
+		franchise = 'Kfish'
+		ytp = '#team_ytp_%s' % (team)
 		pts = '#tmTotalPts_%s' % team
+		proj = '#team_liveproj_%s' % (team)
 		points = soup.select_one(pts).text
-		# points = 'this is how we do it'
+		
 
-		sys.stdout.write('these are the points HERE: {} <<< '.format(points))
+		# Puts this message into heroku logs (live updates with heroku logs --tail)
+		sys.stdout.write('[[{}]] {}, proj: {} | yet to play: {}'.format(points, franchise, proj, ytp))
 		# send_message(points)
 
 
