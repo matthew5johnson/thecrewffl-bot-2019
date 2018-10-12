@@ -47,29 +47,13 @@ def webhook():
 		points = soup.select_one(pts).text
 		projected = soup.select_one(proj).text
 
-		
-
 		# Puts this message into heroku logs (live updates with heroku logs --tail)
 		sys.stdout.write('{} - {} | (proj: {})'.format(franchise, points, projected))
 		
 		msg = '{} - {} | (proj: {})'.format(franchise, points, projected) 
-		# send_message(points)
 		send_message(msg)
 
-		# ytp = '#team_ytp_%s' % (team)
-		# pts = '#tmTotalPts_%s' % (team)
-		# proj = '#team_liveproj_%s' % (team)
-		
-		
-		# send_message(points)
-
-
 	return "ok", 200
-
-# def post_message(msg):
-# 	url = 'https://api.groupme.com/v3/bots/'
-# 	message = {'text': msg, 'bot_id': "eca4646a2e4f736ab96eefa29e"}
-# 	r = requests.post(url, data=message)
 
 
 def send_message(msg):
@@ -77,23 +61,12 @@ def send_message(msg):
 	message = {
 		'text': msg,
 		'bot_id': "eca4646a2e4f736ab96eefa29e"
+		'avatar_url': 'http://thecrewffl.weebly.com/uploads/5/1/9/0/51900477/the-dunk_orig.png'
 		}
-	
-	# request = Request(url, urlencode(data).encode())
-	# json = urlopen(request).read().decode()
 	json = requests.post(url, message)
 
 	sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 
-
-# def second_message(msg):
-# 	url = 'https://api.groupme.com/v3/bots/'
-# 	data = {'text': 'hey now {}'.format(msg), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
-# 	request = Request(url, urlencode(data).encode())
-# 	json = urlopen(request).read().decode()
-
-# requests-html==0.2.2
-# urllib3==1.23
 
 
 if __name__ == '__main__':
