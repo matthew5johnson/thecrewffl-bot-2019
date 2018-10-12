@@ -2,8 +2,10 @@ import os
 import json
 import sys
 
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
+# from urllib.parse import urlencode
+# from urllib.request import Request, urlopen
+import requests
+
 
 from flask import Flask, request
 
@@ -39,13 +41,19 @@ def webhook():
 		ytp = '#team_ytp_%s' % (team)
 		pts = '#tmTotalPts_%s' % team
 		proj = '#team_liveproj_%s' % (team)
+		
+		players_remaining = soup.select_one(ytp).text
 		points = soup.select_one(pts).text
+		projected = soup.select_one(proj).text
+
 		
 
 		# Puts this message into heroku logs (live updates with heroku logs --tail)
-		sys.stdout.write('[[{}]] {}, proj: {} | yet to play: {}'.format(points, franchise, proj, ytp))
+		sys.stdout.write('{} - {}  (proj: {}) | yet to play: {}'.format(franchise, points, projected, players_remaining))
+		
+		msg = '{} - {}  (proj: {}) | yet to play: {}'.format(franchise, points, projected, players_remaining) 
 		# send_message(points)
-
+		post_message(msg)
 
 		# ytp = '#team_ytp_%s' % (team)
 		# pts = '#tmTotalPts_%s' % (team)
@@ -57,6 +65,12 @@ def webhook():
 
 	return "ok", 200
 
+def post_message(msg):
+	url = 'https://api.groupme.com/v3/bots/'
+	data = {'text': msg, 'bot_id': "eca4646a2e4f736ab96eefa29e"}
+ 	r = requests.post(url, data)
+
+
 # def send_message(points):
 # 	url = 'https://api.groupme.com/v3/bots/'
 # 	data = {'text': 'remaining: {}'.format(points), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
@@ -67,6 +81,10 @@ def webhook():
 # 	data = {'text': 'hey now {}'.format(msg), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
 # 	request = Request(url, urlencode(data).encode())
 # 	json = urlopen(request).read().decode()
+
+# requests-html==0.2.2
+# urllib3==1.23
+
 
 if __name__ == '__main__':
 	app.run()
