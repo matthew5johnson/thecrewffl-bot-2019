@@ -33,7 +33,8 @@ def webhook():
 
 		soup = BeautifulSoup(html, "lxml")
 
-		points = soup.select_one('#tmTotalPts_1').text
+		pts = '#tmTotalPts_%s' % team
+		points = soup.select_one(pts).text
 		# points = 'this is how we do it'
 
 		return(points)
