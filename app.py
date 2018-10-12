@@ -36,12 +36,8 @@ def webhook():
 		points = soup.select_one('#tmTotalPts_1').text
 		# points = 'this is how we do it'
 
-
-		send_message(points)
-
-	else:
-		msg = 'insert message here'
-		second_message(msg)
+		return(points)
+		# send_message(points)
 
 
 		# ytp = '#team_ytp_%s' % (team)
@@ -54,18 +50,18 @@ def webhook():
 
 	return "ok", 200
 
-def send_message(points):
-	url = 'https://api.groupme.com/v3/bots/'
-	data = {'text': 'remaining: {}'.format(points), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
-	request = Request(url, urlencode(data).encode())
-	json = urlopen(request).read().decode()
-def second_message(msg):
-	url = 'https://api.groupme.com/v3/bots/'
-	data = {'text': 'hey now {}'.format(msg), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
-	request = Request(url, urlencode(data).encode())
-	json = urlopen(request).read().decode()
+# def send_message(points):
+# 	url = 'https://api.groupme.com/v3/bots/'
+# 	data = {'text': 'remaining: {}'.format(points), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
+# 	request = Request(url, urlencode(data).encode())
+# 	json = urlopen(request).read().decode()
+# def second_message(msg):
+# 	url = 'https://api.groupme.com/v3/bots/'
+# 	data = {'text': 'hey now {}'.format(msg), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
+# 	request = Request(url, urlencode(data).encode())
+# 	json = urlopen(request).read().decode()
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run()
 
 
