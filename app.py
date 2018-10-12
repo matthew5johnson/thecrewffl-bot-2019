@@ -2,9 +2,10 @@ import os
 import json
 import sys
 
-from urllib.parse import urlencode
-from urllib.request import Request, urlopen
+# from urllib.parse import urlencode
+# from urllib.request import Request, urlopen
 
+import requests
 
 
 from flask import Flask, request

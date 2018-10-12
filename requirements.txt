@@ -2,5 +2,4 @@ Flask==1.0.2
 gunicorn==19.9.0
 selenium==3.14.0
 bs4==0.0.1
-requests-html==0.2.2
-urllib3==1.23
+requests==2.19.1
