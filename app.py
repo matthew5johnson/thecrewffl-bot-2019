@@ -49,11 +49,11 @@ def webhook():
 		
 
 		# Puts this message into heroku logs (live updates with heroku logs --tail)
-		sys.stdout.write('{} - {}  (proj: {}) | yet to play: {}'.format(franchise, points, projected, players_remaining))
+		sys.stdout.write('[[ {} - {} ]]  (proj: {})'.format(franchise, points, projected))
 		
-		msg = '{} - {}  (proj: {}) | yet to play: {}'.format(franchise, points, projected, players_remaining) 
+		msg = '[[ {} - {} ]] | (proj: {})'.format(franchise, points, projected) 
 		# send_message(points)
-		post_message(msg)
+		send_message(msg)
 
 		# ytp = '#team_ytp_%s' % (team)
 		# pts = '#tmTotalPts_%s' % (team)
