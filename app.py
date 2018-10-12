@@ -28,6 +28,7 @@ def webhook():
 		chrome_options.binary_location = GOOGLE_CHROME_BIN
 		chrome_options.add_argument('--disable-gpu')
 		chrome_options.add_argument('--no-sandbox')
+		chrome_options.add_argument('--headless')
 		driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
 		driver.get(url)
 		html = driver.page_source
@@ -38,7 +39,7 @@ def webhook():
 		points = soup.select_one(pts).text
 		# points = 'this is how we do it'
 
-		sys.stdout.write('this is the message HERE')
+		sys.stdout.write('these are the points HERE: {} <<< '.format(points))
 		# send_message(points)
 
 
