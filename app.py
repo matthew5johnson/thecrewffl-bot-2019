@@ -60,7 +60,7 @@ def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
 		'text': msg,
-		'bot_id': "eca4646a2e4f736ab96eefa29e"
+		'bot_id': "eca4646a2e4f736ab96eefa29e",
 		'avatar_url': 'http://thecrewffl.weebly.com/uploads/5/1/9/0/51900477/the-dunk_orig.png'
 		}
 	json = requests.post(url, message)
