@@ -16,7 +16,8 @@ app = Flask(__name__)
 def webhook():
 	data = request.get_json()
 	if '@bot' in data['text']:
-		parse(data)
+		#parse(data)
+		sys.stdout.write(data)
 
 def parse(data):
 	matchup_a = [11,9]
