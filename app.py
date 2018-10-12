@@ -49,9 +49,9 @@ def webhook():
 		
 
 		# Puts this message into heroku logs (live updates with heroku logs --tail)
-		sys.stdout.write('[[ {} - {} ]]  (proj: {})'.format(franchise, points, projected))
+		sys.stdout.write('{} - {} | (proj: {})'.format(franchise, points, projected))
 		
-		msg = '[[ {} - {} ]] | (proj: {})'.format(franchise, points, projected) 
+		msg = '{} - {} | (proj: {})'.format(franchise, points, projected) 
 		# send_message(points)
 		send_message(msg)
 
@@ -72,12 +72,17 @@ def webhook():
 
 
 def send_message(msg):
-	url = 'https://api.groupme.com/v3/bots/'
-	data = {'text': msg, 'bot_id': "eca4646a2e4f736ab96eefa29e"}
+	url = 'https://api.groupme.com/v3/bots/post'
+	data = {
+		'text': msg,
+		'bot_id': "eca4646a2e4f736ab96eefa29e"
+		}
+	
 	request = Request(url, urlencode(data).encode())
 	json = urlopen(request).read().decode()
 
 	sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
+
 
 # def second_message(msg):
 # 	url = 'https://api.groupme.com/v3/bots/'
