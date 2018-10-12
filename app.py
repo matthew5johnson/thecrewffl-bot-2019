@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
@@ -37,7 +38,7 @@ def webhook():
 		points = soup.select_one(pts).text
 		# points = 'this is how we do it'
 
-		stdout.write(points)
+		sys.stdout.write(points)
 		# send_message(points)
 
 
