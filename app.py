@@ -2,8 +2,8 @@ import os
 import json
 import sys
 
-# from urllib.parse import urlencode
-# from urllib.request import Request, urlopen
+from urllib.parse import urlencode
+from urllib.request import Request, urlopen
 import requests
 
 
@@ -65,17 +65,20 @@ def webhook():
 
 	return "ok", 200
 
-def post_message(msg):
-	url = 'https://api.groupme.com/v3/bots/'
-	message = {'text': msg, 'bot_id': "eca4646a2e4f736ab96eefa29e"}
-	r = requests.post(url, data=message)
-
-
-# def send_message(points):
+# def post_message(msg):
 # 	url = 'https://api.groupme.com/v3/bots/'
-# 	data = {'text': 'remaining: {}'.format(points), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
-# 	request = Request(url, urlencode(data).encode())
-# 	json = urlopen(request).read().decode()
+# 	message = {'text': msg, 'bot_id': "eca4646a2e4f736ab96eefa29e"}
+# 	r = requests.post(url, data=message)
+
+
+def send_message(msg):
+	url = 'https://api.groupme.com/v3/bots/'
+	data = {'text': msg, 'bot_id': "eca4646a2e4f736ab96eefa29e"}
+	request = Request(url, urlencode(data).encode())
+	json = urlopen(request).read().decode()
+
+	sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
+
 # def second_message(msg):
 # 	url = 'https://api.groupme.com/v3/bots/'
 # 	data = {'text': 'hey now {}'.format(msg), 'bot_id': "eca4646a2e4f736ab96eefa29e"}
