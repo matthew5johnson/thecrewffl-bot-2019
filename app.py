@@ -22,7 +22,7 @@ def parse(data):
 	matchup_a = [11,9]
 	matchup_b = [6, 8]
 
-	if re.search('my', str(data), re.I) and re.search('score', str(data), re.I):
+	if re.search('my', data['text'], re.I) and re.search('score', data['text'], re.I):
 		franchise = franchise_identifier(data['nickname'])
 		get_data(franchise)
 
