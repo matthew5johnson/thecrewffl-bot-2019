@@ -38,7 +38,7 @@ def webhook():
 		points = soup.select_one(pts).text
 		# points = 'this is how we do it'
 
-		sys.stdout.write(points)
+		sys.stdout.write('this is the message HERE')
 		# send_message(points)
 
 
