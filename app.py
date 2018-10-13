@@ -58,7 +58,7 @@ def get_data(franchise):
 	# proj = '#team_liveproj_%s' % (team)
 	
 	# This gives a list of franchise numbers in the order that they're matched up
-	# plug = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
+	plug = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
 	# matchup_A = [1, 2]
 	# matchup_B = [8, 6]
 	# matchup_C = [7, 3]
@@ -109,6 +109,7 @@ def get_data(franchise):
 
 	if franchise == matchup_A[0] or franchise == matchup_A[1]:
 		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_A[0]), score_A_tm_1, proj_A_tm_1, name_identifier(matchup_A[1]), score_A_tm_2, proj_A_tm_2)
+		sys.stdout.write(message)	
 	elif franchise == matchup_B[0] or franchise == matchup_B[1]:
 		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_B[0]), score_B_tm_1, proj_B_tm_1, name_identifier(matchup_B[1]), score_B_tm_2, proj_B_tm_2)
 	elif franchise == matchup_C[0] or franchise == matchup_C[1]:
@@ -121,7 +122,6 @@ def get_data(franchise):
 		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_F[0]), score_F_tm_1, proj_F_tm_1, name_identifier(matchup_F[1]), score_F_tm_2, proj_F_tm_2)
 
 
-	sys.stdout.write(message)
 
 
 	# sys.stdout.write('matchup A: {} <<<'.format(matchup_A))
