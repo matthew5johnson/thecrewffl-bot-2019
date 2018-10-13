@@ -25,6 +25,7 @@ def webhook():
 		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
 		return('ok',200)
+	else: return('not related',200)
 
 def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
@@ -72,7 +73,6 @@ def get_data(franchise):
 
 	# Puts this message into heroku logs (live updates with heroku logs --tail)
 	# sys.stdout.write('{} - {} | (proj: {})'.format(franchise, points, projected))
-	sys.stdout.write('points: {} <<<'.format(points[0]))
 	sys.stdout.write('points: {} <<<'.format(points[1]))
 	sys.stdout.write('points: {} <<<'.format(points[2]))
 	sys.stdout.write('points: {} <<<'.format(points[3]))
