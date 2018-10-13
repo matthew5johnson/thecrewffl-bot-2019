@@ -24,14 +24,14 @@ def webhook():
 		text = data['text']
 		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
-		return('ok', 200)
-	else: return('none')
+		return('ok',200)
 
 def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = franchise_identifier(sender)
 		sys.stdout.write('franchise: {}'.format(franchise))
 		get_data(franchise)
+		return('ok',200)
 
 
 def get_data(franchise):
@@ -62,7 +62,9 @@ def get_data(franchise):
 	for i in plug:
 		points = points.append(soup.select_one(i).text)
 
-
+	string_form = 'nothing'
+	for x in points:
+		string_form = '{}, {}'.format(string_form, stringpoints[x])
 
 	# players_remaining = soup.select_one(ytp).text
 	# points = soup.select_one(pts).text
@@ -70,12 +72,12 @@ def get_data(franchise):
 
 	# Puts this message into heroku logs (live updates with heroku logs --tail)
 	# sys.stdout.write('{} - {} | (proj: {})'.format(franchise, points, projected))
-	sys.stdout.write(points)
+	sys.stdout.write(string_form)
 
 	# msg = '{} - {} | (proj: {})'.format(franchise, points, projected) 
 	# send_message(points)
 
-	return "ok", 200
+	return('ok',200)
 
 
 def send_message(msg):
