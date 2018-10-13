@@ -66,7 +66,7 @@ def get_data(franchise):
 	# matchup_E = [4, 10]
 	# matchup_F = [11, 9] # Comment this matchup out for week 14
 
-	sys.stdout.write('first team: {}, second: {} <<< '.format(plug[0], plug[1]))
+	sys.stdout.write('first team: {}, second: {} <<< '.format(plug[2], plug[3]))
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
 	# 	points_A1 = soup.select_one('tmTotalPts_%s' % matchup_A[0]).text
@@ -77,12 +77,12 @@ def get_data(franchise):
 
 	# # Separating the franchise numbers into their own matchups
 	# matchup_A = [plug[0], plug[1]]
-	# matchup_B = [plug[2], plug[3]]
+	matchup_B = [plug[2], plug[3]]
 	# matchup_C = [plug[4], plug[5]]
 	# matchup_D = [plug[6], plug[7]]
 	# matchup_E = [plug[8], plug[9]]
 	# matchup_F = [plug[10], plug[11]] # Comment this matchup out for week 14
-
+	sys.stdout.write('team 1 in matchup B; {} -- team 2 in matchup b; {}'.format(matchup_B[0], matchup_B[1]))
 	# score_A_tm_1 = soup.select_one('tmTotalPts_%s' % plug[0]).text
 	# score_A_tm_2 = soup.select_one('tmTotalPts_%s' % plug[1]).text
 	# score_B_tm_1 = soup.select_one('tmTotalPts_%s' % plug[2]).text
