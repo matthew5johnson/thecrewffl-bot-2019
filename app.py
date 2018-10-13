@@ -58,57 +58,58 @@ def get_data(franchise):
 	# proj = '#team_liveproj_%s' % (team)
 	
 	# This gives a list of franchise numbers in the order that they're matched up
-	plug = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
+	# plug = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
 	
-	# Separating the franchise numbers into their own matchups
-	matchup_A = [plug[0], plug[1]]
-	matchup_B = [plug[2], plug[3]]
-	matchup_C = [plug[4], plug[5]]
-	matchup_D = [plug[6], plug[7]]
-	matchup_E = [plug[8], plug[9]]
-	matchup_F = [plug[10], plug[11]] # Comment this matchup out for week 14
 
-	score_A_tm_1 = soup.select_one('tmTotalPts_%s' % plug[0]).text
-	score_A_tm_2 = soup.select_one('tmTotalPts_%s' % plug[1]).text
-	score_B_tm_1 = soup.select_one('tmTotalPts_%s' % plug[2]).text
-	score_B_tm_2 = soup.select_one('tmTotalPts_%s' % plug[3]).text
-	score_C_tm_1 = soup.select_one('tmTotalPts_%s' % plug[4]).text
-	score_C_tm_2 = soup.select_one('tmTotalPts_%s' % plug[5]).text
-	score_D_tm_1 = soup.select_one('tmTotalPts_%s' % plug[6]).text
-	score_D_tm_2 = soup.select_one('tmTotalPts_%s' % plug[7]).text
-	score_E_tm_1 = soup.select_one('tmTotalPts_%s' % plug[8]).text
-	score_E_tm_2 = soup.select_one('tmTotalPts_%s' % plug[9]).text
-	score_F_tm_1 = soup.select_one('tmTotalPts_%s' % plug[10]).text # Comment this matchup out for wk 14
-	score_F_tm_2 = soup.select_one('tmTotalPts_%s' % plug[11]).text # COmment this matchup out for wk 14
+	# # Separating the franchise numbers into their own matchups
+	# matchup_A = [plug[0], plug[1]]
+	# matchup_B = [plug[2], plug[3]]
+	# matchup_C = [plug[4], plug[5]]
+	# matchup_D = [plug[6], plug[7]]
+	# matchup_E = [plug[8], plug[9]]
+	# matchup_F = [plug[10], plug[11]] # Comment this matchup out for week 14
 
-	proj_A_tm_1 = soup.select_one('team_liveproj_%s' % plug[0]).text
-	proj_A_tm_2 = soup.select_one('team_liveproj_%s' % plug[1]).text
-	proj_B_tm_1 = soup.select_one('team_liveproj_%s' % plug[2]).text
-	proj_B_tm_2 = soup.select_one('team_liveproj_%s' % plug[3]).text
-	proj_C_tm_1 = soup.select_one('team_liveproj_%s' % plug[4]).text
-	proj_C_tm_2 = soup.select_one('team_liveproj_%s' % plug[5]).text
-	proj_D_tm_1 = soup.select_one('team_liveproj_%s' % plug[6]).text
-	proj_D_tm_2 = soup.select_one('team_liveproj_%s' % plug[7]).text
-	proj_E_tm_1 = soup.select_one('team_liveproj_%s' % plug[8]).text
-	proj_E_tm_2 = soup.select_one('team_liveproj_%s' % plug[9]).text
-	proj_F_tm_1 = soup.select_one('team_liveproj_%s' % plug[10]).text # Comment this matchup out for wk 14
-	proj_F_tm_2 = soup.select_one('team_liveproj_%s' % plug[11]).text # COmment this matchup out for wk 14
+	# score_A_tm_1 = soup.select_one('tmTotalPts_%s' % plug[0]).text
+	# score_A_tm_2 = soup.select_one('tmTotalPts_%s' % plug[1]).text
+	# score_B_tm_1 = soup.select_one('tmTotalPts_%s' % plug[2]).text
+	# score_B_tm_2 = soup.select_one('tmTotalPts_%s' % plug[3]).text
+	# score_C_tm_1 = soup.select_one('tmTotalPts_%s' % plug[4]).text
+	# score_C_tm_2 = soup.select_one('tmTotalPts_%s' % plug[5]).text
+	# score_D_tm_1 = soup.select_one('tmTotalPts_%s' % plug[6]).text
+	# score_D_tm_2 = soup.select_one('tmTotalPts_%s' % plug[7]).text
+	# score_E_tm_1 = soup.select_one('tmTotalPts_%s' % plug[8]).text
+	# score_E_tm_2 = soup.select_one('tmTotalPts_%s' % plug[9]).text
+	# score_F_tm_1 = soup.select_one('tmTotalPts_%s' % plug[10]).text # Comment this matchup out for wk 14
+	# score_F_tm_2 = soup.select_one('tmTotalPts_%s' % plug[11]).text # COmment this matchup out for wk 14
 
-	if franchise == matchup_A[0] or franchise == matchup_A[1]:
-		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_A[0]), score_A_tm_1, proj_A_tm_1, name_identifier(matchup_A[1]), score_A_tm_2, proj_A_tm_2)
-	elif franchise == matchup_B[0] or franchise == matchup_B[1]:
-		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_B[0]), score_B_tm_1, proj_B_tm_1, name_identifier(matchup_B[1]), score_B_tm_2, proj_B_tm_2)
-	elif franchise == matchup_C[0] or franchise == matchup_C[1]:
-		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_C[0]), score_C_tm_1, proj_C_tm_1, name_identifier(matchup_C[1]), score_C_tm_2, proj_C_tm_2)
-	elif franchise == matchup_D[0] or franchise == matchup_D[1]:
-		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_D[0]), score_D_tm_1, proj_D_tm_1, name_identifier(matchup_D[1]), score_D_tm_2, proj_D_tm_2)
-	elif franchise == matchup_E[0] or franchise == matchup_E[1]:
-		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_E[0]), score_E_tm_1, proj_E_tm_1, name_identifier(matchup_E[1]), score_E_tm_2, proj_E_tm_2)
-	elif franchise == matchup_F[0] or franchise == matchup_F[1]:
-		message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_F[0]), score_F_tm_1, proj_F_tm_1, name_identifier(matchup_F[1]), score_F_tm_2, proj_F_tm_2)
+	# proj_A_tm_1 = soup.select_one('team_liveproj_%s' % plug[0]).text
+	# proj_A_tm_2 = soup.select_one('team_liveproj_%s' % plug[1]).text
+	# proj_B_tm_1 = soup.select_one('team_liveproj_%s' % plug[2]).text
+	# proj_B_tm_2 = soup.select_one('team_liveproj_%s' % plug[3]).text
+	# proj_C_tm_1 = soup.select_one('team_liveproj_%s' % plug[4]).text
+	# proj_C_tm_2 = soup.select_one('team_liveproj_%s' % plug[5]).text
+	# proj_D_tm_1 = soup.select_one('team_liveproj_%s' % plug[6]).text
+	# proj_D_tm_2 = soup.select_one('team_liveproj_%s' % plug[7]).text
+	# proj_E_tm_1 = soup.select_one('team_liveproj_%s' % plug[8]).text
+	# proj_E_tm_2 = soup.select_one('team_liveproj_%s' % plug[9]).text
+	# proj_F_tm_1 = soup.select_one('team_liveproj_%s' % plug[10]).text # Comment this matchup out for wk 14
+	# proj_F_tm_2 = soup.select_one('team_liveproj_%s' % plug[11]).text # COmment this matchup out for wk 14
+
+	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
+	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_A[0]), score_A_tm_1, proj_A_tm_1, name_identifier(matchup_A[1]), score_A_tm_2, proj_A_tm_2)
+	# elif franchise == matchup_B[0] or franchise == matchup_B[1]:
+	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_B[0]), score_B_tm_1, proj_B_tm_1, name_identifier(matchup_B[1]), score_B_tm_2, proj_B_tm_2)
+	# elif franchise == matchup_C[0] or franchise == matchup_C[1]:
+	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_C[0]), score_C_tm_1, proj_C_tm_1, name_identifier(matchup_C[1]), score_C_tm_2, proj_C_tm_2)
+	# elif franchise == matchup_D[0] or franchise == matchup_D[1]:
+	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_D[0]), score_D_tm_1, proj_D_tm_1, name_identifier(matchup_D[1]), score_D_tm_2, proj_D_tm_2)
+	# elif franchise == matchup_E[0] or franchise == matchup_E[1]:
+	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_E[0]), score_E_tm_1, proj_E_tm_1, name_identifier(matchup_E[1]), score_E_tm_2, proj_E_tm_2)
+	# elif franchise == matchup_F[0] or franchise == matchup_F[1]:
+	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_F[0]), score_F_tm_1, proj_F_tm_1, name_identifier(matchup_F[1]), score_F_tm_2, proj_F_tm_2)
 
 
-	sys.stdout.write(message)
+	# sys.stdout.write(message)
 
 
 	# sys.stdout.write('matchup A: {} <<<'.format(matchup_A))
@@ -127,6 +128,7 @@ def get_data(franchise):
 	# sys.stdout.write('plug[0]: {} <<<'.format(plug[0]))
 	
 	# msg = '{} - {} | (proj: {})'.format(franchise, points, projected) 
+	message = 'simple test'
 	send_message(message)
 
 	return('ok',200)
