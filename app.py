@@ -55,7 +55,7 @@ def get_data(franchise):
 	# pts = '#tmTotalPts_%s' % team
 	# proj = '#team_liveproj_%s' % (team)
 	
-	plug = re.findall(r'#tmTotalPts_[0-9]*')
+	plug = re.findall(r'#tmTotalPts_[0-9]*', soup)
 	points = []
 	for i in plug:
 		points = points.append(soup.select_one(i).text)
