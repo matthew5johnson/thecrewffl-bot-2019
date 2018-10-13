@@ -28,7 +28,7 @@ def webhook():
 
 def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
-		franchise = franchise_identifier(user_id)
+		franchise = franchise_identifier(sender)
 		get_data(franchise)
 
 
