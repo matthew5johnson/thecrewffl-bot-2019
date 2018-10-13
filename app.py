@@ -50,7 +50,7 @@ def get_data(franchise):
 	driver.get(url)
 	html = driver.page_source
 	driver.close()
-	soup = BeautifulSoup(html, "html5lib")
+	soup = BeautifulSoup(html, "lxml")
 
 	# franchise = 'Kfish'
 	# ytp = '#team_ytp_%s' % (team)
