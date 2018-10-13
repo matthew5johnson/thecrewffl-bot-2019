@@ -20,7 +20,8 @@ def webhook():
 		# sys.stdout.write(data['nickname'])
 		sys.stdout.write(data['text'])
 		sys.stdout.write(data['user_id'])
-	else: return(none)
+		return('ok', 200)
+	else: return('none')
 
 def parse(data):
 	matchup_a = [11,9]
