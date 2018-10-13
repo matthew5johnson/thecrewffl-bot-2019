@@ -20,13 +20,15 @@ def webhook():
 		# sys.stdout.write(data['nickname']) # Nickname doesn't work. text and user_id do work
 		# sys.stdout.write(data['text'])
 		# sys.stdout.write(data['user_id'])
-		parse(data)
+		sender = data['user_id']
+		text = data['text']
+		parse(sender, text)
 		return('ok', 200)
 	else: return('none')
 
-def parse(data):
-	if re.search('my', data['text'], re.I) and re.search('score', data['text'], re.I):
-		franchise = franchise_identifier(data['user_id'])
+def parse(sender, text):
+	if re.search('my', text, re.I) and re.search('score', text, re.I):
+		franchise = franchise_identifier(user_id)
 		get_data(franchise)
 
 
@@ -45,7 +47,7 @@ def get_data(franchise):
 	driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
 	driver.get(url)
 	html = driver.page_source
-
+	driver.close()
 	soup = BeautifulSoup(html, "lxml")
 
 	# franchise = 'Kfish'
@@ -68,7 +70,7 @@ def get_data(franchise):
 	sys.stdout.write(points)
 
 	# msg = '{} - {} | (proj: {})'.format(franchise, points, projected) 
-	send_message(points)
+	# send_message(points)
 
 	return "ok", 200
 
