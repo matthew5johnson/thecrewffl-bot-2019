@@ -17,9 +17,10 @@ def webhook():
 	data = request.get_json()
 	if '@bot' in data['text']:
 		#parse(data)
-		sys.stdout.write(data['nickname'])
+		# sys.stdout.write(data['nickname'])
 		sys.stdout.write(data['text'])
 		sys.stdout.write(data['user_id'])
+	else: return(none)
 
 def parse(data):
 	matchup_a = [11,9]
