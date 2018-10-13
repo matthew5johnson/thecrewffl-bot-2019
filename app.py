@@ -58,7 +58,7 @@ def get_data(franchise):
 	# pts = '#tmTotalPts_%s' % team
 	# proj = '#team_liveproj_%s' % (team)
 	
-	plug = re.findall(r'#tmTotalPts_[0-9]*', str(soup))
+	plug = re.findall(r'#tmTotalPts_[0-9]*', str(soup)) # confirmed: this creates a list
 	points = []
 	for i in plug:
 		points = points.append(soup.select_one(i).text)
@@ -74,7 +74,7 @@ def get_data(franchise):
 	# Puts this message into heroku logs (live updates with heroku logs --tail)
 	# sys.stdout.write('{} - {} | (proj: {})'.format(franchise, points, projected))
 	# All of these are getting IndexError: list index out of range
-	sys.stdout.write('points type: {} <<<'.format(type(plug)))
+	sys.stdout.write('points type: {} <<<'.format(plug[0]))
 	# sys.stdout.write('points: {} <<<'.format(points[2]))
 	# sys.stdout.write('points: {} <<<'.format(points[3]))
 	# sys.stdout.write('points: {} <<<'.format(points[4]))
