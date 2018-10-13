@@ -30,7 +30,7 @@ def webhook():
 def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = 1 #franchise_identifier(sender)
-		sys.stdout.write('franchise: {}'.format(franchise))
+		sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise)
 		return('ok',200)
 
@@ -66,7 +66,7 @@ def get_data(franchise):
 	# matchup_E = [4, 10]
 	# matchup_F = [11, 9] # Comment this matchup out for week 14
 
-	sys.stdout.write(plug[0])
+	sys.stdout.write('first team: {}, second: {} <<< '.format(plug[0], plug[1])
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
 	# 	points_A1 = soup.select_one('tmTotalPts_%s' % matchup_A[0]).text
