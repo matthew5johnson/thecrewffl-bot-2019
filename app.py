@@ -74,7 +74,7 @@ def get_data(franchise):
 	# Puts this message into heroku logs (live updates with heroku logs --tail)
 	# sys.stdout.write('{} - {} | (proj: {})'.format(franchise, points, projected))
 	# All of these are getting IndexError: list index out of range
-	# sys.stdout.write('points: {} <<<'.format(points[1]))
+	sys.stdout.write('points type: {} <<<'.format(type(plug)))
 	# sys.stdout.write('points: {} <<<'.format(points[2]))
 	# sys.stdout.write('points: {} <<<'.format(points[3]))
 	# sys.stdout.write('points: {} <<<'.format(points[4]))
@@ -87,7 +87,7 @@ def get_data(franchise):
 	# sys.stdout.write('points: {} <<<'.format(points[11]))
 
 	# msg = '{} - {} | (proj: {})'.format(franchise, points, projected) 
-	send_message(points)
+	# send_message(points)
 
 	return('ok',200)
 
@@ -95,7 +95,7 @@ def get_data(franchise):
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
-		'text': 'this is it: {} <<'.format(msg),
+		'text': 'this is it: {} <<'.format(msg),  ##### The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself
 		'bot_id': "eca4646a2e4f736ab96eefa29e"
 		}
 	json = requests.post(url, message)
