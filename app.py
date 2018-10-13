@@ -62,9 +62,9 @@ def get_data(franchise):
 	for i in plug:
 		points = points.append(soup.select_one(i).text)
 
-	string_form = 'nothing'
-	for x in points:
-		string_form = '{}, {}'.format(string_form, stringpoints[x])
+	# string_form = 'nothing'
+	# for x in points:
+	# 	string_form = '{}, {}'.format(string_form, stringpoints[x])
 
 	# players_remaining = soup.select_one(ytp).text
 	# points = soup.select_one(pts).text
@@ -72,7 +72,18 @@ def get_data(franchise):
 
 	# Puts this message into heroku logs (live updates with heroku logs --tail)
 	# sys.stdout.write('{} - {} | (proj: {})'.format(franchise, points, projected))
-	sys.stdout.write(string_form)
+	sys.stdout.write('points: {} <<<'.format(points[0]))
+	sys.stdout.write('points: {} <<<'.format(points[1]))
+	sys.stdout.write('points: {} <<<'.format(points[2]))
+	sys.stdout.write('points: {} <<<'.format(points[3]))
+	sys.stdout.write('points: {} <<<'.format(points[4]))
+	sys.stdout.write('points: {} <<<'.format(points[5]))
+	sys.stdout.write('points: {} <<<'.format(points[6]))
+	sys.stdout.write('points: {} <<<'.format(points[7]))
+	sys.stdout.write('points: {} <<<'.format(points[8]))
+	sys.stdout.write('points: {} <<<'.format(points[9]))
+	sys.stdout.write('points: {} <<<'.format(points[10]))
+	sys.stdout.write('points: {} <<<'.format(points[11]))
 
 	# msg = '{} - {} | (proj: {})'.format(franchise, points, projected) 
 	# send_message(points)
@@ -109,7 +120,7 @@ def franchise_identifier(input):
 		return(7)
 	elif input == 'John Gaudet' or input == 8:
 		return(8)
-	elif input == 'Bob' or input == 'Jordan Redmon' or input == 'Kevin Pohlig' or input == 7435972 or input == 9:
+	elif input == 'Bob' or input == 'Jordan Redmon' or input == 'Kevin Pohlig' or input == '7435972' or input == 9:
 		return(9)
 	elif input == 'Mitch Tellarico' or input == 10:
 		return(10)
