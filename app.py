@@ -22,6 +22,7 @@ def webhook():
 		# sys.stdout.write(data['user_id'])
 		sender = data['user_id']
 		text = data['text']
+		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
 		return('ok', 200)
 	else: return('none')
@@ -29,6 +30,7 @@ def webhook():
 def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = franchise_identifier(sender)
+		sys.stdout.write('franchise: {}'.format(franchise))
 		get_data(franchise)
 
 
@@ -55,10 +57,11 @@ def get_data(franchise):
 	# pts = '#tmTotalPts_%s' % team
 	# proj = '#team_liveproj_%s' % (team)
 	
-	plug = re.findall(r'#tmTotalPts_[0-9]*', soup)
+	plug = re.findall(r'#tmTotalPts_[0-9]*', str(soup))
 	points = []
 	for i in plug:
 		points = points.append(soup.select_one(i).text)
+
 
 
 	# players_remaining = soup.select_one(ytp).text
