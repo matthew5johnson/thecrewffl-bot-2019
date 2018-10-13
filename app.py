@@ -17,18 +17,16 @@ def webhook():
 	data = request.get_json()
 	if '@bot' in data['text']:
 		#parse(data)
-		# sys.stdout.write(data['nickname'])
-		sys.stdout.write(data['text'])
-		sys.stdout.write(data['user_id'])
+		# sys.stdout.write(data['nickname']) # Nickname doesn't work. text and user_id do work
+		# sys.stdout.write(data['text'])
+		# sys.stdout.write(data['user_id'])
+		parse(data)
 		return('ok', 200)
 	else: return('none')
 
 def parse(data):
-	matchup_a = [11,9]
-	matchup_b = [6, 8]
-
 	if re.search('my', data['text'], re.I) and re.search('score', data['text'], re.I):
-		franchise = franchise_identifier(data['nickname'])
+		franchise = franchise_identifier(data['user_id'])
 		get_data(franchise)
 
 
@@ -104,7 +102,7 @@ def franchise_identifier(input):
 		return(7)
 	elif input == 'John Gaudet' or input == 8:
 		return(8)
-	elif input == 'Bob' or input == 'Jordan Redmon' or input == 'Kevin Pohlig' or input == 'Matthew Johnson' or input == 9:
+	elif input == 'Bob' or input == 'Jordan Redmon' or input == 'Kevin Pohlig' or input == 7435972 or input == 9:
 		return(9)
 	elif input == 'Mitch Tellarico' or input == 10:
 		return(10)
