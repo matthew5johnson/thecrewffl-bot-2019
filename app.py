@@ -29,7 +29,7 @@ def webhook():
 
 def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
-		franchise = 1 #franchise_identifier(sender)
+		franchise = 6 #franchise_identifier(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise)
 		return('ok',200)
@@ -58,15 +58,32 @@ def get_data(franchise):
 	# proj = '#team_liveproj_%s' % (team)
 	
 	# This gives a list of franchise numbers in the order that they're matched up
-	plug = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
-	# matchup_A = [1, 2]
-	# matchup_B = [8, 6]
-	# matchup_C = [7, 3]
-	# matchup_D = [12, 5]
-	# matchup_E = [4, 10]
-	# matchup_F = [11, 9] # Comment this matchup out for week 14
+	franchise_number_list = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
+	
+	# sys.stdout.write('first team: {}, second: {} <<< '.format(plug[2], plug[3]))  # This worked perfectly
 
-	sys.stdout.write('first team: {}, second: {} <<< '.format(plug[2], plug[3]))
+	points_list = []
+	projected_list = []
+	for i in franchise_number_list:
+		points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
+		projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
+
+	position = franchise_number_list.index(str(franchise))
+
+	franchise_score = points_list[position]
+	franchise_proj = projected_list[position]
+	if position % 2 == 0:
+		opponent_position = position + 1
+	else: opponent_position = position - 1
+
+	opponent_franchise = franchise_number_list[opponent_position]
+	opponent_score = points_list[opponent_position]
+	opponent_proj = projected_list[opponent_position]
+
+	sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
+
+
+
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
 	# 	points_A1 = soup.select_one('tmTotalPts_%s' % matchup_A[0]).text
@@ -75,14 +92,15 @@ def get_data(franchise):
 	# 	proj_A2 = soup.select_one('team_liveproj_%s' % matchup_A[1]).text
 	# 	message = 
 
+	### This is the spot where urllib3 is throwin a connection error
 	# # Separating the franchise numbers into their own matchups
 	# matchup_A = [plug[0], plug[1]]
-	matchup_B = [plug[2], plug[3]]
+	# matchup_B = [plug[2], plug[3]]  # <<< The error was thrown with unit testing here
 	# matchup_C = [plug[4], plug[5]]
 	# matchup_D = [plug[6], plug[7]]
 	# matchup_E = [plug[8], plug[9]]
 	# matchup_F = [plug[10], plug[11]] # Comment this matchup out for week 14
-	sys.stdout.write('team 1 in matchup B; {} -- team 2 in matchup b; {}'.format(matchup_B[0], matchup_B[1]))
+	# sys.stdout.write('team 1 in matchup B; {} -- team 2 in matchup b; {}'.format(matchup_B[0], matchup_B[1]))
 	# score_A_tm_1 = soup.select_one('tmTotalPts_%s' % plug[0]).text
 	# score_A_tm_2 = soup.select_one('tmTotalPts_%s' % plug[1]).text
 	# score_B_tm_1 = soup.select_one('tmTotalPts_%s' % plug[2]).text
