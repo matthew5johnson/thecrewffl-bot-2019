@@ -80,10 +80,11 @@ def get_data(franchise):
 	opponent_score = points_list[opponent_position]
 	opponent_proj = projected_list[opponent_position]
 
-	sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
+	# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-	send_message('{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
+	final_message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj)
 
+	sys.stdout.write(final_message)
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
 	# 	points_A1 = soup.select_one('tmTotalPts_%s' % matchup_A[0]).text
