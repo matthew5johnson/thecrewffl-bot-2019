@@ -76,13 +76,13 @@ def get_data(franchise):
 		opponent_position = position + 1
 	else: opponent_position = position - 1
 
-	opponent_franchise = franchise_number_list[opponent_position]
+	opponent_franchise = int(franchise_number_list[opponent_position])
 	opponent_score = points_list[opponent_position]
 	opponent_proj = projected_list[opponent_position]
 
 	sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-
+	send_message('{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
