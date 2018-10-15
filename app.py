@@ -23,17 +23,16 @@ def webhook():
 		sender = data['user_id']
 		text = data['text']
 		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
-		if sender != 'None':
-			parse(sender, text)
-			return('ok',200)
+		parse(sender, text)
+		return('ok',200)
 	else: return('not related',200)
 
 def parse(sender, text):
 	# First if statement: avoid infinite bot loops
-	# if re.search('-----   Commands   -----', text. re.I):
+	if re.search('-----   Commands   -----', text. re.I) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text): 
 		# AVOID responding to the BOT itself (in the help message)
-		# return('ok',200)
-	if re.search('my', text, re.I) and re.search('score', text, re.I):
+		return('ok',200)
+	elif re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = franchise_identifier(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise, 1)
