@@ -28,7 +28,7 @@ def parse(sender, text):
 		return('ok',200)
 	# Looks for @bot my score command
 	elif re.search('my', text, re.I) and re.search('score', text, re.I):
-		franchise = franchise_identifier(sender)
+		franchise = get_franchise_number(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise, 1)
 		return('ok',200)
@@ -86,16 +86,16 @@ def get_data(franchise, message_type):
 
 		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-		# my_final_message = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
-		my_final_message = 'this is testing'
+		my_score_message = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, get_franchise_name(franchise), franchise_proj, opponent_score, get_franchise_name(opponent_franchise), opponent_proj)
+		# my_final_message = 'this is testing'
 		# sys.stdout.write(final_message) # this works perfectly
-		send_message(my_final_message)
+		send_message(my_score_message)
 		return('ok',200)
 
 	elif message_type == 2:
 		scoreboard = '*** Live Scoreboard ***\n'
 		for i in range(len(franchise_number_list))[0::2]:
-			scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
+			scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
 		send_message(scoreboard)
 		return('ok',200)
 
@@ -107,8 +107,9 @@ def send_message(msg):
 		}
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
+	return('ok',200)
 
-def name_identifier(franchise):
+def get_franchise_name(franchise):
 	if franchise == 1:
 		return('Matt & Ross')
 	elif franchise == 2:
@@ -135,7 +136,7 @@ def name_identifier(franchise):
 		return('Joseph & Mike')
 
 
-def franchise_identifier(input):
+def get_franchise_number(input):
 	# These inputs correspond to groupme nicknames as of 10/12/18
 	if input == 'Matt Lewis' or input == 'Ross Wafer' or input == 1:
 		return(1)
@@ -161,34 +162,6 @@ def franchise_identifier(input):
 		return(11)
 	elif input == 'Mike Evers' or input == 'Joseph Howe 2' or input == 12:
 		return(12)
-
-
-def franchise_namer(number):
-	if number == 1:
-		return('Matt & Ross')
-	elif number == 2: 
-		return('Scott & James')
-	elif number == 3:
-		return('Doug')
-	elif number == 4:
-		return('Crockett')
-	elif number == 5:
-		return('Blake')
-	elif number == 6:
-		return('Kfish')
-	elif number == 7:
-		return('Kyle')
-	elif number == 8:
-		return('Gaudet & Cameron')
-	elif number == 9:
-		return('RTRO')
-	elif number == 10:
-		return('Mitch')
-	elif number == 11:
-		return('Nick & Mickey')
-	elif number == 12:
-		return('Joseph & Mike')
-
 
 
 if __name__ == '__main__':
