@@ -31,8 +31,15 @@ def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = 6 #franchise_identifier(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
-		get_data(franchise, 1)
+		message_type = 1
+		get_data(franchise, message_type)
 		return('ok',200)
+	elif re.search('all', text. re.I) and re.search('score', text, re.I):
+		franchise = 'placeholder'
+		message_type = 2
+		get_data(franchise, message_type)
+		return('ok',200)
+
 
 
 def get_data(franchise, message_type):
@@ -82,12 +89,25 @@ def get_data(franchise, message_type):
 
 		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-		my_final_message = '{}  .  {}  ||| proj: {}\n{}  .  {}  ||| proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
+		my_final_message = '{} . {} | proj: {}\n{} . {} | proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
 
 		# sys.stdout.write(final_message) # this works perfectly
 
 		send_message(my_final_message)
+		return('ok',200)
 
+	elif message_type == 2:
+		scoreboard = {}
+		for team in franchise_number_list:
+			index = franchise_number_list.index(str(team))
+			scoreboard[index] = []
+			scoreboard[index].append(points_list[index])
+			scoreboard[index].append(name_identifier(int(team)))
+			scoreboard[index].append(projected_list[index])
+
+		all_final_message = '{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}'.format(scoreboard[0][0], scoreboard[0][1], scoreboard[0][2], scoreboard[1][0], scoreboard[1][1], scoreboard[1][2], scoreboard[2][0], scoreboard[2][1], scoreboard[2][2], scoreboard[3][0], scoreboard[3][1], scoreboard[3][2], scoreboard[4][0], scoreboard[4][1], scoreboard[4][2], scoreboard[5][0], scoreboard[5][1], scoreboard[5][2]) 	
+		send_message(all_final_message)
+		return('ok',200)
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
 	# 	points_A1 = soup.select_one('tmTotalPts_%s' % matchup_A[0]).text
