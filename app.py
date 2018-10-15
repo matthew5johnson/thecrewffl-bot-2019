@@ -95,7 +95,7 @@ def get_data(franchise, message_type):
 
 		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-		my_final_message = '{} . {} | proj: {}\n{} . {} | proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
+		my_final_message = '{} - {} .. proj: ({})\n{} - {} .. proj: ({})'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
 
 		# sys.stdout.write(final_message) # this works perfectly
 
@@ -103,9 +103,9 @@ def get_data(franchise, message_type):
 		return('ok',200)
 
 	elif message_type == 2:
-		scoreboard = 'Live Scoreboard\n'
+		scoreboard = '*** Live Scoreboard ***\n'
 		for i in range(len(franchise_number_list))[0::2]:
-			scoreboard = scoreboard + '{} -- {} -- -- proj: {}\n{} -- {} -- -- proj: {}\n===== ===== =====\n'.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
+			scoreboard = scoreboard + '{} - {} .. proj: ({})\n{} - {} .. proj: ({})\n===== ===== =====\n'.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
 			
 		send_message(scoreboard)
 		# scoreboard = {}
@@ -213,11 +213,8 @@ def get_data(franchise, message_type):
 
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
-	test_fran = 'Gaudet & Cameron'
-	test_pts = 138.2
-	test_proj = 140.3
 	message = {
-		'text': '{:>8} . {:18} proj: {}'.format(test_pts, test_fran, test_proj),  ##### The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself
+		'text': msg,  ##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
 		'bot_id': 'eca4646a2e4f736ab96eefa29e'
 		}
 	json = requests.post(url, message)
