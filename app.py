@@ -181,7 +181,7 @@ def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
 		'text': msg,  ##### The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself
-		'bot_id': os.environ['GROUPME_TOKEN']   # "eca4646a2e4f736ab96eefa29e"
+		'bot_id': "eca4646a2e4f736ab96eefa29e"
 		}
 	json = requests.post(url, message)
 
