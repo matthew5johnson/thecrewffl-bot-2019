@@ -70,25 +70,25 @@ def get_data(franchise, message_type):
 
 	position = franchise_number_list.index(str(franchise))
 
-	if message_type == 1:
-		franchise_score = points_list[position]
-		franchise_proj = projected_list[position]
-		if position % 2 == 0:
-			opponent_position = position + 1
-		else: opponent_position = position - 1
+	#if message_type == 1:
+	franchise_score = points_list[position]
+	franchise_proj = projected_list[position]
+	if position % 2 == 0:
+		opponent_position = position + 1
+	else: opponent_position = position - 1
 
-		opponent_franchise = int(franchise_number_list[opponent_position])
-		opponent_score = points_list[opponent_position]
-		opponent_proj = projected_list[opponent_position]
+	opponent_franchise = int(franchise_number_list[opponent_position])
+	opponent_score = points_list[opponent_position]
+	opponent_proj = projected_list[opponent_position]
 
-		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
+	# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-		my_final_message = '{:>8} . {:18} proj: {}\n{:>8} . {:18} proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
+	my_final_message = '{:>8} . {:18} proj: {}\n{:>8} . {:18} proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
 
-		# sys.stdout.write(final_message) # this works perfectly
+	# sys.stdout.write(final_message) # this works perfectly
 
-		send_message(my_final_message)
-		return('ok',200)
+	send_message(my_final_message)
+
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
 	# 	points_A1 = soup.select_one('tmTotalPts_%s' % matchup_A[0]).text
