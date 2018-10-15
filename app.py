@@ -19,7 +19,7 @@ def webhook():
 		text = data['text']
 		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
-		return('ok',200)
+	return('ok',200)
 		
 def parse(sender, text):
 	# First if statement: avoid infinite bot loops
@@ -44,6 +44,7 @@ def parse(sender, text):
 		help_message = "I'm a bot. Get my attention by @ing me.\n** All scores are live (scraped in real-time) **\n-----   Commands   -----\nStart your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\nMisc.\n=====\nBot avatar: attempted dunk in slamball at EHS.\n \nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
 		send_message(help_message)
 		return('ok',200)
+	else: return('off topic',200)
 
 
 def get_data(franchise, message_type):
