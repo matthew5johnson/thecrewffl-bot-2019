@@ -103,9 +103,11 @@ def get_data(franchise, message_type):
 		return('ok',200)
 
 	elif message_type == 2:
+		scoreboard = 'Live Scoreboard\n'
 		for i in range(len(franchise_number_list))[0::2]:
-			each_game = '{} -- {} -- -- proj: {}\n{} -- {} -- -- proj: {}\n===== ===== ====='.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
-			send_message(each_game)
+			scoreboard = scoreboard + '{} -- {} -- -- proj: {}\n{} -- {} -- -- proj: {}\n===== ===== ====='.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
+			
+		send_message(scoreboard)
 		# scoreboard = {}
 		# for team in franchise_number_list:
 		# 	index = franchise_number_list.index(str(team))
