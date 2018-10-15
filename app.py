@@ -40,7 +40,7 @@ def parse(sender, text):
 
 	# Stock responses
 	elif re.search('help', text, re.I):
-		help_message = "-----   Commands   -----\nGet my attention by @ing me. Start your message with '@bot'\nThen get your game's live score with 'my score'\nOr get the full live scoreboard with 'all scores'\n=====\n   ** These scores are pulled in real-time. Let's avoid spamming the bot since we've got this thing on a free server **\n We can add pretty much any other features you think of. Next up, I'll integrate our league record book. Let me know if anything else would be cool to add."
+		help_message = "-----   Commands   -----\nGet my attention by @ing me. Start your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this library of commands\n _commands are case and space insensitive_\n=====\n Bot avatar: Yes, that is Mitch attempting a monster dunk in slamball.\n=====\n   ** These scores are pulled in real-time. Let's avoid spamming the bot since we've got this thing on a free server **\n \nWe can add pretty much any other features you think of. Next up, I'll be integrating our league record book. Let me know if anything else would be cool to add, and we'll do it"
 		send_message(help_message)
 
 
@@ -107,8 +107,8 @@ def get_data(franchise, message_type):
 			scoreboard[index].append(name_identifier(int(team)))
 			scoreboard[index].append(projected_list[index])
 
-		all_final_message = '{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}'.format(scoreboard[0][0], scoreboard[0][1], scoreboard[0][2], scoreboard[1][0], scoreboard[1][1], scoreboard[1][2], scoreboard[2][0], scoreboard[2][1], scoreboard[2][2], scoreboard[3][0], scoreboard[3][1], scoreboard[3][2], scoreboard[4][0], scoreboard[4][1], scoreboard[4][2], scoreboard[5][0], scoreboard[5][1], scoreboard[5][2]) 	
-		sys.stdout.write(all_final_message)
+		# all_final_message = '{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}'.format(scoreboard[0][0], scoreboard[0][1], scoreboard[0][2], scoreboard[1][0], scoreboard[1][1], scoreboard[1][2], scoreboard[2][0], scoreboard[2][1], scoreboard[2][2], scoreboard[3][0], scoreboard[3][1], scoreboard[3][2], scoreboard[4][0], scoreboard[4][1], scoreboard[4][2], scoreboard[5][0], scoreboard[5][1], scoreboard[5][2]) 	
+		sys.stdout.write(scoreboard[0][0])
 		# send_message(all_final_message)
 		return('ok',200)
 
