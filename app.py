@@ -29,15 +29,12 @@ def webhook():
 
 def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
-		franchise = 6 #franchise_identifier(sender)
+		franchise = franchise_identifier(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
-		message_type = 1
-		get_data(franchise, message_type)
+		get_data(franchise, 1)
 		return('ok',200)
 	elif re.search('all', text. re.I) and re.search('score', text, re.I):
-		franchise = 'placeholder'
-		message_type = 2
-		get_data(franchise, message_type)
+		get_data(0, 2)
 		return('ok',200)
 
 
