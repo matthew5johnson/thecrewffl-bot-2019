@@ -16,17 +16,11 @@ app = Flask(__name__)
 def webhook():
 	data = request.get_json()
 	if '@bot' in data['text']:
-		#parse(data)
-		# sys.stdout.write(data['nickname']) # Nickname doesn't work. text and user_id do work
-		# sys.stdout.write(data['text'])
-		# sys.stdout.write(data['user_id'])
 		sender = data['user_id']
 		text = data['text']
 		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
-		return('ok',200)
-	else: return('not related',200)
-
+		
 def parse(sender, text):
 	# First if statement: avoid infinite bot loops
 	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text): 
@@ -95,7 +89,7 @@ def get_data(franchise, message_type):
 
 		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-		my_final_message = '{} - {} .. proj: ({})\n{} - {} .. proj: ({})'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
+		my_final_message = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
 
 		# sys.stdout.write(final_message) # this works perfectly
 
@@ -105,7 +99,7 @@ def get_data(franchise, message_type):
 	elif message_type == 2:
 		scoreboard = '*** Live Scoreboard ***\n'
 		for i in range(len(franchise_number_list))[0::2]:
-			scoreboard = scoreboard + '{} - {} .. proj: ({})\n{} - {} .. proj: ({})\n===== ===== =====\n'.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
+			scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
 			
 		send_message(scoreboard)
 		# scoreboard = {}
