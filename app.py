@@ -103,17 +103,20 @@ def get_data(franchise, message_type):
 		return('ok',200)
 
 	elif message_type == 2:
-		scoreboard = {}
-		for team in franchise_number_list:
-			index = franchise_number_list.index(str(team))
-			scoreboard[index] = []
-			scoreboard[index].append(points_list[index])
-			scoreboard[index].append(name_identifier(int(team)))
-			scoreboard[index].append(projected_list[index])
+		# scoreboard = {}
+		# for team in franchise_number_list:
+		# 	index = franchise_number_list.index(str(team))
+		# 	scoreboard[index] = []
+		# 	scoreboard[index].append(points_list[index])
+		# 	scoreboard[index].append(name_identifier(int(team)))
+		# 	scoreboard[index].append(projected_list[index])
 
-		# all_final_message = '{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}'.format(scoreboard[0][0], scoreboard[0][1], scoreboard[0][2], scoreboard[1][0], scoreboard[1][1], scoreboard[1][2], scoreboard[2][0], scoreboard[2][1], scoreboard[2][2], scoreboard[3][0], scoreboard[3][1], scoreboard[3][2], scoreboard[4][0], scoreboard[4][1], scoreboard[4][2], scoreboard[5][0], scoreboard[5][1], scoreboard[5][2]) 	
-		sys.stdout.write(scoreboard[0][0])
-		# send_message(all_final_message)
+		# # all_final_message = '{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}'.format(scoreboard[0][0], scoreboard[0][1], scoreboard[0][2], scoreboard[1][0], scoreboard[1][1], scoreboard[1][2], scoreboard[2][0], scoreboard[2][1], scoreboard[2][2], scoreboard[3][0], scoreboard[3][1], scoreboard[3][2], scoreboard[4][0], scoreboard[4][1], scoreboard[4][2], scoreboard[5][0], scoreboard[5][1], scoreboard[5][2]) 	
+		# sys.stdout.write(scoreboard[0][0])
+		
+		# # send_message(all_final_message)
+		 
+
 		return('ok',200)
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
