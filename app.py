@@ -20,6 +20,7 @@ def webhook():
 		text = data['text']
 		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
+		return('ok',200)
 		
 def parse(sender, text):
 	# First if statement: avoid infinite bot loops
