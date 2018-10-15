@@ -68,26 +68,25 @@ def get_data(franchise, message_type):
 		points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
 		projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
 
-	position = franchise_number_list.index(str(franchise))
+	if message_type == 1:
+		position = franchise_number_list.index(str(franchise))
+		franchise_score = points_list[position]
+		franchise_proj = projected_list[position]
+		if position % 2 == 0:
+			opponent_position = position + 1
+		else: opponent_position = position - 1
 
-	#if message_type == 1:
-	franchise_score = points_list[position]
-	franchise_proj = projected_list[position]
-	if position % 2 == 0:
-		opponent_position = position + 1
-	else: opponent_position = position - 1
+		opponent_franchise = int(franchise_number_list[opponent_position])
+		opponent_score = points_list[opponent_position]
+		opponent_proj = projected_list[opponent_position]
 
-	opponent_franchise = int(franchise_number_list[opponent_position])
-	opponent_score = points_list[opponent_position]
-	opponent_proj = projected_list[opponent_position]
+		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-	# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
+		my_final_message = '{}  .  {}  ||| proj: {}\n{}  .  {}  ||| proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
 
-	my_final_message = '{:>8} . {:18} proj: {}\n{:>8} . {:18} proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
+		# sys.stdout.write(final_message) # this works perfectly
 
-	# sys.stdout.write(final_message) # this works perfectly
-
-	send_message(my_final_message)
+		send_message(my_final_message)
 
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
@@ -181,7 +180,7 @@ def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
 		'text': msg,  ##### The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself
-		'bot_id': os.environ['GROUPME_TOKEN'] #"eca4646a2e4f736ab96eefa29e"
+		'bot_id': 'eca4646a2e4f736ab96eefa29e'
 		}
 	json = requests.post(url, message)
 
