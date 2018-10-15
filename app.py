@@ -28,7 +28,11 @@ def webhook():
 	else: return('not related',200)
 
 def parse(sender, text):
-	if re.search('my', text, re.I) and re.search('score', text, re.I):
+	# First if statement: avoid infinite bot loops
+	if re.search('-----   Commands   -----', text. re.I):
+		# AVOID responding to the BOT itself (in the help message)
+		return('ok',200)
+	elif re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = franchise_identifier(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise, 1)
@@ -38,7 +42,7 @@ def parse(sender, text):
 		get_data(franchise, 2)
 		return('ok',200)
 
-	# Stock responses
+	# Stock responses. Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
 	elif re.search('help', text, re.I):
 		help_message = "-----   Commands   -----\nGet my attention by @ing me. Start your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this library of commands\n _commands are case and space insensitive_\n=====\n Bot avatar: Yes, that is Mitch attempting a monster dunk in slamball.\n=====\n   ** These scores are pulled in real-time. Let's avoid spamming the bot since we've got this thing on a free server **\n \nWe can add pretty much any other features you think of. Next up, I'll be integrating our league record book. Let me know if anything else would be cool to add, and we'll do it"
 		send_message(help_message)
