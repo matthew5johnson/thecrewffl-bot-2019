@@ -29,7 +29,7 @@ def webhook():
 
 def parse(sender, text):
 	# First if statement: avoid infinite bot loops
-	if re.search('-----   Commands   -----', text, re.I) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text): 
+	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
 	elif re.search('my', text, re.I) and re.search('score', text, re.I):
@@ -44,7 +44,7 @@ def parse(sender, text):
 
 	# Stock responses. Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
 	elif re.search('help', text, re.I):
-		help_message = "-----   Commands   -----\nGet my attention by @ing me. Start your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this library of commands\n _commands are case and space insensitive_\n=====\n Bot avatar: Yes, that is Mitch attempting a monster dunk in slamball.\n=====\n   ** These scores are pulled in real-time. Let's avoid spamming the bot since we've got this thing on a free server **\n \nWe can add pretty much any other features you think of. Next up will be league record book integration. Post any other cool ideas that you think of, and we'll add them to the wish list."
+		help_message = "-----   Commands   -----\nI'm a bot\nGet my attention by @ing me. Start your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\n Bot avatar: attempted dunk in slamball at EHS.\n=====\n   ** These scores are pulled in real-time. Let's avoid spamming the bot since we've got this thing on a free server **\n \nWe can add pretty much any other features you think of. Next up will be league record book integration. Post any other cool ideas that you think of, and we'll add them to the wish list."
 		send_message(help_message)
 
 
@@ -104,10 +104,9 @@ def get_data(franchise, message_type):
 
 	elif message_type == 2:
 		for i in range(len(franchise_number_list))[0::2]:
-			matchup_message = '{} -- {} . proj: {}\n{} -- {} . proj: {}'.format(points_list[i], name_identifier(franchise_number_list[i]), projected_list[i], points_list[i+1], name_identifier(franchise_number_list[i+1]), projected_list[i+1])
+			matchup_message = '{} -- {} -- -- proj: {}\n{} -- {} -- -- proj: {}\n===== ===== ====='.format(points_list[i], name_identifier(int(franchise_number_list[i]), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1]), projected_list[i+1])
 			send_message(matchup_message)
 			sys.stdout.write(matchup_message)
-			return('ok',200)
 		# scoreboard = {}
 		# for team in franchise_number_list:
 		# 	index = franchise_number_list.index(str(team))
