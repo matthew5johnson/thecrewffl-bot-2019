@@ -33,7 +33,7 @@ def parse(sender, text):
 	# if re.search('-----   Commands   -----', text. re.I):
 		# AVOID responding to the BOT itself (in the help message)
 		# return('ok',200)
-	elif re.search('my', text, re.I) and re.search('score', text, re.I):
+	if re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = franchise_identifier(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise, 1)
