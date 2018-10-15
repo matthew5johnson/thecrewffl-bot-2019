@@ -105,7 +105,7 @@ def get_data(franchise, message_type):
 	elif message_type == 2:
 		scoreboard = 'Live Scoreboard\n'
 		for i in range(len(franchise_number_list))[0::2]:
-			scoreboard = scoreboard + '{} -- {} -- -- proj: {}\n{} -- {} -- -- proj: {}\n===== ===== ====='.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
+			scoreboard = scoreboard + '{} -- {} -- -- proj: {}\n{} -- {} -- -- proj: {}\n===== ===== =====\n'.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
 			
 		send_message(scoreboard)
 		# scoreboard = {}
@@ -213,8 +213,11 @@ def get_data(franchise, message_type):
 
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
+	test_fran = 'Gaudet & Cameron'
+	test_pts = 138.2
+	test_proj = 140.3
 	message = {
-		'text': msg,  ##### The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself
+		'text': '{:>8} . {:18} proj: {}'.format(test_pts, test_fran, test_proj),  ##### The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself
 		'bot_id': 'eca4646a2e4f736ab96eefa29e'
 		}
 	json = requests.post(url, message)
