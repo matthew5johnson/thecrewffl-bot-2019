@@ -33,8 +33,9 @@ def parse(sender, text):
 		sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise, 1)
 		return('ok',200)
-	elif re.search('all', text. re.I) and re.search('score', text, re.I):
-		get_data(0, 2)
+	elif re.search('all', text, re.I) and re.search('score', text, re.I):
+		franchise = 'none'
+		get_data(franchise, 2)
 		return('ok',200)
 
 
