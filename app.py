@@ -7,7 +7,6 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options 
 import selenium.webdriver.chrome.service as service
-
 import re
 
 app = Flask(__name__)
@@ -27,20 +26,24 @@ def parse(sender, text):
 	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
+	# Looks for @bot my score command
 	elif re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = franchise_identifier(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise, 1)
 		return('ok',200)
+	# Looks for @bot all scores command
 	elif re.search('all', text, re.I) and re.search('score', text, re.I):
 		franchise = 'none'
 		get_data(franchise, 2)
 		return('ok',200)
 
 	# Stock responses. Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
+	# Looks for help command and posts response
 	elif re.search('help', text, re.I):
-		help_message = "-----   Commands   -----\nI'm a bot\nGet my attention by @ing me. Start your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\n Bot avatar: attempted dunk in slamball at EHS.\n=====\n   ** These scores are pulled in real-time. Let's avoid spamming the bot since we've got this thing on a free server **\n \nWe can add pretty much any other features you think of. Next up will be league record book integration. Post any other cool ideas that you think of, and we'll add them to the wish list."
+		help_message = "I'm a bot. Get my attention by @ing me.\n** All scores are live (scraped in real-time) **\n-----   Commands   -----\nStart your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\nMisc.\n=====\nBot avatar: attempted dunk in slamball at EHS.\n \nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
 		send_message(help_message)
+		return('ok',200)
 
 
 def get_data(franchise, message_type):
@@ -60,16 +63,9 @@ def get_data(franchise, message_type):
 	driver.close()
 	soup = BeautifulSoup(html, "lxml")
 
-	# franchise = 'Kfish'
-	# ytp = '#team_ytp_%s' % (team)
-	# pts = '#tmTotalPts_%s' % team
-	# proj = '#team_liveproj_%s' % (team)
-	
 	# This gives a list of franchise numbers in the order that they're matched up
 	franchise_number_list = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
-	
 	# sys.stdout.write('first team: {}, second: {} <<< '.format(plug[2], plug[3]))  # This worked perfectly
-
 	points_list = []
 	projected_list = []
 	for i in franchise_number_list:
@@ -90,10 +86,9 @@ def get_data(franchise, message_type):
 
 		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-		my_final_message = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
-
+		# my_final_message = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
+		my_final_message = 'this is testing'
 		# sys.stdout.write(final_message) # this works perfectly
-
 		send_message(my_final_message)
 		return('ok',200)
 
@@ -101,110 +96,8 @@ def get_data(franchise, message_type):
 		scoreboard = '*** Live Scoreboard ***\n'
 		for i in range(len(franchise_number_list))[0::2]:
 			scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], name_identifier(int(franchise_number_list[i])), projected_list[i], points_list[i+1], name_identifier(int(franchise_number_list[i+1])), projected_list[i+1])
-			
 		send_message(scoreboard)
-		# scoreboard = {}
-		# for team in franchise_number_list:
-		# 	index = franchise_number_list.index(str(team))
-		# 	scoreboard[index] = []
-		# 	scoreboard[index].append(points_list[index])
-		# 	scoreboard[index].append(name_identifier(int(team)))
-		# 	scoreboard[index].append(projected_list[index])
-
-		# # all_final_message = '{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}\n=================\n{} . {} | proj: {}\n{} . {} | proj: {}'.format(scoreboard[0][0], scoreboard[0][1], scoreboard[0][2], scoreboard[1][0], scoreboard[1][1], scoreboard[1][2], scoreboard[2][0], scoreboard[2][1], scoreboard[2][2], scoreboard[3][0], scoreboard[3][1], scoreboard[3][2], scoreboard[4][0], scoreboard[4][1], scoreboard[4][2], scoreboard[5][0], scoreboard[5][1], scoreboard[5][2]) 	
-		# sys.stdout.write(scoreboard[0][0])
-		
-		# # send_message(all_final_message)
-		 
-
 		return('ok',200)
-
-	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
-	# 	points_A1 = soup.select_one('tmTotalPts_%s' % matchup_A[0]).text
-	# 	proj_A1 = soup.select_one('team_liveproj_%s' % matchup_A[0]).text
-	# 	points_A2 = soup.select_one('tmTotalPts_%s' % matchup_A[1]).text
-	# 	proj_A2 = soup.select_one('team_liveproj_%s' % matchup_A[1]).text
-	# 	message = 
-
-	### This is the spot where urllib3 is throwin a connection error
-	# # Separating the franchise numbers into their own matchups
-	# matchup_A = [plug[0], plug[1]]
-	# matchup_B = [plug[2], plug[3]]  # <<< The error was thrown with unit testing here
-	# matchup_C = [plug[4], plug[5]]
-	# matchup_D = [plug[6], plug[7]]
-	# matchup_E = [plug[8], plug[9]]
-	# matchup_F = [plug[10], plug[11]] # Comment this matchup out for week 14
-	# sys.stdout.write('team 1 in matchup B; {} -- team 2 in matchup b; {}'.format(matchup_B[0], matchup_B[1]))
-	# score_A_tm_1 = soup.select_one('tmTotalPts_%s' % plug[0]).text
-	# score_A_tm_2 = soup.select_one('tmTotalPts_%s' % plug[1]).text
-	# score_B_tm_1 = soup.select_one('tmTotalPts_%s' % plug[2]).text
-	# score_B_tm_2 = soup.select_one('tmTotalPts_%s' % plug[3]).text
-	# score_C_tm_1 = soup.select_one('tmTotalPts_%s' % plug[4]).text
-	# score_C_tm_2 = soup.select_one('tmTotalPts_%s' % plug[5]).text
-	# score_D_tm_1 = soup.select_one('tmTotalPts_%s' % plug[6]).text
-	# score_D_tm_2 = soup.select_one('tmTotalPts_%s' % plug[7]).text
-	# score_E_tm_1= soup.select_one('tmTotalPts_%s' % plug[8]).text
-	# score_E_tm_2 = soup.select_one('tmTotalPts_%s' % plug[9]).text
-	# score_F_tm_1 = soup.select_one('tmTotalPts_%s' % plug[10]).text # Comment this matchup out for wk 14
-	# score_F_tm_2 = soup.select_one('tmTotalPts_%s' % plug[11]).text # COmment this matchup out for wk 14
-
-	# proj_A_tm_1 = soup.select_one('team_liveproj_%s' % plug[0]).text
-	# proj_A_tm_2 = soup.select_one('team_liveproj_%s' % plug[1]).text
-	# proj_B_tm_1 = soup.select_one('team_liveproj_%s' % plug[2]).text
-	# proj_B_tm_2 = soup.select_one('team_liveproj_%s' % plug[3]).text
-	# proj_C_tm_1 = soup.select_one('team_liveproj_%s' % plug[4]).text
-	# proj_C_tm_2 = soup.select_one('team_liveproj_%s' % plug[5]).text
-	# proj_D_tm_1 = soup.select_one('team_liveproj_%s' % plug[6]).text
-	# proj_D_tm_2 = soup.select_one('team_liveproj_%s' % plug[7]).text
-	# proj_E_tm_1 = soup.select_one('team_liveproj_%s' % plug[8]).text
-	# proj_E_tm_2 = soup.select_one('team_liveproj_%s' % plug[9]).text
-	# proj_F_tm_1 = soup.select_one('team_liveproj_%s' % plug[10]).text # Comment this matchup out for wk 14
-	# proj_F_tm_2 = soup.select_one('team_liveproj_%s' % plug[11]).text # COmment this matchup out for wk 14
-
-	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
-	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_A[0]), score_A_tm_1, proj_A_tm_1, name_identifier(matchup_A[1]), score_A_tm_2, proj_A_tm_2)
-	# 	sys.stdout.write(message)
-	# 	return('ok',200)	
-	# elif franchise == matchup_B[0] or franchise == matchup_B[1]:
-	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_B[0]), score_B_tm_1, proj_B_tm_1, name_identifier(matchup_B[1]), score_B_tm_2, proj_B_tm_2)
-	# 	return('ok',200)
-	# elif franchise == matchup_C[0] or franchise == matchup_C[1]:
-	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_C[0]), score_C_tm_1, proj_C_tm_1, name_identifier(matchup_C[1]), score_C_tm_2, proj_C_tm_2)
-	# 	return('ok',200)	
-	# elif franchise == matchup_D[0] or franchise == matchup_D[1]:
-	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_D[0]), score_D_tm_1, proj_D_tm_1, name_identifier(matchup_D[1]), score_D_tm_2, proj_D_tm_2)
-	# 	return('ok',200)
-	# elif franchise == matchup_E[0] or franchise == matchup_E[1]:
-	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_E[0]), score_E_tm_1, proj_E_tm_1, name_identifier(matchup_E[1]), score_E_tm_2, proj_E_tm_2)
-	# 	return('ok',200)
-	# elif franchise == matchup_F[0] or franchise == matchup_F[1]:
-	# 	message = '{:<18}- {:6} | proj: {}\n{:<18}- {:6} | proj: {}'.format(name_identifier(matchup_F[0]), score_F_tm_1, proj_F_tm_1, name_identifier(matchup_F[1]), score_F_tm_2, proj_F_tm_2)
-	# 	return('ok',200)
-	# else: return('none')
-
-
-
-	# sys.stdout.write('matchup A: {} <<<'.format(matchup_A))
-	# sys.stdout.write('matchupA[0]: {} <<<'.format(matchup_A[0]))
-	# string_form = 'nothing'
-	# for x in points:
-	# 	string_form = '{}, {}'.format(string_form, stringpoints[x])
-
-	# players_remaining = soup.select_one(ytp).text
-	# points = soup.select_one(pts).text
-	# projected = soup.select_one(proj).text
-
-	# Puts this message into heroku logs (live updates with heroku logs --tail)
-	# sys.stdout.write('{} - {} | (proj: {})'.format(franchise, points, projected))
-	# All of these are getting IndexError: list index out of range
-	# sys.stdout.write('plug[0]: {} <<<'.format(plug[0]))
-	
-	# msg = '{} - {} | (proj: {})'.format(franchise, points, projected) 
-	# message = 'simple test'
-	# send_message(message)
-
-	return('ok',200)
-
 
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
@@ -213,7 +106,6 @@ def send_message(msg):
 		'bot_id': 'eca4646a2e4f736ab96eefa29e'
 		}
 	json = requests.post(url, message)
-
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 
 def name_identifier(franchise):
