@@ -103,8 +103,8 @@ def get_data(franchise, message_type):
 		return('ok',200)
 
 	elif message_type == 2:
-		for i in franchise_number_list[0::2]:
-			matchup_message = '{} . {} | proj: {}\n{} . {} | proj: {}'.format(points_list[i], name_identifier(franchise_number_list[i]), projected_list[i], points_list[i+1], name_identifier(franchise_number_list[i+1]), projected_list[i+1])
+		for i in range(len(franchise_number_list))[0::2]:
+			matchup_message = '{} -- {} . proj: {}\n{} -- {} . proj: {}'.format(points_list[i], name_identifier(franchise_number_list[i]), projected_list[i], points_list[i+1], name_identifier(franchise_number_list[i+1]), projected_list[i+1])
 			send_message(matchup_message)
 			sys.stdout.write(matchup_message)
 			return('ok',200)
