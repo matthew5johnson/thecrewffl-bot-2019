@@ -31,22 +31,22 @@ def parse(sender, text):
 	if re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = 6 #franchise_identifier(sender)
 		sys.stdout.write('franchise: {} <<'.format(franchise))
-		get_data(franchise)
+		get_data(franchise, 1)
 		return('ok',200)
 
 
-def get_data(franchise):
+def get_data(franchise, message_type):
 	season = 2018
 	week = 6  # This is the only variable that needs to be changed each week
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
-	CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-	GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
+	#CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
+	#GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
 	chrome_options = Options()
-	chrome_options.binary_location = GOOGLE_CHROME_BIN
+	chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
 	chrome_options.add_argument('--disable-gpu')
 	chrome_options.add_argument('--no-sandbox')
 	chrome_options.add_argument('--headless')
-	driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, chrome_options=chrome_options)
+	driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
 	driver.get(url)
 	html = driver.page_source
 	driver.close()
@@ -70,23 +70,25 @@ def get_data(franchise):
 
 	position = franchise_number_list.index(str(franchise))
 
-	franchise_score = points_list[position]
-	franchise_proj = projected_list[position]
-	if position % 2 == 0:
-		opponent_position = position + 1
-	else: opponent_position = position - 1
+	if message_type == 1:
+		franchise_score = points_list[position]
+		franchise_proj = projected_list[position]
+		if position % 2 == 0:
+			opponent_position = position + 1
+		else: opponent_position = position - 1
 
-	opponent_franchise = int(franchise_number_list[opponent_position])
-	opponent_score = points_list[opponent_position]
-	opponent_proj = projected_list[opponent_position]
+		opponent_franchise = int(franchise_number_list[opponent_position])
+		opponent_score = points_list[opponent_position]
+		opponent_proj = projected_list[opponent_position]
 
-	# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
+		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 
-	final_message = '{:<17}- {:6} | proj: {}\n{:<17}- {:6} | proj: {}'.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj)
+		my_final_message = '{:>8} . {:18} proj: {}\n{:>8} . {:18} proj: {}'.format(franchise_score, name_identifier(franchise), franchise_proj, opponent_score, name_identifier(opponent_franchise), opponent_proj)
 
-	# sys.stdout.write(final_message) # this works perfectly
+		# sys.stdout.write(final_message) # this works perfectly
 
-	send_message(final_message)
+		send_message(my_final_message)
+		return('ok',200)
 
 	# if franchise == matchup_A[0] or franchise == matchup_A[1]:
 	# 	points_A1 = soup.select_one('tmTotalPts_%s' % matchup_A[0]).text
@@ -179,7 +181,7 @@ def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
 		'text': msg,  ##### The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself
-		'bot_id': "eca4646a2e4f736ab96eefa29e"
+		'bot_id': os.environ['GROUPME_TOKEN']   # "eca4646a2e4f736ab96eefa29e"
 		}
 	json = requests.post(url, message)
 
