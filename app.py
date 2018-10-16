@@ -139,29 +139,29 @@ def get_franchise_name(franchise):
 
 def get_franchise_number(input):
 	# These inputs correspond to groupme nicknames as of 10/12/18
-	if input == 'Matt Lewis' or input == 'Ross Wafer' or input == 1:
+	if input == '3491271' or input == '7435976' or input == 1:
 		return(1)
-	elif input == 'Scott Becker' or input == 'James Roeling' or input == 2:
+	elif input == '7435971' or input == '3931770' or input == 2:
 		return(2)
-	elif input == 'Doug Ramey, League Champion' or input == 3:
+	elif input == '7435973' or input == 3:
 		return(3)
-	elif input == 'Taylor Crockett' or input == 4:
+	elif input == '7435977' or input == 4:
 		return(4)
-	elif input == 'Blake Tellarico' or input == 5:
+	elif input == '12610331' or input == 5:
 		return(5)
-	elif input == 'Kevin Fischer' or input == 6:
+	elif input == '7435975' or input == 6:
 		return(6)
-	elif input == 'Kyle Evers' or input == 7:
+	elif input == '7435974' or input == 7:
 		return(7)
-	elif input == 'John Gaudet' or input == 8:
+	elif input == '22905' or input == 8:
 		return(8)
-	elif input == 'Bob' or input == 'Jordan Redmon' or input == 'Kevin Pohlig' or input == '7435972' or input == 9:
+	elif input == '4747679' or input == '29542085' or input == '3054470' or input == '7435972' or input == 9:
 		return(9)
-	elif input == 'Mitch Tellarico' or input == 10:
+	elif input == '7435969' or input == 10:
 		return(10)
-	elif input == 'Nicholas Hart' or input == 'Monster' or input == 11:
+	elif input == '3165727' or input == '3159027' or input == 11:
 		return(11)
-	elif input == 'Mike Evers' or input == 'Joseph Howe 2' or input == 12:
+	elif input == '6602218' or input == '55209013' or input == 12:
 		return(12)
 
 
