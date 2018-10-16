@@ -21,6 +21,7 @@ def webhook():
 		parse(sender, text)
 		return('ok',200)
 	elif '@testing' in data['text']:
+		# Sends us into a play function (sandbox_testing) that feeds into a send message function aimed at File Sharing group
 		text = data['text']
 		sys.stdout.write('sent into testing environment')
 		sandbox_testing(text)
@@ -131,8 +132,10 @@ def send_message(msg):
 
 
 def sandbox_testing(text):
-	output = 'pinged the message'
-	message_to_sandbox(output)
+	# Just don't output 'testing' or 'bot' into the sandbox and you're good
+	global votes
+	votes += 1
+	message_to_sandbox(votes)
 	return('ok',200)
 def message_to_sandbox(message):
 	# Sent to File Sharing group for testing purposes
