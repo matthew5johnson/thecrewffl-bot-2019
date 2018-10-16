@@ -108,64 +108,67 @@ def get_data(franchise, message_type):
 		projected_list = 'GAME COMPLETED'
 		sys.stdout.write('nestled into a completed game. no projs')
 
-	# points_list = []
-	# projected_list = []
-	# for i in franchise_number_list:
-	# 	points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
-	# 	projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
+	generate_message(franchise, message_type, franchise_number_list, points_list, projected_list)
+
+def generate_message(franchise, message_type, franchise_number_list, points_list, projected_list):
+	
+	#####     @bot my score     #####
 
 	if message_type == 1:
 		position = franchise_number_list.index(str(franchise))
 		franchise_score = points_list[position]
-		sys.stdout.write(franchise_score)
-		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
+		# sys.stdout.write(franchise_score)
+		
+		# Tests to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
 		if projected_list != 'GAME COMPLETED':
 			franchise_proj = projected_list[position]
 			sys.stdout.write(franchise_proj)
-		# else: 
-		# 	return('Game has concluded. No projections')
 		if position % 2 == 0:
 			opponent_position = position + 1
-			sys.stdout.write('even index')
+			# sys.stdout.write('even index')
 		else: 
 			opponent_position = position - 1
-			sys.stdout.write('odd index')
+			# sys.stdout.write('odd index')
 
 		opponent_franchise = int(franchise_number_list[opponent_position])
 		opponent_score = points_list[opponent_position]
-		sys.stdout.write('opponent score')
-		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
+		# sys.stdout.write('opponent score')
+		
+		# Tests to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
 		if projected_list != 'GAME COMPLETED':
 			opponent_proj = projected_list[opponent_position]
-			sys.stdout.write(opponent_proj)
-			# return('ok',200)
-			# sys.stdout.write('Game has concluded. No opponent projections')
+			# sys.stdout.write(opponent_proj)
 
-		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
 		if projected_list != 'GAME COMPLETED':
 			my_ongoing_matchup = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, get_franchise_name(franchise), franchise_proj, opponent_score, get_franchise_name(opponent_franchise), opponent_proj)
 			send_message(my_ongoing_matchup)
 			return('ok',200)
+			# WORKED A
 		else: 
 			my_completed_matchup = '{} - {}\n{} - {}'.format(franchise_score, get_franchise_name(franchise), opponent_score, get_franchise_name(opponent_franchise))
 			sys.stdout.write('It should send my score from last week')
 			send_message(my_completed_matchup)
 			return('ok',200)
+			# WORKED A
+	
+	#####     @bot all scores     #####
 
 	elif message_type == 2:
 		if projected_list != 'GAME COMPLETED':
-			live_scoreboard = '*** Live Scoreboard ***\n'
+			live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
 			for i in range(len(franchise_number_list))[0::2]:
 				live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
 			send_message(live_scoreboard)
 			return('ok',200)
+			# WORKED A
 		else:
-			final_scoreboard = '*** Final Scoreboard ***\n'
+			final_scoreboard = '*** Week %i Final Scoreboard ***\n' % week
 			for i in range(len(franchise_number_list))[0::2]:
 				final_scoreboard = final_scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])))
 			send_message(final_scoreboard)
 			return('ok',200)
+			# WORKED A
 
 
 def send_message(msg):
@@ -174,9 +177,9 @@ def send_message(msg):
 	#STTDB: 'ba284f3f9f43fb0ef944c59350' File Sharing: 'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
 	message = {
 		'text': msg,  
-		'bot_id': 'token' 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
-	message['bot_id'] = os.environ['GROUPME_TOKEN']
+	# message['bot_id'] = os.environ['GROUPME_TOKEN']
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 	return('ok',200)
