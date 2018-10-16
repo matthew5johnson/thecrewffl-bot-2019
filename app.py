@@ -19,7 +19,13 @@ def webhook():
 		text = data['text']
 		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
-	return('ok',200)
+		return('ok',200)
+	elif '@testing' in data['text']:
+		text = data['text']
+		sys.stdout.write('sent into testing environment')
+		sandbox_testing(text)
+		return('ok',200)
+	else: return('ok',200)
 
 
 # def remove_bob():
@@ -120,6 +126,25 @@ def send_message(msg):
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 	return('ok',200)
+
+
+
+
+def sandbox_testing(text):
+	output = 'pinged the message'
+	message_to_sandbox(output)
+	return('ok',200)
+def message_to_sandbox(message):
+	# Sent to File Sharing group for testing purposes
+	url = 'https://api.groupme.com/v3/bots/post'
+	message = {
+		'text': message, 
+		'bot_id': 'eca4646a2e4f736ab96eefa29e' # eca46:file sharing group for sandbox testing
+		}
+	json = requests.post(url, message)
+	return('ok',200)
+
+
 
 def get_franchise_name(franchise):
 	if franchise == 1:
