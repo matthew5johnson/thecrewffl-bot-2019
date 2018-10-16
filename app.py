@@ -14,16 +14,19 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def webhook():
 	data = request.get_json()
+	#####     Sniffing for @bot     #####
 	if '@bot' in data['text']:
 		sender = data['user_id']
 		text = data['text']
-		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
+		# sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
 		return('ok',200)
+
+	#####     Sniffing for @testing     #####
 	elif '@testing' in data['text']:
 		# Sends us into a play function (sandbox_testing) that feeds into a send message function aimed at File Sharing group
 		text = data['text']
-		sys.stdout.write('sent into testing environment')
+		# sys.stdout.write('sent into testing environment')
 		sandbox_testing(text)
 		return('ok',200)
 	else: return('ok',200)
@@ -36,35 +39,39 @@ week = 6
 
 
 def parse(sender, text):
-	# First if statement: avoid infinite bot loops
+	#### Ignore every line that the bot prints out itself
 	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
-	# Looks for @bot my score command
+	
+	# 1   ...   @bot my score 
 	elif re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = get_franchise_number(sender)
-		sys.stdout.write('franchise: {} <<'.format(franchise))
+		# sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise, 1)
 		return('ok',200)
-	# Looks for @bot all scores command
+	
+	# 2   ...   @bot all scores
 	elif re.search('all', text, re.I) and re.search('score', text, re.I):
 		franchise = 'none'
 		get_data(franchise, 2)
 		return('ok',200)
 
-	# Stock responses. Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
-	# Looks for help command and posts response
+	#### Stock responses. ** Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
+	
+	# help   ...   and posts response
 	elif re.search('help', text, re.I):
-		help_message = "I'm a bot. Get my attention by @ing me.\n** All scores are live (scraped in real-time) **\n-----   Commands   -----\nStart your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\nMisc.\n=====\nBot avatar: attempted dunk in slamball at EHS.\n \nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
+		help_message = "I'm a bot. Get my attention by @ing me.\n** All scores are live (scraped in real-time) **\n-----   Commands   -----\nStart your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
 		send_message(help_message)
 		return('ok',200)
-	# Looks for @bot remove bob votes
+	#    ...   @bot remove bob   ...   and posts vote tally
 	elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
 		global rb_votes
 		rb_votes += 1
 		vote_message = 'Total #RB votes: {}'.format(rb_votes)
 		send_message(vote_message)
 		return(rb_votes)
+	
 	##### Settings from within the groupme
 	# Set the week. Can only be done when '@bot advance week' is sent by me
 	elif re.search('Advance week', text, re.I) and sender == '7435972':
@@ -77,10 +84,7 @@ def parse(sender, text):
 
 def get_data(franchise, message_type):
 	season = 2018
-	# week = 7  # NOW it's accessed globally ... This is the only variable that needs to be changed each week
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
-	#CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
-	#GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
 	chrome_options = Options()
 	chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
 	chrome_options.add_argument('--disable-gpu')
@@ -93,7 +97,6 @@ def get_data(franchise, message_type):
 	soup = BeautifulSoup(html, "lxml")
 
 	# This gives a list of franchise numbers in the order that they're matched up
-	# franchise_number_list = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
 	franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
 	points_list = []
 	projected_list = []
@@ -109,6 +112,8 @@ def get_data(franchise, message_type):
 		sys.stdout.write('nestled into a completed game. no projs')
 
 	generate_message(franchise, message_type, franchise_number_list, points_list, projected_list)
+	return('ok',200)
+
 
 def generate_message(franchise, message_type, franchise_number_list, points_list, projected_list):
 	
@@ -144,13 +149,13 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 			my_ongoing_matchup = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, get_franchise_name(franchise), franchise_proj, opponent_score, get_franchise_name(opponent_franchise), opponent_proj)
 			send_message(my_ongoing_matchup)
 			return('ok',200)
-			# WORKED A
+			# WORKED B
 		else: 
 			my_completed_matchup = '{} - {}\n{} - {}'.format(franchise_score, get_franchise_name(franchise), opponent_score, get_franchise_name(opponent_franchise))
 			sys.stdout.write('It should send my score from last week')
 			send_message(my_completed_matchup)
 			return('ok',200)
-			# WORKED A
+			# WORKED B
 	
 	#####     @bot all scores     #####
 
@@ -168,18 +173,16 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 				final_scoreboard = final_scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])))
 			send_message(final_scoreboard)
 			return('ok',200)
-			# WORKED A
+			# WORKED B
 
 
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
-	#STTDB: 'ba284f3f9f43fb0ef944c59350' File Sharing: 'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
 	message = {
 		'text': msg,  
 		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
-	# message['bot_id'] = os.environ['GROUPME_TOKEN']
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 	return('ok',200)
@@ -248,12 +251,13 @@ def sandbox_testing(text):
 	say = 'Votes to #RemoveBob:'
 	message_to_sandbox(say)
 	return('ok',200)
+
 def message_to_sandbox(message):
 	# Sent to File Sharing group for testing purposes
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
 		'text': message, 
-		'bot_id': 'eca4646a2e4f736ab96eefa29e' # eca46:file sharing group for sandbox testing
+		'bot_id': os.environ['SANDBOX_TOKEN']   
 		}
 	json = requests.post(url, message)
 	return('ok',200)
