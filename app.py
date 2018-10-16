@@ -22,10 +22,10 @@ def webhook():
 	return('ok',200)
 
 
-def remove_bob():
-	global remove_bob_count
-	remove_bob_count += 1
-	return(remove_bob_count)
+# def remove_bob():
+# 	global remove_bob_count
+# 	remove_bob_count += 1
+# 	return(remove_bob_count)
 
 def parse(sender, text):
 	# First if statement: avoid infinite bot loops
@@ -50,11 +50,12 @@ def parse(sender, text):
 		help_message = "I'm a bot. Get my attention by @ing me.\n** All scores are live (scraped in real-time) **\n-----   Commands   -----\nStart your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\nMisc.\n=====\nBot avatar: attempted dunk in slamball at EHS.\n \nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
 		send_message(help_message)
 		return('ok',200)
-	elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
-		remove_bob()
-		vote_message = 'Total #RemoveBob votes: {}'.format(remove_bob_count)
-		send_message(vote_message)
-		return('ok',200)
+	# elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
+	# 	global remove_bob_count
+	# 	remove_bob()
+	# 	vote_message = 'Total #RemoveBob votes: {}'.format(remove_bob_count)
+	# 	send_message(vote_message)
+	# 	return('ok',200)
 	else: return('off topic',200)
 
 def get_data(franchise, message_type):
@@ -114,7 +115,7 @@ def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
 		'text': msg,  ##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
-		'bot_id': 'ba284f3f9f43fb0ef944c59350' #'eca4646a2e4f736ab96eefa29e'
+		'bot_id': 'ba284f3f9f43fb0ef944c59350' #'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
 		}
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
