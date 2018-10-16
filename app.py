@@ -135,8 +135,9 @@ def sandbox_testing(text):
 	# Just don't output 'testing' or 'bot' into the sandbox and you're good
 	global votes
 	votes += 1
-	message_to_sandbox(votes)
-	return('ok',200)
+	say = 'Votes to #RemoveBob: {}'.format(votes)
+	message_to_sandbox(say)
+	return(votes)
 def message_to_sandbox(message):
 	# Sent to File Sharing group for testing purposes
 	url = 'https://api.groupme.com/v3/bots/post'
