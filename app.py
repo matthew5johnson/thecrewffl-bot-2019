@@ -153,7 +153,7 @@ def get_data(franchise, message_type):
 		if projected_list != 'N/A':
 			scoreboard = '*** Live Scoreboard ***\n'
 			for i in range(len(franchise_number_list))[0::2]:
-				scoreboard = scoreboard + '{:>8} - {:18} | proj: {}\n{:>8} - {:18} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
+				scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
 			send_message(scoreboard)
 			return('ok',200)
 		else:
@@ -169,10 +169,9 @@ def send_message(msg):
 	##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
 	#STTDB: 'ba284f3f9f43fb0ef944c59350' File Sharing: 'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
 	message = {
-		'text': 'holder',  
-		'bot_id': 'holder' 
+		'text': msg,  
+		'bot_id': 'token' 
 		}
-	message['text'] = msg
 	message['bot_id'] = os.environ['GROUPME_TOKEN']
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
