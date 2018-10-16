@@ -181,8 +181,9 @@ def send_message(msg):
 	##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': 'testing' 
 		}
+	message['bot_id'] = os.environ['SANDBOX_TOKEN']
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 	return('ok',200)
@@ -257,8 +258,9 @@ def message_to_sandbox(message):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
 		'text': message, 
-		'bot_id': os.environ['SANDBOX_TOKEN']   
+		'bot_id': 'token'   
 		}
+	message['bot_id'] = os.environ['SANDBOX_TOKEN']
 	json = requests.post(url, message)
 	return('ok',200)
 
