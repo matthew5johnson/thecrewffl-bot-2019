@@ -38,7 +38,7 @@ def webhook():
 ## Remove Bob vote count
 rb_votes = 0
 ## Week
-# week = 6
+week = 6
 
 
 def parse(sender, text):
@@ -87,7 +87,6 @@ def parse(sender, text):
 
 def get_data(franchise, message_type):
 	season = 2018
-	week = 6
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 	chrome_options = Options()
 	chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
