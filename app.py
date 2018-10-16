@@ -1,7 +1,10 @@
 import os
 import json
 import sys
-import requests
+# import requests
+# requests==2.19.1
+from urllib.request import Request, urlopen
+from urllib.parse import urlencode
 from flask import Flask, request
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -35,7 +38,7 @@ def webhook():
 ## Remove Bob vote count
 rb_votes = 0
 ## Week
-week = 6
+# week = 6
 
 
 def parse(sender, text):
@@ -74,16 +77,17 @@ def parse(sender, text):
 	
 	##### Settings from within the groupme
 	# Set the week. Can only be done when '@bot advance week' is sent by me
-	elif re.search('Advance week', text, re.I) and sender == '7435972':
-		global week 
-		week += 1
-		settings_message = 'Week has been set to {}'.format(week)
-		send_message(settings_message)
-		return(week)
+	# elif re.search('Advance week', text, re.I) and sender == '7435972':
+	# 	global week 
+	# 	week += 1
+	# 	settings_message = 'Week has been set to {}'.format(week)
+	# 	send_message(settings_message)
+	# 	return(week)
 	else: return('off topic',200)
 
 def get_data(franchise, message_type):
 	season = 2018
+	week = 6
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 	chrome_options = Options()
 	chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
@@ -155,7 +159,7 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 			sys.stdout.write('It should send my score from last week')
 			send_message(my_completed_matchup)
 			return('ok',200)
-			# WORKED B
+			# WORKED C
 	
 	#####     @bot all scores     #####
 
@@ -173,7 +177,7 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 				final_scoreboard = final_scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])))
 			send_message(final_scoreboard)
 			return('ok',200)
-			# WORKED B
+			# WORKED C after pinging a different message and trying again
 
 
 def send_message(msg):
@@ -181,10 +185,13 @@ def send_message(msg):
 	##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
 	message = {
 		'text': msg,  
-		'bot_id': 'testing' 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
-	message['bot_id'] = os.environ['SANDBOX_TOKEN']
-	json = requests.post(url, message)
+	request = Request(url, urlencode(message).encode())
+	json = urlopen(request).read().decode()
+	
+
+	# json = requests.post(url, message) # This was tossing epic urllib3.exceptions.ProtocolError: ('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 	return('ok',200)
 
