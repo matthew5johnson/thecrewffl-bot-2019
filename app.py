@@ -20,7 +20,13 @@ def webhook():
 		sys.stdout.write('sender: {} | text: {}'.format(sender,text))
 		parse(sender, text)
 	return('ok',200)
-		
+
+
+def remove_bob():
+	global remove_bob_count
+	remove_bob_count += 1
+	return(remove_bob_count)
+
 def parse(sender, text):
 	# First if statement: avoid infinite bot loops
 	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text) or re.search('Running vote count in favor of #RB', text): 
@@ -45,17 +51,11 @@ def parse(sender, text):
 		send_message(help_message)
 		return('ok',200)
 	elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
-		remove_bob(1)
+		remove_bob()
+		vote_message = 'Total #RemoveBob votes: {}'.format(remove_bob_count)
+		send_message(vote_message)
 		return('ok',200)
 	else: return('off topic',200)
-
-vote_number = 0
-def remove_bob(count):
-	vote_number += 1
-	vote_count_message = 'Running vote count in favor of #RB: {}'.format(vote_number)
-	send_message(vote_count_message)
-	return('ok',200)
-
 
 def get_data(franchise, message_type):
 	season = 2018
