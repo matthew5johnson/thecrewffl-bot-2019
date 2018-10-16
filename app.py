@@ -106,7 +106,7 @@ def get_data(franchise, message_type):
 	else:
 		points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
 		projected_list = 'N/A'
-		sys.stdout.write('no projections')
+		sys.stdout.write(type(points_list))
 
 	# points_list = []
 	# projected_list = []
@@ -141,22 +141,28 @@ def get_data(franchise, message_type):
 		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
 		if projected_list != 'N/A':
 			my_score_message = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, get_franchise_name(franchise), franchise_proj, opponent_score, get_franchise_name(opponent_franchise), opponent_proj)
+			send_message(my_score_message)
+			return('ok',200)
 		else: 
 			my_score_message = '{} - {}\n{} - {}'.format(franchise_score, get_franchise_name(franchise), opponent_score, get_franchise_name(opponent_franchise))
 			sys.stdout.write('It should send my score from last week')
-		send_message(my_score_message)
-		return('ok',200)
+			send_message(my_score_message)
+			return('ok',200)
 
 	elif message_type == 2:
-		for i in range(len(franchise_number_list))[0::2]:
-			if projected_list != 'N/A':
-				scoreboard = '*** Live Scoreboard ***\n'
+		if projected_list != 'N/A':
+			scoreboard = '*** Live Scoreboard ***\n'
+			for i in range(len(franchise_number_list))[0::2]:
 				scoreboard = scoreboard + '{:>8} - {:18} | proj: {}\n{:>8} - {:18} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
-			else: 
-				scoreboard = '*** Final Scoreboard ***\n'
+			send_message(scoreboard)
+			return('ok',200)
+		else:
+			scoreboard = '*** Final Scoreboard ***\n'
+			for i in range(len(franchise_number_list))[0::2]:
 				scoreboard = scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])))
-		send_message(scoreboard)
-		return('ok',200)
+			send_message(scoreboard)
+			return('ok',200)
+
 
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
