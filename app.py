@@ -151,7 +151,7 @@ def get_data(franchise, message_type):
 		for i in range(len(franchise_number_list))[0::2]:
 			if projected_list != 'N/A':
 				scoreboard = '*** Live Scoreboard ***\n'
-				scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
+				scoreboard = scoreboard + '{:>8} - {:18} | proj: {}\n{:>8} - {:18} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
 			else: 
 				scoreboard = '*** Final Scoreboard ***\n'
 				scoreboard = scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])))
@@ -160,9 +160,11 @@ def get_data(franchise, message_type):
 
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
+	##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
+	#STTDB: 'ba284f3f9f43fb0ef944c59350' File Sharing: 'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
 	message = {
-		'text': ,  ##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
-		'bot_id':  #'ba284f3f9f43fb0ef944c59350' #'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
+		'text': 'holder',  
+		'bot_id': 'holder' 
 		}
 	message['text'] = msg
 	message['bot_id'] = os.environ['GROUPME_TOKEN']
