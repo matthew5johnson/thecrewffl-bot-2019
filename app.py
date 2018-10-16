@@ -106,6 +106,7 @@ def get_data(franchise, message_type):
 	else:
 		points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
 		projected_list = 'N/A'
+		sys.stdout.write('no projections')
 
 	# points_list = []
 	# projected_list = []
@@ -116,20 +117,25 @@ def get_data(franchise, message_type):
 	if message_type == 1:
 		position = franchise_number_list.index(str(franchise))
 		franchise_score = points_list[position]
+		sys.stdout.write(franchise_score)
 		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
 		if projected_list != 'N/A':
 			franchise_proj = projected_list[position]
-		else: return('Game has concluded. No projections')
+		else: 
+			return('Game has concluded. No projections')
 		if position % 2 == 0:
 			opponent_position = position + 1
-		else: opponent_position = position - 1
+		else: 
+			opponent_position = position - 1
 
 		opponent_franchise = int(franchise_number_list[opponent_position])
 		opponent_score = points_list[opponent_position]
 		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
 		if projected_list != 'N/A':
 			opponent_proj = projected_list[opponent_position]
-		else: return('Game has concluded. No opponent projections')
+		else: 
+			return('ok',200)
+			sys.stdout.write('Game has concluded. No opponent projections')
 
 		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
 		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
@@ -144,10 +150,10 @@ def get_data(franchise, message_type):
 	elif message_type == 2:
 		for i in range(len(franchise_number_list))[0::2]:
 			if projected_list != 'N/A':
-				scoreboard = '*** Week {} Live Scoreboard ***\n'.format(week)
+				scoreboard = '*** Live Scoreboard ***\n'
 				scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
 			else: 
-				scoreboard = '*** Week {} Final Scoreboard ***\n'.format(week)
+				scoreboard = '*** Final Scoreboard ***\n'
 				scoreboard = scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])))
 		send_message(scoreboard)
 		return('ok',200)
@@ -155,9 +161,11 @@ def get_data(franchise, message_type):
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
-		'text': msg,  ##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
-		'bot_id': 'eca4646a2e4f736ab96eefa29e' #'ba284f3f9f43fb0ef944c59350' #'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
+		'text': ,  ##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
+		'bot_id':  #'ba284f3f9f43fb0ef944c59350' #'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
 		}
+	message['text'] = msg
+	message['bot_id'] = os.environ['GROUPME_TOKEN']
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 	return('ok',200)
