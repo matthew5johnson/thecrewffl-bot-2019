@@ -28,15 +28,16 @@ def webhook():
 		return('ok',200)
 	else: return('ok',200)
 
+###### Global variables
+## Remove Bob vote count
+rb_votes = 0
+## Week
+week = 6
 
-# def remove_bob():
-# 	global remove_bob_count
-# 	remove_bob_count += 1
-# 	return(remove_bob_count)
 
 def parse(sender, text):
 	# First if statement: avoid infinite bot loops
-	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text) or re.search('Running vote count in favor of #RB', text): 
+	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
 	# Looks for @bot my score command
@@ -57,17 +58,26 @@ def parse(sender, text):
 		help_message = "I'm a bot. Get my attention by @ing me.\n** All scores are live (scraped in real-time) **\n-----   Commands   -----\nStart your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\nMisc.\n=====\nBot avatar: attempted dunk in slamball at EHS.\n \nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
 		send_message(help_message)
 		return('ok',200)
-	# elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
-	# 	global remove_bob_count
-	# 	remove_bob()
-	# 	vote_message = 'Total #RemoveBob votes: {}'.format(remove_bob_count)
-	# 	send_message(vote_message)
-	# 	return('ok',200)
+	# Looks for @bot remove bob votes
+	elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
+		global rb_votes
+		rb_votes += 1
+		vote_message = 'Total #RB votes: {}'.format(rb_votes)
+		send_message(vote_message)
+		return(rb_votes)
+	##### Settings from within the groupme
+	# Set the week. Can only be done when '@bot advance week' is sent by me
+	elif re.search('Advance week', text, re.I) and sender == '7435972':
+		global week 
+		week += 1
+		settings_message = 'Week has been set to {}'.format(week)
+		send_message(settings_message)
+		return(week)
 	else: return('off topic',200)
 
 def get_data(franchise, message_type):
 	season = 2018
-	week = 7  # This is the only variable that needs to be changed each week
+	# week = 7  # NOW it's accessed globally ... This is the only variable that needs to be changed each week
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 	#CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
 	#GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
@@ -83,30 +93,49 @@ def get_data(franchise, message_type):
 	soup = BeautifulSoup(html, "lxml")
 
 	# This gives a list of franchise numbers in the order that they're matched up
-	franchise_number_list = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
-	# sys.stdout.write('first team: {}, second: {} <<< '.format(plug[2], plug[3]))  # This worked perfectly
+	# franchise_number_list = re.findall(r'(?<=tmTotalPts_)[0-9]*', str(soup)) # confirmed: this creates a list
+	franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
 	points_list = []
 	projected_list = []
-	for i in franchise_number_list:
-		points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
-		projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
+
+	# The if statement tests to see if the matchup is ongoing (returns true if so) or already completed (returns false if so)
+	if re.search('tmTotalPts_', str(soup)):
+		for i in franchise_number_list:
+			points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
+			projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
+	else:
+		points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
+		projected_list = 'N/A'
+
+	# points_list = []
+	# projected_list = []
+	# for i in franchise_number_list:
+	# 	points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
+	# 	projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
 
 	if message_type == 1:
 		position = franchise_number_list.index(str(franchise))
 		franchise_score = points_list[position]
-		franchise_proj = projected_list[position]
+		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
+		if projected_list != 'N/A':
+			franchise_proj = projected_list[position]
+		else: return('Game has concluded. No projections')
 		if position % 2 == 0:
 			opponent_position = position + 1
 		else: opponent_position = position - 1
 
 		opponent_franchise = int(franchise_number_list[opponent_position])
 		opponent_score = points_list[opponent_position]
-		opponent_proj = projected_list[opponent_position]
+		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
+		if projected_list != 'N/A':
+			opponent_proj = projected_list[opponent_position]
+		else: return('Game has concluded. No opponent projections')
 
 		# sys.stdout.write('franchise: {} points: {} proj: {} <<<\nopponent: {} points: {} proj: {} <<< '.format(name_identifier(franchise), franchise_score, franchise_proj, name_identifier(opponent_franchise), opponent_score, opponent_proj))
-
-		my_score_message = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, get_franchise_name(franchise), franchise_proj, opponent_score, get_franchise_name(opponent_franchise), opponent_proj)
-		# my_final_message = 'this is testing'
+		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
+		if projected_list != 'N/A':
+			my_score_message = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, get_franchise_name(franchise), franchise_proj, opponent_score, get_franchise_name(opponent_franchise), opponent_proj)
+		else: my_score_message = '{} - {}\n{} - {}'.format(franchise_score, get_franchise_name(franchise), opponent_score, get_franchise_name(opponent_franchise))
 		# sys.stdout.write(final_message) # this works perfectly
 		send_message(my_score_message)
 		return('ok',200)
@@ -114,7 +143,9 @@ def get_data(franchise, message_type):
 	elif message_type == 2:
 		scoreboard = '*** Live Scoreboard ***\n'
 		for i in range(len(franchise_number_list))[0::2]:
-			scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
+			if projected_list != 'N/A':
+				scoreboard = scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
+			else: scoreboard = scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])))
 		send_message(scoreboard)
 		return('ok',200)
 
@@ -122,33 +153,11 @@ def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
 		'text': msg,  ##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
-		'bot_id': 'ba284f3f9f43fb0ef944c59350' #'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
+		'bot_id': 'eca4646a2e4f736ab96eefa29e' #'ba284f3f9f43fb0ef944c59350' #'eca4646a2e4f736ab96eefa29e' #ba28:STTDB; eca46:file sharing
 		}
 	json = requests.post(url, message)
 	# sys.stdout.write('made it to send_message function. This was passed {} << '.format(msg))
 	return('ok',200)
-
-
-
-votes = 0
-def sandbox_testing(text):
-	# Just don't output 'testing' or 'bot' into the sandbox and you're good
-	global votes
-	votes += 1
-	say = 'Votes to #RemoveBob: {}'.format(votes)
-	message_to_sandbox(say)
-	return(votes)
-def message_to_sandbox(message):
-	# Sent to File Sharing group for testing purposes
-	url = 'https://api.groupme.com/v3/bots/post'
-	message = {
-		'text': message, 
-		'bot_id': 'eca4646a2e4f736ab96eefa29e' # eca46:file sharing group for sandbox testing
-		}
-	json = requests.post(url, message)
-	return('ok',200)
-
-
 
 def get_franchise_name(franchise):
 	if franchise == 1:
@@ -175,7 +184,6 @@ def get_franchise_name(franchise):
 		return('Nick & Mickey')
 	elif franchise == 12:
 		return('Joseph & Mike')
-
 
 def get_franchise_number(input):
 	# These inputs correspond to groupme nicknames as of 10/12/18
@@ -204,6 +212,26 @@ def get_franchise_number(input):
 	elif input == '6602218' or input == '55209013' or input == 12:
 		return(12)
 
+
+
+
+
+
+
+def sandbox_testing(text):
+	# Just don't output 'testing' or 'bot' into the sandbox and you're good
+	say = 'Votes to #RemoveBob:'
+	message_to_sandbox(say)
+	return('ok',200)
+def message_to_sandbox(message):
+	# Sent to File Sharing group for testing purposes
+	url = 'https://api.groupme.com/v3/bots/post'
+	message = {
+		'text': message, 
+		'bot_id': 'eca4646a2e4f736ab96eefa29e' # eca46:file sharing group for sandbox testing
+		}
+	json = requests.post(url, message)
+	return('ok',200)
 
 if __name__ == '__main__':
 	app.run()
