@@ -130,7 +130,7 @@ def send_message(msg):
 
 
 
-
+votes = 0
 def sandbox_testing(text):
 	# Just don't output 'testing' or 'bot' into the sandbox and you're good
 	global votes
