@@ -60,7 +60,7 @@ def parse(sender, text):
 
 def get_data(franchise, message_type):
 	season = 2018
-	week = 6  # This is the only variable that needs to be changed each week
+	week = 7  # This is the only variable that needs to be changed each week
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 	#CHROMEDRIVER_PATH = '/app/.chromedriver/bin/chromedriver'
 	#GOOGLE_CHROME_BIN = '/app/.apt/usr/bin/google-chrome'
