@@ -106,7 +106,7 @@ def get_data(franchise, message_type):
 	else:
 		points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
 		projected_list = 'N/A'
-		sys.stdout.write(type(points_list))
+		sys.stdout.write('nestled into a completed game. no projs')
 
 	# points_list = []
 	# projected_list = []
