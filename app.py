@@ -192,7 +192,7 @@ def parse(sender, text):
 	
 	# help   ...   and posts response
 	elif re.search('help', text, re.I):
-		help_message = "I'm a bot. Get my attention by @ing me.\n** All scores are live (scraped in real-time) **\n-----   Commands   -----\nStart your messages with '@bot'\n1. '@bot my score' = your game's live score\n2. '@bot all scores' = full live scoreboard\n3. '@bot help' for this help message\n _commands are case and space insensitive_\n=====\nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
+		help_message = "** All scores are scraped in real-time **\n-----   Commands   -----\n1. '@bot my score' = your live score\n2. '@bot all scores' = league live scoreboard\n3. '@bot records' = record book\n4. '@bot help' = this help message\n _commands are case and space insensitive_\n=====\nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
 		send_message(help_message)
 		return('ok',200)
 	#    ...   @bot remove bob   ...   and posts vote tally
@@ -211,7 +211,7 @@ def parse(sender, text):
 		settings_message = database_change_week('minus')
 		send_message(settings_message)
 		return('ok',200)
-	elif re.search('week -', text, re.I) or re.search('week +', text, re.I):
+	elif re.search('next week', text, re.I) or re.search('last week', text, re.I):
 		message = '#KyleLogic'
 		send_message(message)
 	else: return('off topic',200)
@@ -324,7 +324,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
