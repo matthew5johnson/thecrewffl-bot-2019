@@ -97,27 +97,30 @@ def get_data(franchise, message_type):
 		driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
 		driver.get(url)
 		html = driver.page_source
-		# driver.close()
+		driver.close()
 		soup = BeautifulSoup(html, "lxml")
+
+		# This gives a list of franchise numbers in the order that they're matched up
+		franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
+		points_list = []
+		projected_list = []
+
+		# The if statement tests to see if the matchup is ongoing (returns true if so) or already completed (returns false if so)
+		if re.search('tmTotalPts_', str(soup)):
+			for i in franchise_number_list:
+				points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
+				projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
+		else:
+			points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
+			projected_list = 'GAME COMPLETED'
+			sys.stdout.write('nestled into a completed game. no projs')
+
+		generate_message(franchise, message_type, franchise_number_list, points_list, projected_list)
+		return('ok',200)
+		
 	except:
 		send_message('Error. Retry')
-	# This gives a list of franchise numbers in the order that they're matched up
-	franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
-	points_list = []
-	projected_list = []
-
-	# The if statement tests to see if the matchup is ongoing (returns true if so) or already completed (returns false if so)
-	if re.search('tmTotalPts_', str(soup)):
-		for i in franchise_number_list:
-			points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
-			projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
-	else:
-		points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
-		projected_list = 'GAME COMPLETED'
-		sys.stdout.write('nestled into a completed game. no projs')
-
-	generate_message(franchise, message_type, franchise_number_list, points_list, projected_list)
-	return('ok',200)
+		return('get_data failed')
 
 
 def generate_message(franchise, message_type, franchise_number_list, points_list, projected_list):
