@@ -109,6 +109,34 @@ def database_access(table, command):
 		sys.stdout.write('entered db access but no relevant command')
 		return('ok',200)
 
+def database_change_week(direction):
+	week = database_access('settings', 'week')
+	if direction == 'plus':
+		week += 1
+	elif direction == 'minus':
+		week -= 1
+
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+	cur.execute("UPDATE settings SET settings_week=%s WHERE description='main';", (week))
+	con.commit()
+	con.close()
+	return('Week updated to %s') % (week)
+
+def database_remove_bob():
+	rb_votes = database_access('settings', 'rb')
+	rb_votes += 1
+
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+	cur.execute("UPDATE settings SET settings_rbvotes=%s WHERE description='main';", (rb_votes))
+	con.commit()
+	con.close()
+	return('Total #RB votes: %s') % (rb_votes)
+
+
+
+
 def parse(sender, text):
 	#### Ignore every line that the bot prints out itself
 	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
@@ -147,15 +175,15 @@ def parse(sender, text):
 		weekly_highscore_tuple, weekly_lowcore_tuple, weekly_blowout_tuple, weekly_closest_tuple, season_highppg_tuple, season_lowppg_tuple, season_highwins_tuple, season_lowwins_tuple, season_highmargin_tuple = database_access('records', 'all')
 		# message = '1. %s : %s - %s/%s vs %s' % (weekly_points, franchise, season, week, opponent)
 		### Weekly
-		best_game = 'Most Points: %s - %s (%s/%s)' % (weekly_highscore_tuple[0][0], weekly_highscore_tuple[0][1], weekly_highscore_tuple[0][2], weekly_highscore_tuple[0][3])
-		worst_game = 'Fewest Points: %s - %s (%s/%s)' % (weekly_lowcore_tuple[0][0], weekly_lowcore_tuple[0][1], weekly_lowcore_tuple[0][2], weekly_lowcore_tuple[0][3])
-		blowout = 'Biggest Blowout: %s - %s (%s/%s)' % (weekly_blowout_tuple[0][0], weekly_blowout_tuple[0][1], weekly_blowout_tuple[0][2], weekly_blowout_tuple[0][3])
-		closest_game = 'Closest Game: %s - %s (%s/%s)' % (weekly_closest_tuple[0][0], weekly_closest_tuple[0][1], weekly_closest_tuple[0][2], weekly_closest_tuple[0][3])
+		best_game = 'Most points scored in a game:\n%s - %s (%s/%s)' % (weekly_highscore_tuple[0][0], weekly_highscore_tuple[0][1], weekly_highscore_tuple[0][2], weekly_highscore_tuple[0][3])
+		worst_game = 'Fewest points in a game:\n%s - %s (%s/%s)' % (weekly_lowcore_tuple[0][0], weekly_lowcore_tuple[0][1], weekly_lowcore_tuple[0][2], weekly_lowcore_tuple[0][3])
+		blowout = 'Biggest blowout:\n%s - %s (%s/%s)' % (weekly_blowout_tuple[0][0], weekly_blowout_tuple[0][1], weekly_blowout_tuple[0][2], weekly_blowout_tuple[0][3])
+		closest_game = 'Closest game:\n%s - %s (%s/%s)' % (weekly_closest_tuple[0][0], weekly_closest_tuple[0][1], weekly_closest_tuple[0][2], weekly_closest_tuple[0][3])
 		### Seasonal
-		best_ppg = 'Most PPG in a Season: %s - %s (%s)' % (season_highppg_tuple[0][0], season_highppg_tuple[0][1], season_highppg_tuple[0][2])
-		fewest_ppg = 'Least PPG in a Season: %s - %s (%s)' % (season_lowppg_tuple[0][0], season_lowppg_tuple[0][1], season_lowppg_tuple[0][2])
-		most_wins = 'Most Wins: %s - %s (%s)' % (season_highwins_tuple[0][0], season_highwins_tuple[0][1], season_highwins_tuple[0][2])
-		high_margin = 'Largest avg. Margin: %s - %s (%s)' % (season_highmargin_tuple[0][0], season_highmargin_tuple[0][1], season_highmargin_tuple[0][2])
+		best_ppg = 'Most points-per-game in a season:\n%s - %s (%s)' % (season_highppg_tuple[0][0], season_highppg_tuple[0][1], season_highppg_tuple[0][2])
+		fewest_ppg = 'Fewest ppg in a season:\n%s - %s (%s)' % (season_lowppg_tuple[0][0], season_lowppg_tuple[0][1], season_lowppg_tuple[0][2])
+		most_wins = 'Most wins:\n%s - %s (%s)' % (season_highwins_tuple[0][0], season_highwins_tuple[0][1], season_highwins_tuple[0][2])
+		high_margin = 'Largest avgerage margin of margin:\n%s - %s (%s)' % (season_highmargin_tuple[0][0], season_highmargin_tuple[0][1], season_highmargin_tuple[0][2])
 		message = "=== Modern Era Record Book ===\n-----  Week  -----\n%s\n%s\n%s\n%s\n-----  Season  -----\n%s\n%s\n%s\n%s" % (best_game, worst_game, blowout, closest_game, best_ppg, fewest_ppg, most_wins, high_margin)
 		send_message(message)
 		return('ok',200) 
@@ -169,20 +197,23 @@ def parse(sender, text):
 		return('ok',200)
 	#    ...   @bot remove bob   ...   and posts vote tally
 	elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
-		global rb_votes
-		rb_votes += 1
-		vote_message = 'Total #RB votes: {}'.format(rb_votes)
-		send_message(vote_message)
-		return(rb_votes)
+		rb_message = database_remove_bob()
+		send_message(rb_message)
+		return('ok',200)
 	
 	##### Settings from within the groupme
 	# Set the week. Can only be done when '@bot advance week' is sent by me
-	# elif re.search('Advance week', text, re.I) and sender == '7435972':
-	# 	global week 
-	# 	week += 1
-	# 	settings_message = 'Week has been set to {}'.format(week)
-	# 	send_message(settings_message)
-	# 	return(week)
+	elif re.search('week +', text, re.I) and sender == '7435972':
+		settings_message = database_change_week('plus')
+		send_message(settings_message)
+		return('ok',200)
+	elif re.search('week -', text, re.I) and sender == '7435972':
+		settings_message = database_change_week('minus')
+		send_message(settings_message)
+		return('ok',200)
+	elif re.search('week -', text, re.I) or re.search('week +', text, re.I):
+		message = '#KyleLogic'
+		send_message(message)
 	else: return('off topic',200)
 
 def get_data(franchise, message_type):
