@@ -37,17 +37,17 @@ def webhook():
 	else: return('ok',200)
 
 ###### Global variables
-con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+con = pymysql.connect(os.environ['CLEARDB_DATABASE_URL'])
 cur = con.cursor()
-cur.execute("SELECT settings_rbvote, settings_week FROM settings WHERE description='main';")
+cur.execute("SELECT settings_rbvotes, settings_week FROM settings WHERE description='main';")
 settings_tuple = cur.fetchall()
 con.commit()
 con.close()
 ## Remove Bob vote count
-rb_votes = settings_tuple[0][0]
+rb_votes = int(settings_tuple[0][0])
 ## Week
-week = settings_tuple[0][1]
-
+week = int(settings_tuple[0][1])
+#host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565'
 
 def parse(sender, text):
 	#### Ignore every line that the bot prints out itself
