@@ -40,17 +40,29 @@ def database_access(table, command):
 	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
 	cur = con.cursor()
 
-	if table == 'settings':
+	if table == 'settings' and command == 'week':
 		cur.execute("SELECT settings_rbvotes, settings_week FROM settings WHERE description='main';")
 		settings_tuple = cur.fetchall()
 		con.commit()
 		con.close()
-		if command == 'week':
-			week = int(settings_tuple[0][1])
-			return(week)
-		elif command == 'rb':
-			rb_votes = int(settings_tuple[0][0])
-			return(rb_votes)
+		week = settings_tuple[0][1]
+		sys.stdout.write('hit settings week if st')
+		return(week)
+	elif table == 'settings' and command == 'rb':
+		cur.execute("SELECT settings_rbvotes, settings_week FROM settings WHERE description='main';")
+		settings_tuple = cur.fetchall()
+		con.commit()
+		con.close()
+		rb_votes = settings_tuple[0][0]
+		return(rb_votes)
+
+
+		# if command == 'week':
+		# 	week = int(settings_tuple[0][1])
+		# 	return(week)
+		# elif command == 'rb':
+		# 	rb_votes = int(settings_tuple[0][0])
+		# 	return(rb_votes)
 	else:
 		con.close()
 		sys.stdout.write('entered db access but no relevant command')
