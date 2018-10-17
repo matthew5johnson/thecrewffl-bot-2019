@@ -51,6 +51,21 @@ def database_access(table, command):
 		elif command == 'rb':
 			rb_votes = int(settings_tuple[0][0])
 			return(rb_votes)
+	elif table == 'records':
+		if command == 'all':
+			# Highest single game score
+			cur.execute("SELECT weekly_points, franchise, season, week, opponent FROM weekly_records WHERE type=1 ORDER BY weekly_points desc;")
+			weekly_highscore_tuple = cur.fetchall()
+			con.commit()
+			con.close()
+			weekly_points = weekly_highscore_tuple[0]
+			franchse = weekly_highscore_tuple[1]
+			season = weekly_highscore_tuple[2]
+			week = weekly_highscore_tuple[3]
+			opponent = weekly_highscore_tuple[4]
+			return(weekly_points, franchise, season, week, opponent)
+		else: 
+			return('none',200)
 	else:
 		con.close()
 		sys.stdout.write('entered db access but no relevant command')
@@ -89,6 +104,12 @@ def parse(sender, text):
 	# 	get_data(franchise, 1)
 	# 	return('ok',200)
 	
+	# 5   ...   @bot records
+	elif re.search('record', text, re.I):
+		weekly_points, franchise, season, week, opponent = database_access('records', 'all')
+		message = '1. %s : %s - %s/%s vs %s' % (weekly_points, franchise, season, week, opponent)
+		send_message(message)
+		return('ok',200) 
 
 	#### Stock responses. ** Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
 	
@@ -151,7 +172,7 @@ def get_data(franchise, message_type):
 		# Adding Try/Except mitigated the connection error issue on run #1
 
 	except:
-		send_message('Error. Remote webdriver is being a noob. Retry')
+		send_message('Error. Our remote webdriver + free tier of cloud hosting is lagging like a noob. Retry in a few minutes')
 		return('get_data failed')
 
 
@@ -302,11 +323,14 @@ def message_to_sandbox(message):
 	# Sent to File Sharing group for testing purposes
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
-		'text': message, 
-		'bot_id': 'token'   
+		'text': message,  
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
-	message['bot_id'] = os.environ['SANDBOX_TOKEN']
-	json = requests.post(url, message)
+	request = Request(url, urlencode(message).encode())
+	json = urlopen(request).read().decode()
+
+	
+	# json = requests.post(url, message)
 	return('ok',200)
 
 if __name__ == '__main__':
