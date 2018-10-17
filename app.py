@@ -38,7 +38,7 @@ def webhook():
 ## Remove Bob vote count
 rb_votes = 0
 ## Week
-week = 6
+week = 7
 
 
 def parse(sender, text):
@@ -59,6 +59,21 @@ def parse(sender, text):
 		franchise = 'none'
 		get_data(franchise, 2)
 		return('ok',200)
+
+	# 3   ...   @bot my mwm score
+	# elif re.search('my', text, re.I) and re.search('mwm', text, re.I) and re.search('score', text, re.I):
+	# 	franchise = get_franchise_number(sender)
+	# 	# sys.stdout.write('franchise: {} <<'.format(franchise))
+	# 	get_data(franchise, 1)
+	# 	return('ok',200)
+	
+	# 4   ...   @bot all mwm scores
+	# elif re.search('my', text, re.I) and re.search('score', text, re.I):
+	# 	franchise = get_franchise_number(sender)
+	# 	# sys.stdout.write('franchise: {} <<'.format(franchise))
+	# 	get_data(franchise, 1)
+	# 	return('ok',200)
+	
 
 	#### Stock responses. ** Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
 	
@@ -117,9 +132,10 @@ def get_data(franchise, message_type):
 
 		generate_message(franchise, message_type, franchise_number_list, points_list, projected_list)
 		return('ok',200)
-		
+		# Adding Try/Except mitigated the connection error issue on run #1
+
 	except:
-		send_message('Error. Retry')
+		send_message('Error. Remote webdriver is being a noob. Retry')
 		return('get_data failed')
 
 
