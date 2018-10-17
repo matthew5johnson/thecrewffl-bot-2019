@@ -59,7 +59,7 @@ def database_access(table, command):
 			con.commit()
 			con.close()
 			weekly_points = weekly_highscore_tuple[0]
-			franchse = weekly_highscore_tuple[1]
+			franchise = weekly_highscore_tuple[1]
 			season = weekly_highscore_tuple[2]
 			week = weekly_highscore_tuple[3]
 			opponent = weekly_highscore_tuple[4]
