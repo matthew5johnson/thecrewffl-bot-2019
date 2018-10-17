@@ -40,29 +40,17 @@ def database_access(table, command):
 	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
 	cur = con.cursor()
 
-	if table == 'settings' and command == 'week':
+	if table == 'settings':
 		cur.execute("SELECT settings_rbvotes, settings_week FROM settings WHERE description='main';")
 		settings_tuple = cur.fetchall()
 		con.commit()
 		con.close()
-		week = settings_tuple[0][1]
-		sys.stdout.write('hit settings week if st')
-		return(week)
-	elif table == 'settings' and command == 'rb':
-		cur.execute("SELECT settings_rbvotes, settings_week FROM settings WHERE description='main';")
-		settings_tuple = cur.fetchall()
-		con.commit()
-		con.close()
-		rb_votes = settings_tuple[0][0]
-		return(rb_votes)
-
-
-		# if command == 'week':
-		# 	week = int(settings_tuple[0][1])
-		# 	return(week)
-		# elif command == 'rb':
-		# 	rb_votes = int(settings_tuple[0][0])
-		# 	return(rb_votes)
+		if command == 'week':
+			week = int(settings_tuple[0][1])
+			return(week)
+		elif command == 'rb':
+			rb_votes = int(settings_tuple[0][0])
+			return(rb_votes)
 	else:
 		con.close()
 		sys.stdout.write('entered db access but no relevant command')
@@ -130,7 +118,7 @@ def parse(sender, text):
 def get_data(franchise, message_type):
 	try:
 		season = 2018
-		database_access('settings', 'week')
+		week = database_access('settings', 'week')
 		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 		chrome_options = Options()
 		chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
@@ -306,7 +294,7 @@ def get_franchise_number(input):
 
 def sandbox_testing(text):
 	# Just don't output 'testing' or 'bot' into the sandbox and you're good
-	database_access('settings', 'week')
+	week = database_access('settings', 'week')
 	message_to_sandbox(week)
 	return('ok',200)
 
