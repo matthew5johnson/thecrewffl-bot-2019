@@ -294,8 +294,8 @@ def get_franchise_number(input):
 
 def sandbox_testing(text):
 	# Just don't output 'testing' or 'bot' into the sandbox and you're good
-	say = 'Votes to #RemoveBob:'
-	message_to_sandbox(say)
+	database_access('settings', 'week')
+	message_to_sandbox(week)
 	return('ok',200)
 
 def message_to_sandbox(message):
