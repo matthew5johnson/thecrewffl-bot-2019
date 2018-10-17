@@ -86,19 +86,21 @@ def parse(sender, text):
 	else: return('off topic',200)
 
 def get_data(franchise, message_type):
-	season = 2018
-	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
-	chrome_options = Options()
-	chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
-	chrome_options.add_argument('--disable-gpu')
-	chrome_options.add_argument('--no-sandbox')
-	chrome_options.add_argument('--headless')
-	driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
-	driver.get(url)
-	html = driver.page_source
-	driver.close()
-	soup = BeautifulSoup(html, "lxml")
-
+	try:
+		season = 2018
+		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
+		chrome_options = Options()
+		chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
+		chrome_options.add_argument('--disable-gpu')
+		chrome_options.add_argument('--no-sandbox')
+		chrome_options.add_argument('--headless')
+		driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
+		driver.get(url)
+		html = driver.page_source
+		# driver.close()
+		soup = BeautifulSoup(html, "lxml")
+	except:
+		send_message('Error. Retry')
 	# This gives a list of franchise numbers in the order that they're matched up
 	franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
 	points_list = []
