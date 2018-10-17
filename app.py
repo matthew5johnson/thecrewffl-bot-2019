@@ -61,13 +61,47 @@ def database_access(table, command):
 			cur.execute("SELECT weekly_points, franchise, season, week, opponent FROM weekly_records WHERE type=1 ORDER BY weekly_points desc LIMIT 1;")
 			weekly_highscore_tuple = cur.fetchall()
 			con.commit()
+			# Lowest single game score
+			cur.execute("SELECT weekly_points, franchise, season, week, opponent FROM weekly_records WHERE type=2 ORDER BY weekly_points asc LIMIT 1;")
+			weekly_lowcore_tuple = cur.fetchall()
+			con.commit()
+			# Biggest blowout
+			cur.execute("SELECT weekly_margin, franchise, season, week, opponent FROM weekly_records WHERE type=3 ORDER BY weekly_margin desc LIMIT 1;")
+			weekly_blowout_tuple = cur.fetchall()
+			con.commit()
+			# Closest game
+			cur.execute("SELECT weekly_margin, franchise, season, week, opponent FROM weekly_records WHERE type=4 ORDER BY weekly_margin asc LIMIT 1;")
+			weekly_closest_tuple = cur.fetchall()
+			con.commit()
+			# Most PPG Season
+			cur.execute("SELECT season_ppg, franchise, season FROM season_records WHERE type=5 ORDER BY season_ppg desc LIMIT 1;")
+			season_highppg_tuple = cur.fetchall()
+			con.commit()
+			# Fewest PPG Season
+			cur.execute("SELECT season_ppg, franchise, season FROM season_records WHERE type=6 ORDER BY season_ppg asc LIMIT 1;")
+			season_lowppg_tuple = cur.fetchall()
+			con.commit()
+			# Most WINS
+			cur.execute("SELECT season_wins, franchise, season FROM season_records WHERE type=7 ORDER BY season_wins desc LIMIT 1;")
+			season_highwins_tuple = cur.fetchall()
+			con.commit()
+			# Fewest WINS
+			cur.execute("SELECT season_wins, franchise, season FROM season_records WHERE type=8 ORDER BY season_wins asc LIMIT 1;")
+			season_lowwins_tuple = cur.fetchall()
+			con.commit()
+			# Highest avg margin of victory
+			cur.execute("SELECT season_margin, franchise, season FROM season_records WHERE type=9 ORDER BY season_margin desc LIMIT 1;")
+			season_highmargin_tuple = cur.fetchall()
+			con.commit()
+
 			con.close()
-			weekly_points = weekly_highscore_tuple[0][0]
-			franchise = weekly_highscore_tuple[0][1]
-			season = weekly_highscore_tuple[0][2]
-			week = weekly_highscore_tuple[0][3]
-			opponent = weekly_highscore_tuple[0][4]
-			return(weekly_points, franchise, season, week, opponent)
+			# weekly_points = weekly_highscore_tuple[0][0]
+			# franchise = weekly_highscore_tuple[0][1]
+			# season = weekly_highscore_tuple[0][2]
+			# week = weekly_highscore_tuple[0][3]
+			# opponent = weekly_highscore_tuple[0][4]
+			return(weekly_highscore_tuple, weekly_lowcore_tuple, weekly_blowout_tuple, weekly_closest_tuple, season_highppg_tuple, season_lowppg_tuple, season_highwins_tuple, season_lowwins_tuple, season_highmargin_tuple)
+			# return(weekly_points, franchise, season, week, opponent)
 		else: 
 			return('none',200)
 	else:
@@ -110,8 +144,19 @@ def parse(sender, text):
 	
 	# 5   ...   @bot records
 	elif re.search('record', text, re.I):
-		weekly_points, franchise, season, week, opponent = database_access('records', 'all')
-		message = '1. %s : %s - %s/%s vs %s' % (weekly_points, franchise, season, week, opponent)
+		weekly_highscore_tuple, weekly_lowcore_tuple, weekly_blowout_tuple, weekly_closest_tuple, season_highppg_tuple, season_lowppg_tuple, season_highwins_tuple, season_lowwins_tuple, season_highmargin_tuple = database_access('records', 'all')
+		# message = '1. %s : %s - %s/%s vs %s' % (weekly_points, franchise, season, week, opponent)
+		### Weekly
+		best_game = 'Most Points: %s - %s (%s/%s)' % (weekly_highscore_tuple[0][0], weekly_highscore_tuple[0][1], weekly_highscore_tuple[0][2], weekly_highscore_tuple[0][3])
+		worst_game = 'Fewest Points: %s - %s (%s/%s)' % (weekly_lowcore_tuple[0][0], weekly_lowcore_tuple[0][1], weekly_lowcore_tuple[0][2], weekly_lowcore_tuple[0][3])
+		blowout = 'Biggest Blowout: %s - %s (%s/%s)' % (weekly_blowout_tuple[0][0], weekly_blowout_tuple[0][1], weekly_blowout_tuple[0][2], weekly_blowout_tuple[0][3])
+		closest_game = 'Closest Game: %s - %s (%s/%s)' % (weekly_closest_tuple[0][0], weekly_closest_tuple[0][1], weekly_closest_tuple[0][2], weekly_closest_tuple[0][3])
+		### Seasonal
+		best_ppg = 'Most PPG in a Season: %s - %s (%s)' % (season_highppg_tuple[0][0], season_highppg_tuple[0][1], season_highppg_tuple[0][2])
+		fewest_ppg = 'Least PPG in a Season: %s - %s (%s)' % (season_lowppg_tuple[0][0], season_lowppg_tuple[0][1], season_lowppg_tuple[0][2])
+		most_wins = 'Most Wins: %s - %s (%s)' % (season_highwins_tuple[0][0], season_highwins_tuple[0][1], season_highwins_tuple[0][2])
+		high_margin = 'Largest avg. Margin: %s - %s (%s)' % (season_highmargin_tuple[0][0], season_highmargin_tuple[0][1], season_highmargin_tuple[0][2])
+		message = "=== Modern Era Record Book ===\n-----  Week  -----\n%s\n%s\n%s\n%s\n-----  Season  -----\n%s\n%s\n%s\n%s" % (best_game, worst_game, blowout, closest_game, best_ppg, fewest_ppg, most_wins, high_margin)
 		send_message(message)
 		return('ok',200) 
 
