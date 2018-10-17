@@ -183,7 +183,7 @@ def parse(sender, text):
 		best_ppg = 'Most points-per-game in a season:\n%s - %s (%s)' % (season_highppg_tuple[0][0], season_highppg_tuple[0][1], season_highppg_tuple[0][2])
 		fewest_ppg = 'Fewest ppg in a season:\n%s - %s (%s)' % (season_lowppg_tuple[0][0], season_lowppg_tuple[0][1], season_lowppg_tuple[0][2])
 		most_wins = 'Most wins:\n%s - %s (%s)' % (season_highwins_tuple[0][0], season_highwins_tuple[0][1], season_highwins_tuple[0][2])
-		high_margin = 'Largest avgerage margin of margin:\n%s - %s (%s)' % (season_highmargin_tuple[0][0], season_highmargin_tuple[0][1], season_highmargin_tuple[0][2])
+		high_margin = 'Largest avgerage margin of victory:\n%s - %s (%s)' % (season_highmargin_tuple[0][0], season_highmargin_tuple[0][1], season_highmargin_tuple[0][2])
 		message = "=== Modern Era Record Book ===\n-----  Week  -----\n%s\n%s\n%s\n%s\n-----  Season  -----\n%s\n%s\n%s\n%s" % (best_game, worst_game, blowout, closest_game, best_ppg, fewest_ppg, most_wins, high_margin)
 		send_message(message)
 		return('ok',200) 
@@ -203,11 +203,11 @@ def parse(sender, text):
 	
 	##### Settings from within the groupme
 	# Set the week. Can only be done when '@bot advance week' is sent by me
-	elif re.search('week +', text, re.I) and sender == '7435972':
+	elif re.search('next week', text, re.I) and sender == '7435972':
 		settings_message = database_change_week('plus')
 		send_message(settings_message)
 		return('ok',200)
-	elif re.search('week -', text, re.I) and sender == '7435972':
+	elif re.search('last week', text, re.I) and sender == '7435972':
 		settings_message = database_change_week('minus')
 		send_message(settings_message)
 		return('ok',200)
@@ -252,7 +252,7 @@ def get_data(franchise, message_type):
 		# Adding Try/Except mitigated the connection error issue on run #1
 
 	except:
-		send_message('Error. Our remote webdriver + free tier of cloud hosting is lagging like a noob. Retry in a few minutes')
+		send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
 		return('get_data failed')
 
 
