@@ -86,9 +86,9 @@ def parse(sender, text):
 	elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
 		global rb_votes
 		rb_votes += 1
+		return(rb_votes)
 		vote_message = 'Total #RB votes: {}'.format(rb_votes)
 		send_message(vote_message)
-		return(rb_votes)
 	
 	##### Settings from within the groupme
 	# Set the week. Can only be done when '@bot advance week' is sent by me
