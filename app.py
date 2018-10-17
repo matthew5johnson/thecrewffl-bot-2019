@@ -36,18 +36,25 @@ def webhook():
 		return('ok',200)
 	else: return('ok',200)
 
-###### Global variables
-con = pymysql.connect(os.environ['CLEARDB_DATABASE_URL'])
-cur = con.cursor()
-cur.execute("SELECT settings_rbvotes, settings_week FROM settings WHERE description='main';")
-settings_tuple = cur.fetchall()
-con.commit()
-con.close()
-## Remove Bob vote count
-rb_votes = int(settings_tuple[0][0])
-## Week
-week = int(settings_tuple[0][1])
-#host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565'
+def database_access(table, command):
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+
+	if table == 'settings':
+		cur.execute("SELECT settings_rbvotes, settings_week FROM settings WHERE description='main';")
+		settings_tuple = cur.fetchall()
+		con.commit()
+		con.close()
+		if command == 'week':
+			week = int(settings_tuple[0][1])
+			return(week)
+		elif command == 'rb':
+			rb_votes = int(settings_tuple[0][0])
+			return(rb_votes)
+	else:
+		con.close()
+		sys.stdout.write('entered db access but no relevant command')
+		return('ok',200)
 
 def parse(sender, text):
 	#### Ignore every line that the bot prints out itself
@@ -111,6 +118,7 @@ def parse(sender, text):
 def get_data(franchise, message_type):
 	try:
 		season = 2018
+		database_access('settings', 'week')
 		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 		chrome_options = Options()
 		chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
@@ -192,6 +200,7 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 	#####     @bot all scores     #####
 
 	elif message_type == 2:
+		week = database_access('settings', 'week')
 		if projected_list != 'GAME COMPLETED':
 			live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
 			for i in range(len(franchise_number_list))[0::2]:
