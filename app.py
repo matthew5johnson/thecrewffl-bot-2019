@@ -11,6 +11,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options 
 import selenium.webdriver.chrome.service as service
 import re
+import pymysql
+
 
 app = Flask(__name__)
 
@@ -35,10 +37,16 @@ def webhook():
 	else: return('ok',200)
 
 ###### Global variables
+con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+cur = con.cursor()
+cur.execute("SELECT settings_rbvote, settings_week FROM settings WHERE description='main';")
+settings_tuple = cur.fetchall()
+con.commit()
+con.close()
 ## Remove Bob vote count
-rb_votes = 0
+rb_votes = settings_tuple[0][0]
 ## Week
-week = 7
+week = settings_tuple[0][1]
 
 
 def parse(sender, text):
@@ -86,9 +94,9 @@ def parse(sender, text):
 	elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
 		global rb_votes
 		rb_votes += 1
-		return(rb_votes)
 		vote_message = 'Total #RB votes: {}'.format(rb_votes)
 		send_message(vote_message)
+		return(rb_votes)
 	
 	##### Settings from within the groupme
 	# Set the week. Can only be done when '@bot advance week' is sent by me
@@ -203,6 +211,7 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
 	##### Formatting wishlist: {:>8} . {:18} proj: {}   ... The error is here prob because it can't encode a list data type in the middle of a string. work with the types. .type print to console if you can't print the list itself.
+	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
 		'bot_id': os.environ['SANDBOX_TOKEN'] 
