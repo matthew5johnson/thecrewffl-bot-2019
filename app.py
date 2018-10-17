@@ -40,6 +40,8 @@ def database_access(table, command):
 	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
 	cur = con.cursor()
 
+
+	##########  SETTINGS
 	if table == 'settings':
 		cur.execute("SELECT settings_rbvotes, settings_week FROM settings WHERE description='main';")
 		settings_tuple = cur.fetchall()
@@ -51,6 +53,8 @@ def database_access(table, command):
 		elif command == 'rb':
 			rb_votes = int(settings_tuple[0][0])
 			return(rb_votes)
+	
+	#########   RECORDS		
 	elif table == 'records':
 		if command == 'all':
 			# Highest single game score
@@ -58,11 +62,11 @@ def database_access(table, command):
 			weekly_highscore_tuple = cur.fetchall()
 			con.commit()
 			con.close()
-			weekly_points = weekly_highscore_tuple[0]
-			franchise = weekly_highscore_tuple[1]
-			season = weekly_highscore_tuple[2]
-			week = weekly_highscore_tuple[3]
-			opponent = weekly_highscore_tuple[4]
+			weekly_points = weekly_highscore_tuple[0][0]
+			franchise = weekly_highscore_tuple[0][1]
+			season = weekly_highscore_tuple[0][2]
+			week = weekly_highscore_tuple[0][3]
+			opponent = weekly_highscore_tuple[0][4]
 			return(weekly_points, franchise, season, week, opponent)
 		else: 
 			return('none',200)
