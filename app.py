@@ -54,7 +54,7 @@ def database_access(table, command):
 	elif table == 'records':
 		if command == 'all':
 			# Highest single game score
-			cur.execute("SELECT weekly_points, franchise, season, week, opponent FROM weekly_records WHERE type=1 ORDER BY weekly_points desc;")
+			cur.execute("SELECT weekly_points, franchise, season, week, opponent FROM weekly_records WHERE type=1 ORDER BY weekly_points desc LIMIT 1;")
 			weekly_highscore_tuple = cur.fetchall()
 			con.commit()
 			con.close()
