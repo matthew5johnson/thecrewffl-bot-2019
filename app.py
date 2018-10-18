@@ -409,7 +409,7 @@ def get_vegas_lines(text):
 		for i in range(len(games)):
 		    slate.append('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
 		    
-		modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', text))
+		modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', str(text)))
 
 		# send = slate[0]
 		send = 'blank'
