@@ -414,7 +414,8 @@ def get_vegas_lines(text):
 		# send = slate[0]
 		# send = 'blank'
 
-		return(slate[7])
+		return(home[2])
+		# return(slate[7])
 
 		##### All 32 NFL Teams
 		# if re.search('denver', text, re.I) or re.search('broncos', text, re.I):
