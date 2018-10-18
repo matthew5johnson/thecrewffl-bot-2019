@@ -414,14 +414,13 @@ def get_vegas_lines(text):
 		# send = slate[0]
 		send = 'blank'
 
-		# for i in range(len(slate)):
-		#     if modified in games[i]:
-		#         send = slate[i]
-		return(modified)        
-		# if send != 'blank':
-		#     return(send)
-		# else: 
-		# 	return("'@bot vegas City' is the command. LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
+		for i in range(len(slate)):
+		    if modified in games[i]:
+		        send = slate[i]        
+		if send != 'blank':
+		    return(send)
+		else: 
+			return("'@bot vegas City' is the command. Example: '@bot vegas New Orleans' ... LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
 	except:
 		return('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
 
