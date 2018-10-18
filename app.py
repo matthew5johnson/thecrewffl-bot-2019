@@ -417,7 +417,7 @@ def get_vegas_lines(text):
 		if re.search('atlanta', text, re.I) or re.search('falcons', text, re.I):
 			for i in range(len(slate)):
 				if 'Atlanta' in slate[i]:
-				return(slate[i])        
+					return(slate[i])        
 		elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
 			for i in range(len(slate)):
 				if 'New Orleans' in slate[i]:
