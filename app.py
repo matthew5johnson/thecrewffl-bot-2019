@@ -415,7 +415,7 @@ def get_vegas_lines(text):
 
 		for i in range(len(slate)):
 		    if re.search(modified, slate[i], re.I):
-		        send = slate[i]
+		        send = str(slate[i])
 		        
 		if send != 'blank':
 		    return(send)
