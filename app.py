@@ -415,13 +415,15 @@ def get_vegas_lines(text):
 
 		##### All 32 NFL Teams
 		if re.search('atlanta', text, re.I) or re.search('falcons', text, re.I):
-			for i in range(len(slate)):
-				if 'Atlanta' in slate[i]:
-					return(slate[i])        
+			for i in range(len(games)):
+				if 'Atlanta' in games[i]:
+					message = slate[i]
+					return(message)        
 		elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
 			for i in range(len(slate)):
 				if 'New Orleans' in slate[i]:
-					return(slate[i])
+					message = slate[i]
+					return(message)
 		elif re.search('tampa', text, re.I) or re.search('bucs', text, re.I):
 			for i in range(len(slate)):
 				if 'Tampa Bay' in slate[i]:
