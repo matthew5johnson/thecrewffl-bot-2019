@@ -397,7 +397,7 @@ def get_vegas_lines(text):
 		# driver.close()
 		page = urlopen(url)
 		page_content = page.read()
-		
+
 		soup = BeautifulSoup(html, "lxml")
 
 
@@ -410,15 +410,19 @@ def get_vegas_lines(text):
 		away = second_team[::5]
 		ou = overunder[::5]
 
-		slate = []
 		for i in range(len(games)):
-			slate.append('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
+			send_message('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
+		
+		# slate = []
+		# for i in range(len(games)):
+		# 	slate.append('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
 		    
 		# modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', str(text)))
 		# send = slate[0]
 		# send = 'blank'
 
-		send_message(home[2])
+
+		# send_message(home[2])
 		# return(slate[7])
 
 		##### All 32 NFL Teams
