@@ -411,7 +411,7 @@ def get_vegas_lines(text):
 		    
 		modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', text))
 
-		send = games[0]
+		send = slate[0]
 		# send = 'blank'
 
 		# for i in range(len(slate)):
