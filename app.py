@@ -420,8 +420,8 @@ def get_vegas_lines(text):
 		return(modified)        
 		# if send != 'blank':
 		#     return(send)
-		else: 
-			return("'@bot vegas City' is the command. LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
+		# else: 
+		# 	return("'@bot vegas City' is the command. LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
 	except:
 		return('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
 
