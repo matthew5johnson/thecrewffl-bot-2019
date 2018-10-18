@@ -409,8 +409,9 @@ def get_vegas_lines(text):
 		home = first_team[::5]
 		away = second_team[::5]
 		ou = overunder[::5]
+		length = len(games)
 
-		for i in range(len(games)):
+		for i in range(0, length):
 			send_message('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
 		
 		# slate = []
