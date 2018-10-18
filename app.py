@@ -381,19 +381,23 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 def get_vegas_lines(text):
 	try:
 		from bs4 import BeautifulSoup
-		from selenium import webdriver
-		from selenium.webdriver.chrome.options import Options 
-		import selenium.webdriver.chrome.service as service
+		from urllib.request import urlopen
+		# from selenium import webdriver
+		# from selenium.webdriver.chrome.options import Options 
+		# import selenium.webdriver.chrome.service as service
 		url = 'http://www.espn.com/nfl/lines'
-		chrome_options = Options()
-		chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
-		chrome_options.add_argument('--disable-gpu')
-		chrome_options.add_argument('--no-sandbox')
-		chrome_options.add_argument('--headless')
-		driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
-		driver.get(url)
-		html = driver.page_source
-		driver.close()
+		# chrome_options = Options()
+		# chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
+		# chrome_options.add_argument('--disable-gpu')
+		# chrome_options.add_argument('--no-sandbox')
+		# chrome_options.add_argument('--headless')
+		# driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
+		# driver.get(url)
+		# html = driver.page_source
+		# driver.close()
+		page = urlopen(url)
+		page_content = page.read()
+		
 		soup = BeautifulSoup(html, "lxml")
 
 
