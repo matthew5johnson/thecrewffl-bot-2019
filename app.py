@@ -216,9 +216,9 @@ def parse(sender, text):
 		return('ok',200)
 
 	elif re.search('vegas', text, re.I):
-		vegas_message = get_vegas_lines(text)
-		send_message(vegas_message)
-		# get_vegas_lines(text)
+		# vegas_message = get_vegas_lines(text)
+		# send_message(vegas_message)
+		get_vegas_lines(text)
 		return('ok',200)
 	
 	##### Settings from within the groupme
@@ -414,7 +414,7 @@ def get_vegas_lines(text):
 		# send = slate[0]
 		# send = 'blank'
 
-		return(home[2])
+		send_message(home[2])
 		# return(slate[7])
 
 		##### All 32 NFL Teams
@@ -441,7 +441,7 @@ def get_vegas_lines(text):
 		# 	return("'@bot vegas City' is the command. Example: '@bot vegas New Orleans' ... LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
 			
 	except:
-		return('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
+		send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
 
 
 def send_message(msg):
