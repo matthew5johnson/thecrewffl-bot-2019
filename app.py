@@ -163,14 +163,29 @@ def parse(sender, text):
 	# 	get_data(franchise, 1)
 	# 	return('ok',200)
 	
-	# 4   ...   @bot all mwm scores
+	# 4   ...   @bot mwm scores
+	# elif re.search('my', text, re.I) and re.search('score', text, re.I):
+	# 	franchise = get_franchise_number(sender)
+	# 	# sys.stdout.write('franchise: {} <<'.format(franchise))
+	# 	get_data(franchise, 1)
+	# 	return('ok',200)
+
+	# 5   ...   @bot mwm standings
 	# elif re.search('my', text, re.I) and re.search('score', text, re.I):
 	# 	franchise = get_franchise_number(sender)
 	# 	# sys.stdout.write('franchise: {} <<'.format(franchise))
 	# 	get_data(franchise, 1)
 	# 	return('ok',200)
 	
-	# 5   ...   @bot records
+	# 6   ...   @bot mwm schedule
+	# elif re.search('my', text, re.I) and re.search('score', text, re.I):
+	# 	franchise = get_franchise_number(sender)
+	# 	# sys.stdout.write('franchise: {} <<'.format(franchise))
+	# 	get_data(franchise, 1)
+	# 	return('ok',200)
+	
+	
+	# 7   ...   @bot records
 	elif re.search('record', text, re.I):
 		weekly_highscore_tuple, weekly_lowcore_tuple, weekly_blowout_tuple, weekly_closest_tuple, season_highppg_tuple, season_lowppg_tuple, season_highwins_tuple, season_lowwins_tuple, season_highmargin_tuple = database_access('records', 'all')
 		# message = '1. %s : %s - %s/%s vs %s' % (weekly_points, franchise, season, week, opponent)
@@ -183,7 +198,7 @@ def parse(sender, text):
 		best_ppg = 'Most points-per-game in a season:\n%s - %s (%s)' % (season_highppg_tuple[0][0], season_highppg_tuple[0][1], season_highppg_tuple[0][2])
 		fewest_ppg = 'Fewest ppg in a season:\n%s - %s (%s)' % (season_lowppg_tuple[0][0], season_lowppg_tuple[0][1], season_lowppg_tuple[0][2])
 		most_wins = 'Most wins:\n%s - %s (%s)' % (season_highwins_tuple[0][0], season_highwins_tuple[0][1], season_highwins_tuple[0][2])
-		high_margin = 'Largest avgerage margin of victory:\n%s - %s (%s)' % (season_highmargin_tuple[0][0], season_highmargin_tuple[0][1], season_highmargin_tuple[0][2])
+		high_margin = 'Largest average margin of victory:\n%s - %s (%s)' % (season_highmargin_tuple[0][0], season_highmargin_tuple[0][1], season_highmargin_tuple[0][2])
 		message = "=== Modern Era Record Book ===\n-----  Week  -----\n%s\n%s\n%s\n%s\n-----  Season  -----\n%s\n%s\n%s\n%s" % (best_game, worst_game, blowout, closest_game, best_ppg, fewest_ppg, most_wins, high_margin)
 		send_message(message)
 		return('ok',200) 
