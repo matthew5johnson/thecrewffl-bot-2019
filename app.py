@@ -411,23 +411,26 @@ def get_vegas_lines(text):
 		    
 		# modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', str(text)))
 		# send = slate[0]
-		send = 'blank'
+		# send = 'blank'
 
 		##### All 32 NFL Teams
 		if re.search('atlanta', text, re.I) or re.search('falcons', text, re.I):
 			for i in range(len(slate)):
 		    	if 'Atlanta' in slate[i]:
-		        	send = slate[i]        
+		        	return(slate[i])        
 		elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
 			for i in range(len(slate)):
 				if 'New Orleans' in slate[i]:
-					send = slate[i]
+					return(slate[i])
+		elif re.search('tampa', text, re.I) or re.search('bucs', text, re.I):
+			for i in range(len(slate)):
+				if 'Tampa Bay' in slate[i]:
+					return(slate[i])
+		elif re.search('carolina', text, re.I) or re.search('panthers', text, re.I):
+			for i in range(len(slate)):
+				if 'Carolina' in slate[i]:
+					return(slate[i])
 		else:
-			send = 'blank'
-
-		if send != 'blank':
-		    return(send)
-		else: 
 			return("'@bot vegas City' is the command. Example: '@bot vegas New Orleans' ... LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
 			
 	except:
