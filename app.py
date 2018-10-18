@@ -413,13 +413,23 @@ def get_vegas_lines(text):
 		# send = slate[0]
 		send = 'blank'
 
-		for i in range(len(slate)):
-		    if re.search(text[11:], games[i], re.I):
-		        send = slate[i]        
+		##### All 32 NFL Teams
+		if re.search('atlanta', text, re.I) or re.search('falcons', text, re.I):
+			for i in range(len(slate)):
+		    	if 'Atlanta' in slate[i]:
+		        	send = slate[i]        
+		elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
+			for i in range(len(slate)):
+				if 'New Orleans' in slate[i]:
+					send = slate[i]
+		else:
+			send = 'blank'
+
 		if send != 'blank':
 		    return(send)
 		else: 
 			return("'@bot vegas City' is the command. Example: '@bot vegas New Orleans' ... LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
+			
 	except:
 		return('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
 
