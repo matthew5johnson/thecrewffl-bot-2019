@@ -6,10 +6,10 @@ import sys
 from urllib.request import Request, urlopen
 from urllib.parse import urlencode
 from flask import Flask, request
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options 
-import selenium.webdriver.chrome.service as service
+# from bs4 import BeautifulSoup
+# from selenium import webdriver
+# from selenium.webdriver.chrome.options import Options 
+# import selenium.webdriver.chrome.service as service
 import re
 import pymysql
 
@@ -139,10 +139,9 @@ def database_remove_bob():
 
 def parse(sender, text):
 	#### Ignore every line that the bot prints out itself
-	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot records' = record", text) or re.search("4. '@bot help' = this help mess", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
+	if re.search("'@bot", text) or re.search("All scores are scraped in real-time", text) or re.search("-----   Commands   -----", text) or re.search("1. '@bot help' = this help message", text) or re.search("2. '@bot scores' = live scores", text) or re.search("3. '@bot my score' = your live score", text) or re.search("4. '@bot records' = record book", text) or re.search("_commands are case and space insensitive_", text) or re.search("We can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list.", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
-	
 	# 1   ...   @bot my score 
 	elif re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = get_franchise_number(sender)
@@ -207,13 +206,18 @@ def parse(sender, text):
 	
 	# help   ...   and posts response
 	elif re.search('help', text, re.I):
-		help_message = "** All scores are scraped in real-time **\n-----   Commands   -----\n1. '@bot my score' = your live score\n2. '@bot all scores' = league live scoreboard\n3. '@bot records' = record book\n4. '@bot help' = this help message\n _commands are case and space insensitive_\n=====\nWe can add pretty much any other features you think of. Next up will be an attempt at league record book integration. Post any other cool ideas that you've got, and we'll add them to the wish list."
+		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n1. '@bot help' = this help message\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot records' = record book\n5. '@bot vegas City' = spreads & O/Us\n=====\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Kmish - FAAB, Gilhop - franchise summary"
 		send_message(help_message)
 		return('ok',200)
 	#    ...   @bot remove bob   ...   and posts vote tally
 	elif re.search('remove', text, re.I) and re.search('bob', text, re.I):
 		rb_message = database_remove_bob()
 		send_message(rb_message)
+		return('ok',200)
+
+	elif re.search('vegas', text, re.I):
+		vegas_message = get_vegas_lines(text)
+		send_message(vegas_message)
 		return('ok',200)
 	
 	##### Settings from within the groupme
@@ -233,6 +237,10 @@ def parse(sender, text):
 
 def get_data(franchise, message_type):
 	try:
+		from bs4 import BeautifulSoup
+		from selenium import webdriver
+		from selenium.webdriver.chrome.options import Options 
+		import selenium.webdriver.chrome.service as service
 		season = 2018
 		week = database_access('settings', 'week')
 		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
@@ -369,8 +377,53 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 # 			return('ok',200)
 # 			# WORKED C
 	
+def get_vegas_lines(text):
+	try:
+		from bs4 import BeautifulSoup
+		from selenium import webdriver
+		from selenium.webdriver.chrome.options import Options 
+		import selenium.webdriver.chrome.service as service
+		url = 'http://www.espn.com/nfl/lines'
+		chrome_options = Options()
+		chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
+		chrome_options.add_argument('--disable-gpu')
+		chrome_options.add_argument('--no-sandbox')
+		chrome_options.add_argument('--headless')
+		driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
+		driver.get(url)
+		html = driver.page_source
+		driver.close()
+		soup = BeautifulSoup(html, "lxml")
 
 
+		first_team = re.findall(r'(?<=<td width="50%">)[+-.0-9]*(?=<br/>)', str(soup)) # Makes a list of spreads of the first teams
+		second_team = re.findall(r'(?<=<br/>)[+-.0-9]*(?=</td>)', str(soup)) # Makes a list of spreads of the second teams
+		overunder = re.findall(r'(?<=<td width="50%">)[0-9.]*(?=\sO/U)', str(soup)) # Makes a list of over unders
+		games = re.findall(r'(?<=<td colspan="4">)[\sa-zA-Z]*(?=\s-)', str(soup)) # Makes a list of all matchups
+
+		home = first_team[::5]
+		away = second_team[::5]
+		ou = overunder[::5]
+
+		slate = []
+		for i in range(len(games)):
+		    slate.append('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
+		    
+		modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', text))
+
+		send = 'blank'
+
+		for i in range(len(slate)):
+		    looking = slate[i]
+		    if modified in looking:
+		        send = slate[i]
+		        
+		if send != 'blank':
+		    send_message(send)
+		else: send_message("'@bot vegas City' is the command. Make sure to capitalize the city. LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
+	except:
+		send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
+		return('get_data failed')
 
 
 def send_message(msg):
@@ -379,7 +432,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
