@@ -216,9 +216,9 @@ def parse(sender, text):
 		return('ok',200)
 
 	elif re.search('vegas', text, re.I):
-		# vegas_message = get_vegas_lines(text)
-		# send_message(vegas_message)
-		get_vegas_lines(text)
+		vegas_message = get_vegas_lines(text)
+		send_message(vegas_message)
+		# get_vegas_lines(text)
 		return('ok',200)
 	
 	##### Settings from within the groupme
@@ -419,7 +419,7 @@ def get_vegas_lines(text):
 			for i in range(len(games)):
 				if 'Denver' in games[i]:
 					# message = slate[i]
-					send_message(slate[i])
+					return(slate[i])
 					# return(message)        
 		elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
 			for i in range(len(slate)):
