@@ -139,7 +139,7 @@ def database_remove_bob():
 
 def parse(sender, text):
 	#### Ignore every line that the bot prints out itself
-	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot help' for this library of comm", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
+	if re.search('-----   Commands   -----', text, re.I) or re.search("I'm a bot", text) or re.search('my attention by @ing me. Start', text) or re.search("1. '@bot my score' = your ", text) or re.search("2. '@bot all scores' = full live scorebo", text) or re.search("3. '@bot records' = record", text) or re.search("4. '@bot help' = this help mess", text) or re.search("_commands are case and space insensit", text) or re.search('ot avatar: Yes, that is Mitch attempting a monster d', text) or re.search("ese scores are pulled in real-time. Let's avoi", text) or re.search("We can add pretty much any other features you think of. Next up will be league record book integration. ", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
 	
@@ -151,7 +151,7 @@ def parse(sender, text):
 		return('ok',200)
 	
 	# 2   ...   @bot all scores
-	elif re.search('all', text, re.I) and re.search('score', text, re.I):
+	elif re.search('score', text, re.I): #re.search('all', text, re.I) and
 		franchise = 'none'
 		get_data(franchise, 2)
 		return('ok',200)
@@ -263,7 +263,8 @@ def get_data(franchise, message_type):
 			sys.stdout.write('nestled into a completed game. no projs')
 
 		generate_message(franchise, message_type, franchise_number_list, points_list, projected_list)
-		return('ok',200)
+		return('ok',200) 
+		# return(franchise_number_list, points_list, projected_list)  # Return franchishe, message_type, franchise_number_list, points_list, and projected_list, then these things can be used in a mwm function. If projected_list == 'GAME COMPLETED': enter the scores into the mwm db
 		# Adding Try/Except mitigated the connection error issue on run #1
 
 	except:
@@ -331,6 +332,45 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 			send_message(final_scoreboard)
 			return('ok',200)
 			# WORKED C after pinging a different message and trying again
+
+
+# def mwm(message_request, sender):
+# 	# message_request will be: 3. mine, 4. Scores, 5. Standings, 6. Schedule
+# 	if message_request == 'mine':
+# 		franchise_number_list, points_list, projected_list = get_data()
+# 		position = franchise_number_list.index(str(sender))
+# 		franchise_score = points_list[position]
+# 		# sys.stdout.write(franchise_score)
+		
+# 		# Tests to see if the game is already over. 'GAME COMPLETED' projected list means it's over and there are no longer projections available
+# 		if projected_list != 'GAME COMPLETED':
+# 			franchise_proj = projected_list[position]
+# 			# sys.stdout.write(franchise_proj)
+# 		opponent_franchise = #### LEAVING OFF HERE --- write a function that takes week & sender, and spits out the opponent. Easier to store each teams schedule as a list, and find week's opponent via index slicing the list. Then apply that to :: int(franchise_number_list[opponent_position])
+# 		## Need to find opponent_position in the franchise_number_list. Same way we did for franchise above
+# 		opponent_score = points_list[opponent_position]
+# 		# sys.stdout.write('opponent score')
+		
+# 		# Tests to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
+# 		if projected_list != 'GAME COMPLETED':
+# 			opponent_proj = projected_list[opponent_position]
+# 			# sys.stdout.write(opponent_proj)
+
+# 		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
+# 		if projected_list != 'GAME COMPLETED':
+# 			my_ongoing_matchup = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, get_franchise_name(franchise), franchise_proj, opponent_score, get_franchise_name(opponent_franchise), opponent_proj)
+# 			send_message(my_ongoing_matchup)
+# 			return('ok',200)
+# 			# WORKED B
+# 		else: 
+# 			my_completed_matchup = '{} - {}\n{} - {}'.format(franchise_score, get_franchise_name(franchise), opponent_score, get_franchise_name(opponent_franchise))
+# 			sys.stdout.write('It should send my score from last week')
+# 			send_message(my_completed_matchup)
+# 			return('ok',200)
+# 			# WORKED C
+	
+
+
 
 
 def send_message(msg):
