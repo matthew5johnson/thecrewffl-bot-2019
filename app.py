@@ -403,14 +403,14 @@ def get_vegas_lines(text):
 
 		first_team = re.findall(r'(?<=<td width="50%">)[+-.0-9]*(?=<br/>)', str(soup)) # Makes a list of spreads of the first teams
 		second_team = re.findall(r'(?<=<br/>)[+-.0-9]*(?=</td>)', str(soup)) # Makes a list of spreads of the second teams
-		overunder = re.findall(r'(?<=<td width="50%">)[0-9.]*(?=\sO/U)', str(soup)) # Makes a list of over unders
-		games = re.findall(r'(?<=<td colspan="4">)[\sa-zA-Z]*(?=\s-)', str(soup)) ### LENGTH = 1  # Makes a list of all matchups
-
+		# overunder = re.findall(r'(?<=<td width="50%">)[0-9.]*(?=\sO/U)', str(soup)) ### LENGTH = 3  # Makes a list of over unders
+		# games = re.findall(r'(?<=<td colspan="4">)[\sa-zA-Z]*(?=\s-)', str(soup)) ### LENGTH = 1  # Makes a list of all matchups
+		games = re.findall(r'(?<=<td colspan="4">)[^-]*', str(soup))
 		home = first_team[::5]
 		away = second_team[::5]
 		ou = overunder[::5]
 		
-		length = len(overunder)
+		length = len(games)
 
 		send_message(length)
 		# for i in range(0, length):
