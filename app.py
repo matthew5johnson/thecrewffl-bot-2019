@@ -215,11 +215,11 @@ def parse(sender, text):
 		send_message(rb_message)
 		return('ok',200)
 
-	elif re.search('vegas', text, re.I):
-		# vegas_message = get_vegas_lines(text)
-		# send_message(vegas_message)
-		get_vegas_lines(text)
-		return('ok',200)
+	# elif re.search('vegas', text, re.I):
+	# 	# vegas_message = get_vegas_lines(text)
+	# 	# send_message(vegas_message)
+	# 	get_vegas_lines(text)
+	# 	return('ok',200)
 	
 	##### Settings from within the groupme
 	# Set the week. Can only be done when '@bot advance week' is sent by me
@@ -378,81 +378,81 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 # 			return('ok',200)
 # 			# WORKED C
 	
-def get_vegas_lines(text):
-	try:
-		from bs4 import BeautifulSoup
-		# from urllib.request import urlopen
-		from selenium import webdriver
-		from selenium.webdriver.chrome.options import Options 
-		import selenium.webdriver.chrome.service as service
-		url = 'http://www.espn.com/nfl/lines'
-		chrome_options = Options()
-		chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
-		chrome_options.add_argument('--disable-gpu')
-		chrome_options.add_argument('--no-sandbox')
-		chrome_options.add_argument('--headless')
-		driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
-		driver.get(url)
-		html = driver.page_source
-		driver.close()
-		# page = urlopen(url)
-		# page_content = page.read()
+# def get_vegas_lines(text):
+# 	try:
+# 		from bs4 import BeautifulSoup
+# 		# from urllib.request import urlopen
+# 		from selenium import webdriver
+# 		from selenium.webdriver.chrome.options import Options 
+# 		import selenium.webdriver.chrome.service as service
+# 		url = 'http://www.espn.com/nfl/lines'
+# 		chrome_options = Options()
+# 		chrome_options.binary_location = os.environ['GOOGLE_CHROME_BIN']
+# 		chrome_options.add_argument('--disable-gpu')
+# 		chrome_options.add_argument('--no-sandbox')
+# 		chrome_options.add_argument('--headless')
+# 		driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
+# 		driver.get(url)
+# 		html = driver.page_source
+# 		driver.close()
+# 		# page = urlopen(url)
+# 		# page_content = page.read()
 
-		soup = BeautifulSoup(html, "lxml")
+# 		soup = BeautifulSoup(html, "lxml")
 
 
-		first_team = re.findall(r'(?<=<td width="50%">)[+-.0-9]*(?=<br/>)', str(soup)) # Makes a list of spreads of the first teams
-		second_team = re.findall(r'(?<=<br/>)[+-.0-9]*(?=</td>)', str(soup)) # Makes a list of spreads of the second teams
-		# overunder = re.findall(r'(?<=<td width="50%">)[0-9.]*(?=\sO/U)', str(soup)) ### LENGTH = 3  # Makes a list of over unders
-		# games = re.findall(r'(?<=<td colspan="4">)[\sa-zA-Z]*(?=\s-)', str(soup)) ### LENGTH = 1  # Makes a list of all matchups
-		games = re.findall(r'(?<=<td colspan="4">)[^-]*', str(soup))
-		home = first_team[::5]
-		away = second_team[::5]
-		ou = overunder[::5]
+# 		first_team = re.findall(r'(?<=<td width="50%">)[+-.0-9]*(?=<br/>)', str(soup)) # Makes a list of spreads of the first teams
+# 		second_team = re.findall(r'(?<=<br/>)[+-.0-9]*(?=</td>)', str(soup)) # Makes a list of spreads of the second teams
+# 		# overunder = re.findall(r'(?<=<td width="50%">)[0-9.]*(?=\sO/U)', str(soup)) ### LENGTH = 3  # Makes a list of over unders
+# 		# games = re.findall(r'(?<=<td colspan="4">)[\sa-zA-Z]*(?=\s-)', str(soup)) ### LENGTH = 1  # Makes a list of all matchups
+# 		games = re.findall(r'(?<=<td colspan="4">)[^-]*', str(soup))
+# 		home = first_team[::5]
+# 		away = second_team[::5]
+# 		ou = overunder[::5]
 		
-		length = len(games)
+# 		length = len(games)
 
-		send_message(length)
-		# for i in range(0, length):
-		# 	send_message('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
+# 		send_message(length)
+# 		# for i in range(0, length):
+# 		# 	send_message('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
 		
-		# slate = []
-		# for i in range(len(games)):
-		# 	slate.append('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
+# 		# slate = []
+# 		# for i in range(len(games)):
+# 		# 	slate.append('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
 		    
-		# modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', str(text)))
-		# send = slate[0]
-		# send = 'blank'
+# 		# modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', str(text)))
+# 		# send = slate[0]
+# 		# send = 'blank'
 
 
-		# send_message(home[2])
-		# return(slate[7])
+# 		# send_message(home[2])
+# 		# return(slate[7])
 
-		##### All 32 NFL Teams
-		# if re.search('denver', text, re.I) or re.search('broncos', text, re.I):
-		# 	for i in range(len(games)):
-		# 		if 'Denver' in games[i]:
-		# 			# message = slate[i]
-		# 			return(slate[i])
-		# 			# return(message)        
-		# elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
-		# 	for i in range(len(slate)):
-		# 		if 'New Orleans' in slate[i]:
-		# 			message = slate[i]
-		# 			return(message)
-		# elif re.search('tampa', text, re.I) or re.search('bucs', text, re.I):
-		# 	for i in range(len(slate)):
-		# 		if 'Tampa Bay' in slate[i]:
-		# 			return(slate[i])
-		# elif re.search('carolina', text, re.I) or re.search('panthers', text, re.I):
-		# 	for i in range(len(slate)):
-		# 		if 'Carolina' in slate[i]:
-		# 			return(slate[i])
-		# else:
-		# 	return("'@bot vegas City' is the command. Example: '@bot vegas New Orleans' ... LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
+# 		##### All 32 NFL Teams
+# 		# if re.search('denver', text, re.I) or re.search('broncos', text, re.I):
+# 		# 	for i in range(len(games)):
+# 		# 		if 'Denver' in games[i]:
+# 		# 			# message = slate[i]
+# 		# 			return(slate[i])
+# 		# 			# return(message)        
+# 		# elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
+# 		# 	for i in range(len(slate)):
+# 		# 		if 'New Orleans' in slate[i]:
+# 		# 			message = slate[i]
+# 		# 			return(message)
+# 		# elif re.search('tampa', text, re.I) or re.search('bucs', text, re.I):
+# 		# 	for i in range(len(slate)):
+# 		# 		if 'Tampa Bay' in slate[i]:
+# 		# 			return(slate[i])
+# 		# elif re.search('carolina', text, re.I) or re.search('panthers', text, re.I):
+# 		# 	for i in range(len(slate)):
+# 		# 		if 'Carolina' in slate[i]:
+# 		# 			return(slate[i])
+# 		# else:
+# 		# 	return("'@bot vegas City' is the command. Example: '@bot vegas New Orleans' ... LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
 			
-	except:
-		send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
+# 	except:
+# 		send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
 
 
 def send_message(msg):
@@ -461,7 +461,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
