@@ -408,34 +408,36 @@ def get_vegas_lines(text):
 
 		slate = []
 		for i in range(len(games)):
-		    slate.append('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
+			slate.append('%s %s %s || %s O/U' % (home[i], games[i], away[i], ou[i]))
 		    
 		# modified = ''.join(re.findall(r'(?<=gas\s)[\sa-zA-Z]*', str(text)))
 		# send = slate[0]
 		# send = 'blank'
 
+		return(slate[7])
+
 		##### All 32 NFL Teams
-		if re.search('denver', text, re.I) or re.search('broncos', text, re.I):
-			for i in range(len(games)):
-				if 'Denver' in games[i]:
-					# message = slate[i]
-					return(slate[i])
-					# return(message)        
-		elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
-			for i in range(len(slate)):
-				if 'New Orleans' in slate[i]:
-					message = slate[i]
-					return(message)
-		elif re.search('tampa', text, re.I) or re.search('bucs', text, re.I):
-			for i in range(len(slate)):
-				if 'Tampa Bay' in slate[i]:
-					return(slate[i])
-		elif re.search('carolina', text, re.I) or re.search('panthers', text, re.I):
-			for i in range(len(slate)):
-				if 'Carolina' in slate[i]:
-					return(slate[i])
-		else:
-			return("'@bot vegas City' is the command. Example: '@bot vegas New Orleans' ... LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
+		# if re.search('denver', text, re.I) or re.search('broncos', text, re.I):
+		# 	for i in range(len(games)):
+		# 		if 'Denver' in games[i]:
+		# 			# message = slate[i]
+		# 			return(slate[i])
+		# 			# return(message)        
+		# elif re.search('new orleans', text, re.I) or re.search('saints', text, re.I):
+		# 	for i in range(len(slate)):
+		# 		if 'New Orleans' in slate[i]:
+		# 			message = slate[i]
+		# 			return(message)
+		# elif re.search('tampa', text, re.I) or re.search('bucs', text, re.I):
+		# 	for i in range(len(slate)):
+		# 		if 'Tampa Bay' in slate[i]:
+		# 			return(slate[i])
+		# elif re.search('carolina', text, re.I) or re.search('panthers', text, re.I):
+		# 	for i in range(len(slate)):
+		# 		if 'Carolina' in slate[i]:
+		# 			return(slate[i])
+		# else:
+		# 	return("'@bot vegas City' is the command. Example: '@bot vegas New Orleans' ... LA Rams, LA Chargers, NY Giants, NY Jets for those 4 teams.")
 			
 	except:
 		return('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
