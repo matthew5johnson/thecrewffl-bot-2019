@@ -204,6 +204,11 @@ def parse(sender, text):
 
 	#### Stock responses. ** Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
 	
+	# Get list of NFL bets
+	elif re.search('bets', text, re.I):
+		get_bets()
+		return('ok',200)
+
 	# help   ...   and posts response
 	elif re.search('help', text, re.I):
 		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n1. '@bot help' = this help message\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n=====\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Kmish - FAAB, Gilhop - franchise summary"
@@ -454,6 +459,25 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 # 	except:
 # 		send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
 
+def get_bets():
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+	cur.execute("SELECT * FROM betting_table;")
+	bets = cur.fetchall()
+	con.commit()
+	cur.close()
+	con.close()
+
+	message = "This week's NFL slate:\n"
+	bet_length = len(bets)
+	for i in range(0,bet_length):
+		message = message + "{}\n".format(bets[i][0])
+	send_message(message)
+	return('ok',200)
+
+
+
+
 
 def send_message(msg):
 	url = 'https://api.groupme.com/v3/bots/post'
@@ -461,7 +485,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
