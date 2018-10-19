@@ -461,7 +461,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -527,7 +527,7 @@ def get_franchise_number(input):
 def text_id_franchise(text):
 	if re.search('mattjohn', text, re.I) or re.search('matt john', text, re.I) or re.search('gilhop', text, re.I) or re.search('jordan', text, re.I) or re.search('bob', text, re.I) or re.search('rtro', text, re.I) or re.search('retro', text, re.I):
 		return(9, 1)
-	elif re.search('matt', text, re.I) or re.search('ross', text, re.I):
+	elif re.search('matt', text, re.I) or re.search('ross', text, re.I) or re.search('butler', text, re.I):
 		return(1, 1)
 	elif re.search('scott', text, re.I) or re.search('james', text, re.I) or re.search('choice', text, re.I) or re.search('tpc', text, re.I):
 		return(2, 1)
