@@ -529,9 +529,9 @@ def text_id_franchise(text):
 		return(9, 1)
 	elif re.search('matt', text, re.I) or re.search('ross', text, re.I):
 		return(1, 1)
-	elif re.search('scott', text, re.I) or re.search('james', text, re.I) or re.search('choice', text, re.I) or or re.search('tpc', text, re.I):
+	elif re.search('scott', text, re.I) or re.search('james', text, re.I) or re.search('choice', text, re.I) or re.search('tpc', text, re.I):
 		return(2, 1)
-	elif re.search('doug', text, re.I) or or re.search('rollin', text, re.I):
+	elif re.search('doug', text, re.I) or re.search('rollin', text, re.I):
 		return(3, 1)
 	elif re.search('crocket', text, re.I) or re.search('taylor', text, re.I):
 		return(4, 1)
