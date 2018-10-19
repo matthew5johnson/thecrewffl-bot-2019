@@ -139,7 +139,7 @@ def database_remove_bob():
 
 def parse(sender, text):
 	#### Ignore every line that the bot prints out itself
-	if re.search("'@bot", text) or re.search("All scores are scraped in real-time", text) or re.search("-----   Commands   -----", text) or re.search("1. '@bot help' = this help message", text) or re.search("2. '@bot scores' = live scores", text) or re.search("3. '@bot my score' = your live score", text) or re.search("4. '@bot records' = record book", text) or re.search("_commands are case and space insensitive_", text) or re.search("We can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list.", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
+	if re.search("'@bot", text) or re.search("All scores are scraped in real-time", text) or re.search("-----   Commands   -----", text) or re.search("1. '@bot help' = this help message", text) or re.search("2. '@bot scores' = live scores", text) or re.search("3. '@bot my score' = your live score", text) or re.search("4. '@bot (franchise) score' = enter any franchise name", text) or re.search("5. '@bot records' = record book", text) or re.search("_commands are case and space insensitive_", text) or re.search("We can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list.", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
 	# 1   ...   @bot my score 
@@ -151,8 +151,8 @@ def parse(sender, text):
 	
 	# 2   ...   @bot all scores
 	elif re.search('score', text, re.I): #re.search('all', text, re.I) and
-		franchise = 'none'
-		get_data(franchise, 2)
+		franchise, message_type = text_id_franchise(text)
+		get_data(franchise, message_type)
 		return('ok',200)
 
 	# 3   ...   @bot my mwm score
@@ -206,7 +206,7 @@ def parse(sender, text):
 	
 	# help   ...   and posts response
 	elif re.search('help', text, re.I):
-		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n1. '@bot help' = this help message\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot records' = record book\n=====\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Kmish - FAAB, Gilhop - franchise summary"
+		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n1. '@bot help' = this help message\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n=====\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Kmish - FAAB, Gilhop - franchise summary"
 		send_message(help_message)
 		return('ok',200)
 	#    ...   @bot remove bob   ...   and posts vote tally
@@ -498,8 +498,8 @@ def get_franchise_name(franchise):
 		return('Joseph & Mike')
 
 def get_franchise_number(input):
-	# These inputs correspond to groupme nicknames as of 10/12/18
-	if input == '3491271' or input == '7435976' or input == 1:
+	# These inputs correspond to groupme ids as of 10/12/18
+	if input == '3491271' or input == '7435976':
 		return(1)
 	elif input == '7435971' or input == '3931770' or input == 2:
 		return(2)
@@ -523,6 +523,34 @@ def get_franchise_number(input):
 		return(11)
 	elif input == '6602218' or input == '55209013' or input == 12:
 		return(12)
+
+def text_id_franchise(text):
+	if re.search('mattjohn', text, re.I) or re.search('matt john', text, re.I) or re.search('gilhop', text, re.I) or re.search('jordan', text, re.I) or re.search('bob', text, re.I) or re.search('rtro', text, re.I) or re.search('retro', text, re.I):
+		return(9, 1)
+	elif re.search('matt', text, re.I) or re.search('ross', text, re.I):
+		return(1, 1)
+	elif re.search('scott', text, re.I) or re.search('james', text, re.I) or re.search('choice', text, re.I) or or re.search('tpc', text, re.I):
+		return(2, 1)
+	elif re.search('doug', text, re.I) or or re.search('rollin', text, re.I):
+		return(3, 1)
+	elif re.search('crocket', text, re.I) or re.search('taylor', text, re.I):
+		return(4, 1)
+	elif re.search('blake', text, re.I):
+		return(5, 1)
+	elif re.search('kfish', text, re.I) or re.search('kmish', text, re.I) or re.search('kevin', text, re.I) or re.search('fischer', text, re.I):
+		return(6, 1)
+	elif re.search('kyle', text, re.I) or re.search('dttw', text, re.I) or re.search('douille', text, re.I):
+		return(7, 1)
+	elif re.search('gaudet', text, re.I) or re.search('cameron', text, re.I) or re.search('john', text, re.I) or re.search('zj', text, re.I):
+		return(8, 1)
+	elif re.search('mitch', text, re.I):
+		return(10, 1)
+	elif re.search('nick', text, re.I) or re.search('mickey', text, re.I):
+		return(11, 1)
+	elif re.search('joseph', text, re.I) or re.search('craig', text, re.I) or re.search('mike', text, re.I):
+		return(12, 1)
+	else: 
+		return('none', 2)
 
 
 
