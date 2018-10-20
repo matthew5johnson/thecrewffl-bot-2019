@@ -139,7 +139,7 @@ def database_remove_bob():
 
 def parse(sender, text):
 	#### Ignore every line that the bot prints out itself
-	if re.search("'@bot", text) or re.search("All scores are scraped in real-time", text) or re.search("-----   Commands   -----", text) or re.search("1. '@bot help' = this help message", text) or re.search("2. '@bot scores' = live scores", text) or re.search("3. '@bot my score' = your live score", text) or re.search("4. '@bot (franchise) score' = enter any franchise name", text) or re.search("5. '@bot records' = record book", text) or re.search("_commands are case and space insensitive_", text) or re.search("We can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list.", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
+	if re.search("'@bot", text, re.I) or re.search('"@bot', text) or re.search("-----   Commands   -----", text) or re.search("1. '@bot help' = this help message", text) or re.search("2. '@bot scores' = live scores", text) or re.search("3. '@bot my score' = your live score", text) or re.search("4. '@bot (franchise) score' = enter any franchise name", text) or re.search("5. '@bot records' = record book", text) or re.search("_commands are case and space insensitive_", text) or re.search("We can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list.", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
 	# 1   ...   @bot my score 
@@ -584,8 +584,12 @@ def text_id_franchise(text):
 
 def sandbox_testing(text):
 	# Just don't output 'testing' or 'bot' into the sandbox and you're good
-	week = database_access('settings', 'week')
-	message_to_sandbox(week)
+	# week = database_access('settings', 'week')
+	score = 120.2
+	team = 'Mitch'
+	proj = 131.8
+	formatting_test_message = '{:>8} . {:18} proj: {}'.format(score,team,proj)
+	message_to_sandbox(formatting_test_message)
 	return('ok',200)
 
 def message_to_sandbox(message):
