@@ -591,15 +591,15 @@ def sandbox_testing(text):
 	
 	final_message = 'message on first line\n'
 	for i in range(0,3):
-		final_message = final_message + '{:>8} . {:18} proj: {}'.format(score[i],team[i],proj[i]) + '\n'
+		final_message = final_message + '{:>6}-{:17} proj: {}'.format(score[i],team[i],proj[i]) + '\n'
 	message_to_sandbox(final_message)
 	return('ok',200)
 
-def message_to_sandbox(message):
+def message_to_sandbox(msg):
 	# Sent to File Sharing group for testing purposes
 	url = 'https://api.groupme.com/v3/bots/post'
 	message = {
-		'text': message,  
+		'text': msg,  
 		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
