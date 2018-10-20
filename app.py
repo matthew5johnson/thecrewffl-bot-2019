@@ -598,7 +598,7 @@ def sandbox_testing(text):
 	# for i in range(0,3):
 	# 	final_message = final_message + '{:>6}-{:17} proj: {}'.format(score[i],team[i],proj[i]) + '\n'
 	snippet = 'test'
-	final_message = '{:<8}{:^8}{:>8}'.format(snippet,snippet,snippet)
+	final_message = '{:<8}{:^8}{:>8}\n{:<8}{:^8}{:>8}\n{:<8}{:^8}{:>8}'.format(snippet,snippet,snippet,snippet,snippet,snippet,snippet,snippet,snippet)
 	message_to_sandbox(final_message)
 	return('ok',200)
 
