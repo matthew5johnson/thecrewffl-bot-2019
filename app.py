@@ -333,24 +333,24 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 	elif message_type == 2:
 		week = database_access('settings', 'week')
 		if projected_list != 'GAME COMPLETED':
-			# live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
-			# for i in range(len(franchise_number_list))[0::2]:
-			# 	live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
-			# send_message(live_scoreboard)
-			# return('ok',200)
 			live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
-			formatted_points_list = []
-			formatted_franchise_list = []
-			formatted_proj_list = []
-			line_break = '=== === ===\n'
-			for i in range(len(franchise_number_list)):
-				formatted_points_list[i] = '{} -'.format(points_list[i])
-				formatted_franchise_list[i] = '{} '.format(get_franchise_name(int(franchise_number_list[i])))
-				formatted_proj_list[i] = 'proj: {}'.format(projected_list[i])
-
 			for i in range(len(franchise_number_list))[0::2]:
-				live_scoreboard = live_scoreboard + '{:7}{:16}{:>13}\n'.format(formatted_points_list[i],formatted_franchise_list[i],formatted_proj_list[i],formatted_points_list[i+1],formatted_franchise_list[i+1],formatted_proj_list[i+1]) + '{:^35}'.format(line_break)
+				live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
 			send_message(live_scoreboard)
+			# return('ok',200)
+			# live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
+			# formatted_points_list = []
+			# formatted_franchise_list = []
+			# formatted_proj_list = []
+			# line_break = '=== === ===\n'
+			# for i in range(len(franchise_number_list)):
+			# 	formatted_points_list[i] = '{} -'.format(points_list[i])
+			# 	formatted_franchise_list[i] = '{} '.format(get_franchise_name(int(franchise_number_list[i])))
+			# 	formatted_proj_list[i] = 'proj: {}'.format(projected_list[i])
+
+			# for i in range(len(franchise_number_list))[0::2]:
+			# 	live_scoreboard = live_scoreboard + '{:7}{:16}{:>13}\n'.format(formatted_points_list[i],formatted_franchise_list[i],formatted_proj_list[i],formatted_points_list[i+1],formatted_franchise_list[i+1],formatted_proj_list[i+1]) + '{:^35}'.format(line_break)
+			# send_message(live_scoreboard)
 			return('ok',200)
 			# WORKED A
 		else:
