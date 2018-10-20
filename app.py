@@ -142,14 +142,19 @@ def parse(sender, text):
 	if re.search("'@bot", text, re.I) or re.search('"@bot', text) or re.search("-----   Commands   -----", text) or re.search("1. '@bot help' = this help message", text) or re.search("2. '@bot scores' = live scores", text) or re.search("3. '@bot my score' = your live score", text) or re.search("4. '@bot (franchise) score' = enter any franchise name", text) or re.search("5. '@bot records' = record book", text) or re.search("_commands are case and space insensitive_", text) or re.search("We can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list.", text) or re.search('Total #RB votes', text) or re.search('Week has been set to', text): 
 		# AVOID responding to the BOT itself (in the help message)
 		return('ok',200)
-	# 1   ...   @bot my score 
+	# 2   ...   @bot my score 
 	elif re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = get_franchise_number(sender)
 		# sys.stdout.write('franchise: {} <<'.format(franchise))
 		get_data(franchise, 1)
 		return('ok',200)
+	# 1   ...   @bot franchise summary
+	elif re.search('summary', text, re.I):
+		franchise, message_type = text_id_franchise(text)
+		franchise_summary(franchise)
+		return('ok',200)
 	
-	# 2   ...   @bot all scores
+	# 3   ...   @bot all scores
 	elif re.search('score', text, re.I): #re.search('all', text, re.I) and
 		franchise, message_type = text_id_franchise(text)
 		get_data(franchise, message_type)
@@ -184,7 +189,7 @@ def parse(sender, text):
 	# 	return('ok',200)
 	
 	
-	# 7   ...   @bot records
+	# 4   ...   @bot records
 	elif re.search('record', text, re.I):
 		weekly_highscore_tuple, weekly_lowcore_tuple, weekly_blowout_tuple, weekly_closest_tuple, season_highppg_tuple, season_lowppg_tuple, season_highwins_tuple, season_lowwins_tuple, season_highmargin_tuple = database_access('records', 'all')
 		# message = '1. %s : %s - %s/%s vs %s' % (weekly_points, franchise, season, week, opponent)
@@ -211,7 +216,7 @@ def parse(sender, text):
 
 	# help   ...   and posts response
 	elif re.search('help', text, re.I):
-		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n1. '@bot help' = this help message\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n=====\nOTHER:\n6. '@bot bets' = spreads & O/Us\n----\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Kmish - FAAB, Gilhop - franchise summary"
+		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n'@bot help' = this help message\n--- --- ---\n1. '@bot (franchise) summary' = franchise stats\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n=====\nOTHER:\n6. '@bot bets' = spreads & O/Us\n----\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Kmish - FAAB, Gilhop - franchise summary"
 		send_message(help_message)
 		return('ok',200)
 	#    ...   @bot remove bob   ...   and posts vote tally
@@ -337,7 +342,7 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 			for i in range(len(franchise_number_list))[0::2]:
 				live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(points_list[i], get_franchise_name(int(franchise_number_list[i])), projected_list[i], points_list[i+1], get_franchise_name(int(franchise_number_list[i+1])), projected_list[i+1])
 			send_message(live_scoreboard)
-			# return('ok',200)
+			return('ok',200)
 			# live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
 			# formatted_points_list = []
 			# formatted_franchise_list = []
@@ -351,7 +356,7 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 			# for i in range(len(franchise_number_list))[0::2]:
 			# 	live_scoreboard = live_scoreboard + '{:7}{:16}{:>13}\n'.format(formatted_points_list[i],formatted_franchise_list[i],formatted_proj_list[i],formatted_points_list[i+1],formatted_franchise_list[i+1],formatted_proj_list[i+1]) + '{:^35}'.format(line_break)
 			# send_message(live_scoreboard)
-			return('ok',200)
+			# return('ok',200)
 			# WORKED A
 		else:
 			final_scoreboard = '*** Week %i Final Scoreboard ***\n' % week
@@ -499,7 +504,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -591,6 +596,12 @@ def text_id_franchise(text):
 		return('none', 2)
 
 
+
+def franchise_summary(franchise_number):
+	# Pull from db
+
+	message = 'ok {} << franchise'.format(franchise_number)
+	message_to_sandbox(message)
 
 
 
