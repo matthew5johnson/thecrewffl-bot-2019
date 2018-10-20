@@ -585,14 +585,14 @@ def text_id_franchise(text):
 def sandbox_testing(text):
 	# Just don't output 'testing' or 'bot' into the sandbox and you're good
 	# week = database_access('settings', 'week')
-	score = 120.2
-	team = 'Mitch'
-	proj = 131.8
-	score2 = 115.3
-	team2 = 'Gaudet & Cameron'
-	proj2 = 119.0
-	formatting_test_message = '{:>8} . {:18} proj: {}\n{:>8} . {:18} proj: {}'.format(score,team,proj,score2,team2,proj2)
-	message_to_sandbox(formatting_test_message)
+	score = [120.2, 115.3]
+	team = ['Mitch', 'Gaudet & Cameron']
+	proj = [131.8, 119.0] 
+	
+	final_message = ''
+	for i in range(0,2):
+		final_message = final_message + '{:>8} . {:18} proj: {}'.format(score[i],team[i],proj[i]) + '\n'
+	message_to_sandbox(final_message)
 	return('ok',200)
 
 def message_to_sandbox(message):
