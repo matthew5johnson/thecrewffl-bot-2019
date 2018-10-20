@@ -588,7 +588,10 @@ def sandbox_testing(text):
 	score = 120.2
 	team = 'Mitch'
 	proj = 131.8
-	formatting_test_message = '{:>8} . {:18} proj: {}'.format(score,team,proj)
+	score2 = 115.3
+	team2 = 'Gaudet & Cameron'
+	proj2 = 119.0
+	formatting_test_message = '{:>8} . {:18} proj: {}\n{:>8} . {:18} proj: {}'.format(score,team,proj,score2,team2,proj2)
 	message_to_sandbox(formatting_test_message)
 	return('ok',200)
 
