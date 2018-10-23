@@ -624,6 +624,7 @@ def franchise_summary(franchise_number):
 	best_record = all_annual_data[15]
 	best_record_year = all_annual_data[16]
 	rivalry_record = all_annual_data[17]
+	avg_draft_pick = all_annual_data[18]
 
 	average_ppg = all_temporary_data[1]
 	average_ppg_rank = all_temporary_data[2]
@@ -662,7 +663,7 @@ def franchise_summary(franchise_number):
 			message = '{}\n'.format(franchise_name)
 	else:
 		if sacko_message == 'None':
-			message = ">> {} Summary <<\n\n{:^32}\n{:^32}\n\n'15   '16   '17   (Modern Era)\n#{}   #{}   #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, champion, champion_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)
+			message = ">> {} Summary <<\n\n{:^32}\n{:^32}\n\n'15   '16   '17   (Modern Era)\n#{}   #{}   #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}   |   Avg Draft Pick: {}\n\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, champion, champion_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, avg_draft_pick, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)
 		else:
 			message = '{}\n'.format(franchise_name)  
 
