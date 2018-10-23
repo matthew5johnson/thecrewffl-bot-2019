@@ -651,6 +651,11 @@ def franchise_summary(franchise_number):
 	divider_stars = '***   ***   ***   ***'
 	divider_dashes = '--------------------'
 	champion = 'League Champion'
+	modernera = 'Modern Era:'
+	fifteen = "'15"
+	sixteen = "'16"
+	seventeen = "'17"
+	nothing = ''
 	avgrankrow = 'Avg Rank {} | Playoffs {}'.format(average_ranking, playoff_appearances)
 	ppgrow = '{} PPG (#{})  ...  {} Win% (#{})'.format(average_ppg, average_ppg_rank, win_pct, win_pct_rank)
 
@@ -661,7 +666,7 @@ def franchise_summary(franchise_number):
 			message = '{}\n'.format(franchise_name)
 	else:
 		if sacko_message == 'None':
-			message = "{:^32}\n{:^32}\n{:^32}\n{:^32}\nModern Era: '15 '16 '17\n............{}  {}  {}\n{:^32}\n{:^32}\n{:^32}".format(franchise_name, divider_stars, champion, champion_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, ppgrow)
+			message = "{:^32}\n{:^32}\n{:^32}\n{:^32}\n{:11}{:^4}{:^4}{:^4}\n{:11}{:^4}{:^4}{:^4}\n{:^32}\n{:^32}\n{:^32}".format(franchise_name, divider_stars, champion, champion_message, modernera, fifteen, sixteen, seventeen, nothing ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, ppgrow)
 		else:
 			message = '{}\n'.format(franchise_name)  
 
