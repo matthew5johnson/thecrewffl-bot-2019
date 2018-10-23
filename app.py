@@ -650,14 +650,10 @@ def franchise_summary(franchise_number):
 
 	divider_stars = '***   ***   ***   ***'
 	divider_dashes = '--------------------'
-	champion = 'League Champion'
-	modernera = 'Modern Era:'
-	fifteen = "'15"
-	sixteen = "'16"
-	seventeen = "'17"
-	nothing = ''
+	champion = '*** **  League Champion  ** ***'
 	avgrankrow = 'Avg Rank {} | Playoffs {}'.format(average_ranking, playoff_appearances)
 	ppgrow = '{} PPG (#{})  ...  {} Win% (#{})'.format(average_ppg, average_ppg_rank, win_pct, win_pct_rank)
+	bestperformancesrow = '=== Best Performances ==='
 
 	if champion_message == 'None':
 		if sacko_message == 'None':
@@ -666,7 +662,7 @@ def franchise_summary(franchise_number):
 			message = '{}\n'.format(franchise_name)
 	else:
 		if sacko_message == 'None':
-			message = "{:^32}\n{:^32}\n{:^32}\n{:^32}\n{:11}{:^4}{:^4}{:^4}\n{:25}#{:^4}#{:^4}#{:^4}\n{:^32}\n{:^32}\n{:^32}".format(franchise_name, divider_stars, champion, champion_message, modernera, fifteen, sixteen, seventeen, nothing, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, ppgrow)
+			message = ">> {} Summary <<\n\n{:^32}\n{:^32}\n{} {} {}  (Modern Era)\n#{} #{} #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}  ({}/{})\nBest Season: {} PPG  ({})\nBest Record: {}  ({})\nLargest Margin: {}  ({}/{})\nRivalry: {}\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\n{} {}\nK - {} {}".format(franchise_name, champion, champion_message, modernera, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)
 		else:
 			message = '{}\n'.format(franchise_name)  
 
