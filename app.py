@@ -504,7 +504,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -599,9 +599,80 @@ def text_id_franchise(text):
 
 def franchise_summary(franchise_number):
 	# Pull from db
+	franchise_index = franchise_number - 1
+	franchise_name_list = ['Matt & Ross', 'Scott & James', 'Doug', 'Crockett', 'Blake', 'Kfish', 'Kyle', 'Gaudet & Cameron', 'Gilhop & MJ', 'Mitch', 'Nick & Mickey', 'Joseph & Mike']
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+	cur.execute("SELECT * FROM temporary_franchise_summary WHERE franchise=%s;", (franchise_name_list[franchise_index]))
+	all_temporary_data = cur.fetchall()[0]
+	con.commit()
+	cur.execute("SELECT * FROM annual_franchise_summary WHERE franchise=%s;", (franchise_name_list[franchise_index]))
+	all_annual_data = cur.fetchall()[0]
+	con.commit()
+	con.close()
 
-	message = 'ok {} << franchise'.format(franchise_number)
-	message_to_sandbox(message)
+	franchise_name = get_franchise_name(franchise_number)
+	champion_message = all_annual_data[1]
+	sacko_message = all_annual_data[2]
+	ranking_2015 = all_annual_data[3]
+	ranking_2016 = all_annual_data[4]
+	ranking_2017 = all_annual_data[5]
+	average_ranking = all_annual_data[11]
+	playoff_appearances = all_annual_data[12]
+	best_ppg_season = all_annual_data[13]
+	best_ppg_season_year = all_annual_data[14]
+	best_record = all_annual_data[15]
+	best_record_year = all_annual_data[16]
+	rivalry_record = all_annual_data[17]
+
+	average_ppg = all_temporary_data[1]
+	average_ppg_rank = all_temporary_data[2]
+	win_pct = all_temporary_data[3] * 100
+	win_pct_rank = all_temporary_data[4]
+	highest_score = all_temporary_data[5]
+	highest_score_year = all_temporary_data[6]
+	highest_score_week = all_temporary_data[7]
+	largest_margin = all_temporary_data[8]
+	largest_margin_year = all_temporary_data[9]
+	largest_margin_week = all_temporary_data[10]
+	qb_name = all_temporary_data[11]
+	qb_points = all_temporary_data[12]
+	rb_name = all_temporary_data[13]
+	rb_points = all_temporary_data[14]
+	wr_name = all_temporary_data[15]
+	wr_points = all_temporary_data[16]
+	te_name = all_temporary_data[17]
+	te_points = all_temporary_data[18]
+	dst_name = all_temporary_data[19]
+	dst_points = all_temporary_data[20]
+	k_name = all_temporary_data[21]
+	k_points = all_temporary_data[22]
+
+	divider_stars = '***   ***   ***   ***'
+	champion = 'League Champion:'
+
+	if champion_message == 'None':
+		if sacko_message == 'None':
+			message = '{}\n'.format(franchise_name)
+		else:
+			message = '{}\n'.format(franchise_name)
+	else:
+		if sacko_message == 'None':
+			message = '{:^32}\n{:^32}\n{:^32}\n{:^32}'.format(franchise_name, divider_stars, champion, champion_message)
+		else:
+			message = '{}\n'.format(franchise_name)  
+
+
+
+
+
+
+
+
+
+
+	# message = 'ok {} << franchise'.format(franchise_number)
+	send_message(message)
 
 
 
