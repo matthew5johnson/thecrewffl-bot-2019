@@ -666,7 +666,7 @@ def franchise_summary(franchise_number):
 			message = '{}\n'.format(franchise_name)
 	else:
 		if sacko_message == 'None':
-			message = "{:^32}\n{:^32}\n{:^32}\n{:^32}\n{:11}{:^4}{:^4}{:^4}\n{:11}{:^4}{:^4}{:^4}\n{:^32}\n{:^32}\n{:^32}".format(franchise_name, divider_stars, champion, champion_message, modernera, fifteen, sixteen, seventeen, nothing ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, ppgrow)
+			message = "{:^32}\n{:^32}\n{:^32}\n{:^32}\n{:11}{:^4}{:^4}{:^4}\n{:11}{:^4}{:^4}{:^4}\n{:^32}\n{:^32}\n{:^32}".format(franchise_name, divider_stars, champion, champion_message, modernera, fifteen, sixteen, seventeen, nothing, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, ppgrow)
 		else:
 			message = '{}\n'.format(franchise_name)  
 
