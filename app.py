@@ -147,7 +147,8 @@ def parse(sender, text):
 	elif re.search('my', text, re.I) and re.search('score', text, re.I):
 		franchise = get_franchise_number(sender)
 		# sys.stdout.write('franchise: {} <<'.format(franchise))
-		get_data(franchise, 1)
+		# get_data(franchise, 1)
+		get_data_no_webdriver(franchise, 1)
 		return('ok',200)
 	# 1   ...   @bot franchise summary
 	elif re.search('summary', text, re.I):
@@ -161,7 +162,8 @@ def parse(sender, text):
 	# 3   ...   @bot all scores
 	elif re.search('score', text, re.I): #re.search('all', text, re.I) and
 		franchise, message_type = text_id_franchise(text)
-		get_data(franchise, message_type)
+		# get_data(franchise, message_type)
+		get_data_no_webdriver(franchise, 1)
 		return('ok',200)
 
 	# 3   ...   @bot my mwm score
@@ -508,7 +510,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -713,17 +715,12 @@ def message_to_sandbox(msg):
 	return('ok',200)
 
 
-def get_data_no_webdriver(franchise, message_type):
+def get_data_no_webdriver(franchise_number, message_type):
 	from bs4 import BeautifulSoup
 	from urllib.request import urlopen
 
-	# season = 2018
-	# week = database_access('settings', 'week')
-
-	season = 2017
-	week = 14
-
-
+	season = 2018
+	week = database_access('settings', 'week')
 
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 	page = urlopen(url)
@@ -765,25 +762,77 @@ def get_data_no_webdriver(franchise, message_type):
 
 	con.close()
 
-	get_games_from_temp_cleardb(franchise)
-
-
+	get_games_from_temp_cleardb(franchise_number, message_type)
 	return('ok',200)
 
-# def get_games_from_temp_cleardb(franchise):
-# 	########## Get from ClearDb
-# 	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
-# 	cur = con.cursor()
 
-# 	cur.execute("SELECT projected FROM temporary_scraped_matchups WHERE game=0;")
-# 	ongoing_games = cur.fetchall()[0]
-# 	con.commit()
 
-# 	### If games are still going on, get projected scores. Otherwise, don't
-# 	if ongoing_games[0] != 999.9:
-# 		for i in range
-# 	cur.execute("CREATE TABLE temporary_scraped_matchups (game INT, franchise INT, points DECIMAL(4,1), projected DECIMAL(4,1), PRIMARY KEY(game));")
-# 	con.commit()
+def get_games_from_temp_cleardb(franchise_number, message_type):
+	########## Get from ClearDb
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+
+	cur.execute("SELECT projected FROM temporary_scraped_matchups WHERE game=0;")
+	ongoing_games = cur.fetchall()[0]
+	con.commit()
+	games_over = 'place holder'
+	if ongoing_games == 999.9:
+		games_over = 'yes'
+	else:
+		games_over = 'no'
+
+
+
+	###### Get single score
+	if message_type == 1:
+		cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE franchise=%s", (franchise_number))
+		franchise_data = cur.fetchall()[0]
+		con.commit()
+		game_number = franchise_data[0]
+
+		if game_number % 2 == 0:
+			opponent_game = game_number + 1
+			# sys.stdout.write('even index')
+		else: 
+			opponent_game = game_number - 1
+			# sys.stdout.write('odd index')
+
+		cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s", (opponent_game))
+		opponent_data = cur.fetchall()[0]
+		con.commit()
+
+		create_game_data_message_single(franchise_data, opponent_data, games_over)
+		return('ok',200)
+
+	elif message_type == 2:
+		game_data_list = []
+		for i in range(0,12):
+			cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
+			game_data_list.append(cur.fetchall())
+			con.commit()
+
+			create_game_data_message(game_data_list, message_type, games_over)
+			return('ok',200)
+
+def create_game_data_message_single(franchise, opponent, games_over):
+	if games_over == 'yes':
+		first_line = '{} - {}'.format(franchise[2], get_franchise_name(franchise[1]))
+		second_line = '{} - {}'.format(opponent[2], get_franchise_name(opponent[1]))
+		single_game_final_score = '{}\n{}'.format(first_line, second_line)
+		send_message(single_game_final_score)
+		return('ok',200)
+		# WORKED B
+	else:
+		first_line = '{} - {}'.format(franchise[2], get_franchise_name(franchise[1]))
+		second_line = '{} - {}'.format(opponent[2], get_franchise_name(opponent[1]))
+		proj_one = '| proj: {}'.format(franchise[3])
+		proj_two = '| proj: {}'.format(opponent[3])
+		single_game_ongoing_score = '{}{:>15}\n{}{:>15}'.format(first_line, proj_one, second_line, proj_two)
+		send_message(single_game_ongoing_score)
+		return('ok',200)
+		# WORKED C
+
+
 
 
 
