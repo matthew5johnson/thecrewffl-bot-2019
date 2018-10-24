@@ -510,7 +510,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -804,6 +804,7 @@ def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
 		create_game_data_message_single(franchise_data, opponent_data, games_over)
 		return('ok',200)
 
+	######### For whole scoreboard
 	elif message_type == 2:
 		if games_over == 'yes':
 			week = database_access('settings', 'week')
