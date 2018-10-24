@@ -723,7 +723,7 @@ def get_data_no_webdriver(franchise, message_type):
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 	page = urlopen(url)
 	page_content = page.read()
-	soup = BeautifulSoup(page_content, "html5lib")
+	soup = BeautifulSoup(page_content, "lxml")
 
 	# This gives a list of franchise numbers in the order that they're matched up
 	franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
