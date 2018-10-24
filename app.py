@@ -628,7 +628,7 @@ def franchise_summary(franchise_number):
 
 	average_ppg = all_temporary_data[1]
 	average_ppg_rank = all_temporary_data[2]
-	win_pct = all_temporary_data[3] * 100
+	win_pct = round((all_temporary_data[3] * 100),1)
 	win_pct_rank = all_temporary_data[4]
 	highest_score = all_temporary_data[5]
 	highest_score_year = all_temporary_data[6]
@@ -658,14 +658,14 @@ def franchise_summary(franchise_number):
 
 	if champion_message == 'None':
 		if sacko_message == 'None':
-			message = '{}\n'.format(franchise_name)
+			message = ">> {} Summary <<\n\n'15   '16   '17  (Modern Era)\n#{}   #{}   #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}   |   Avg Draft Pick: {}\n\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, avg_draft_pick, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)
 		else:
-			message = '{}\n'.format(franchise_name)
+			message = ">> {} Summary <<\n\n### Sacko: {}\n\n'15   '16   '17  (Modern Era)\n#{}   #{}   #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}   |   Avg Draft Pick: {}\n\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, sacko_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, avg_draft_pick, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)
 	else:
 		if sacko_message == 'None':
-			message = ">> {} Summary <<\n\n{:^32}\n{:^32}\n\n2015   2016   2017  (Modern Era)\n#{}    #{}    #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}   |   Avg Draft Pick: {}\n\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, champion, champion_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, avg_draft_pick, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)
+			message = ">> {} Summary <<\n\n{:^32}\n{:^32}\n\n'15   '16   '17  (Modern Era)\n#{}   #{}   #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}   |   Avg Draft Pick: {}\n\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, champion, champion_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, avg_draft_pick, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)
 		else:
-			message = '{}\n'.format(franchise_name)  
+			message = ">> {} Summary <<\n\n{:^32}\n{:^32}\n\n### Sacko: {}\n\n'15   '16   '17  (Modern Era)\n#{}   #{}   #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}   |   Avg Draft Pick: {}\n\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, champion, champion_message, sacko_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, avg_draft_pick, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)  
 
 
 
