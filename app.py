@@ -805,16 +805,36 @@ def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
 		return('ok',200)
 
 	elif message_type == 2:
-		game_data_list = [1,2,3,4,5,6,7,8,9,10,11,12]
-		for i in range(0,12):
-			cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
-			holder = cur.fetchall()[0]
-			game_data_list[i] = holder
-			con.commit()
-
+		if games_over == 'yes':
+			week = database_access('settings', 'week')
+			final_scoreboard = '*** Week %i Final Scoreboard ***\n' % week
+			for i in range(0,12)[::2]:
+				cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
+				first_line_raw = cur.fetchall()[0]
+				con.commit()
+				cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i+1))
+				second_line_raw = cur.fetchall()[0]
+				con.commit()
+				final_scoreboard = final_scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(first_line_raw[2], get_franchise_name(first_line_raw[1]), second_line_raw[2], get_franchise_name(second_line_raw[1]))
+			
 			con.close()
-
-			create_game_data_message_all(game_data_list, games_over)
+			send_message(final_scoreboard)
+			return('ok',200)
+		
+		elif games_over == 'no':
+			week = database_access('settings', 'week')
+			final_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
+			for i in range(0,12)[::2]:
+				cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
+				first_line_raw = cur.fetchall()[0]
+				con.commit()
+				cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i+1))
+				second_line_raw = cur.fetchall()[0]
+				con.commit()
+				live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(first_line_raw[2], get_franchise_name(first_line_raw[1]), first_line_raw[3], second_line_raw[2], get_franchise_name(second_line_raw[1]), second_line_raw[3])
+			
+			con.close()
+			send_message(live_scoreboard)
 			return('ok',200)
 
 def create_game_data_message_single(franchise, opponent, games_over):
@@ -833,36 +853,36 @@ def create_game_data_message_single(franchise, opponent, games_over):
 		return('ok',200)
 		# WORKED C
 
-def create_game_data_message_all(game_data, games_over):
-	week = database_access('settings', 'week')
-	if games_over == 'no':
-		live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
-		for i in range(0,12)[0::2]:
-			live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(game_data[i][2], get_franchise_name(game_data[i][1]), game_data[i][3], game_data[i+1][2], get_franchise_name(game_data[i+1][1]), game_data[i+1][3])
-			send_message(live_scoreboard)
-			return('ok',200)
-			# live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
-			# formatted_points_list = []
-			# formatted_franchise_list = []
-			# formatted_proj_list = []
-			# line_break = '=== === ===\n'
-			# for i in range(len(franchise_number_list)):
-			# 	formatted_points_list[i] = '{} -'.format(points_list[i])
-			# 	formatted_franchise_list[i] = '{} '.format(get_franchise_name(int(franchise_number_list[i])))
-			# 	formatted_proj_list[i] = 'proj: {}'.format(projected_list[i])
+# def create_game_data_message_all(game_data, games_over):
+# 	week = database_access('settings', 'week')
+# 	if games_over == 'no':
+# 		live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
+# 		for i in range(0,12)[0::2]:
+# 			live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(game_data[i][2], get_franchise_name(game_data[i][1]), game_data[i][3], game_data[i+1][2], get_franchise_name(game_data[i+1][1]), game_data[i+1][3])
+# 			send_message(live_scoreboard)
+# 			return('ok',200)
+# 			# live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
+# 			# formatted_points_list = []
+# 			# formatted_franchise_list = []
+# 			# formatted_proj_list = []
+# 			# line_break = '=== === ===\n'
+# 			# for i in range(len(franchise_number_list)):
+# 			# 	formatted_points_list[i] = '{} -'.format(points_list[i])
+# 			# 	formatted_franchise_list[i] = '{} '.format(get_franchise_name(int(franchise_number_list[i])))
+# 			# 	formatted_proj_list[i] = 'proj: {}'.format(projected_list[i])
 
-			# for i in range(len(franchise_number_list))[0::2]:
-			# 	live_scoreboard = live_scoreboard + '{:7}{:16}{:>13}\n'.format(formatted_points_list[i],formatted_franchise_list[i],formatted_proj_list[i],formatted_points_list[i+1],formatted_franchise_list[i+1],formatted_proj_list[i+1]) + '{:^35}'.format(line_break)
-			# send_message(live_scoreboard)
-			# return('ok',200)
-			# WORKED A
-		else:
-			final_scoreboard = '*** Week %i Final Scoreboard ***\n' % week
-			for i in range(len(franchise_number_list))[0::2]:
-				final_scoreboard = final_scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(game_data[i][2], get_franchise_name(game_data[i][1]), game_data[i+1][2], get_franchise_name(game_data[i+1][1]))
-			send_message(final_scoreboard)
-			return('ok',200)
-			# WORKED C after pinging a different message and trying again
+# 			# for i in range(len(franchise_number_list))[0::2]:
+# 			# 	live_scoreboard = live_scoreboard + '{:7}{:16}{:>13}\n'.format(formatted_points_list[i],formatted_franchise_list[i],formatted_proj_list[i],formatted_points_list[i+1],formatted_franchise_list[i+1],formatted_proj_list[i+1]) + '{:^35}'.format(line_break)
+# 			# send_message(live_scoreboard)
+# 			# return('ok',200)
+# 			# WORKED A
+# 		else:
+# 			final_scoreboard = '*** Week %i Final Scoreboard ***\n' % week
+# 			for i in range(len(franchise_number_list))[0::2]:
+# 				final_scoreboard = final_scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(game_data[i][2], get_franchise_name(game_data[i][1]), game_data[i+1][2], get_franchise_name(game_data[i+1][1]))
+# 			send_message(final_scoreboard)
+# 			return('ok',200)
+# 			# WORKED C after pinging a different message and trying again
 
 
 
