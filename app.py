@@ -823,7 +823,7 @@ def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
 		
 		elif games_over == 'no':
 			week = database_access('settings', 'week')
-			final_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
+			live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
 			for i in range(0,12)[::2]:
 				cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
 				first_line_raw = cur.fetchall()[0]
