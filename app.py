@@ -805,11 +805,11 @@ def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
 		return('ok',200)
 
 	elif message_type == 2:
-		game_data_list = []
+		game_data_list = [1,2,3,4,5,6,7,8,9,10,11,12]
 		for i in range(0,12):
 			cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
 			holder = cur.fetchall()[0]
-			game_data_list.append(holder)
+			game_data_list[i] = holder
 			con.commit()
 
 			con.close()
