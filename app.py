@@ -762,26 +762,20 @@ def get_data_no_webdriver(franchise_number, message_type):
 
 	con.close()
 
-	get_games_from_temp_cleardb(franchise_number, message_type)
-	return('ok',200)
-
-
-
-def get_games_from_temp_cleardb(franchise_number, message_type):
-	########## Get from ClearDb
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
-	cur = con.cursor()
-
-	cur.execute("SELECT projected FROM temporary_scraped_matchups WHERE game=0;")
-	ongoing_games = cur.fetchall()[0]
-	con.commit()
-	games_over = 'place holder'
-	if ongoing_games[0] == 999.9:
+	if projected_list == 'GAME COMPLETED':
 		games_over = 'yes'
 	else:
 		games_over = 'no'
 
+	get_games_from_temp_cleardb(franchise_number, message_type, games_over)
+	return('ok',200)
 
+
+
+def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
+	########## Get from ClearDb
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
 
 	###### Get single score
 	if message_type == 1:
@@ -801,6 +795,8 @@ def get_games_from_temp_cleardb(franchise_number, message_type):
 		opponent_data = cur.fetchall()[0]
 		con.commit()
 
+		con.close()
+
 		create_game_data_message_single(franchise_data, opponent_data, games_over)
 		return('ok',200)
 
@@ -810,6 +806,8 @@ def get_games_from_temp_cleardb(franchise_number, message_type):
 			cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
 			game_data_list.append(cur.fetchall())
 			con.commit()
+
+			con.close()
 
 			create_game_data_message(game_data_list, message_type, games_over)
 			return('ok',200)
@@ -825,9 +823,7 @@ def create_game_data_message_single(franchise, opponent, games_over):
 	else:
 		first_line = '{} - {}'.format(franchise[2], get_franchise_name(franchise[1]))
 		second_line = '{} - {}'.format(opponent[2], get_franchise_name(opponent[1]))
-		proj_one = '| proj: {}'.format(franchise[3])
-		proj_two = '| proj: {}'.format(opponent[3])
-		single_game_ongoing_score = '{}{:>15}\n{}{:>15}'.format(first_line, proj_one, second_line, proj_two)
+		single_game_ongoing_score = '{} | proj: {}\n{} | proj: {}'.format(first_line, franchise[3], second_line, opponent[3])
 		send_message(single_game_ongoing_score)
 		return('ok',200)
 		# WORKED C
