@@ -746,7 +746,7 @@ def get_data_no_webdriver(franchise, message_type):
 
 	cur.execute("DROP TABLE temporary_scraped_matchups;")
 	con.commit()
-	cur.execute("CREATE TABLE temporary_scraped_matchups (game INT, franchise INT, points DECIMAL(4,1), projected DECIMAL(4,1), PRIMARY KEY(game);")
+	cur.execute("CREATE TABLE temporary_scraped_matchups (game INT, franchise INT, points DECIMAL(4,1), projected DECIMAL(4,1), PRIMARY KEY(game));")
 	con.commit()
 
 	if projected_list != 'GAME COMPLETED':
@@ -755,7 +755,7 @@ def get_data_no_webdriver(franchise, message_type):
 			con.commit()
 	else:
 		for i in range(0,12):
-			cur.execute("INSERT INTO temporary_scraped_matchups VALUES(%s, %s, %s, %s);", (i, franchise_number_list[i], points_list[i], 999.9))
+			cur.execute("INSERT INTO temporary_scraped_matchups VALUES(%s, %s, %s, 999.9);", (i, franchise_number_list[i], points_list[i]))
 			con.commit()
 
 	con.close()
