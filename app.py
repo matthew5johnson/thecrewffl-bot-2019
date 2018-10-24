@@ -30,9 +30,10 @@ def webhook():
 	#####     Sniffing for @testing     #####
 	elif '@testing' in data['text']:
 		# Sends us into a play function (sandbox_testing) that feeds into a send message function aimed at File Sharing group
-		text = data['text']
+		# text = data['text']
 		# sys.stdout.write('sent into testing environment')
-		sandbox_testing(text)
+		# sandbox_testing(text)
+		get_data_no_webdriver(9,1)
 		return('ok',200)
 	else: return('ok',200)
 
@@ -710,6 +711,56 @@ def message_to_sandbox(msg):
 	
 	# json = requests.post(url, message)
 	return('ok',200)
+
+
+def get_data_no_webdriver(franchise, message_type):
+	from bs4 import BeautifulSoup
+	from urllib.request import urlopen
+
+	season = 2018
+	week = database_access('settings', 'week')
+
+	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
+	page = urlopen(url)
+	page_content = page.read()
+	soup = BeautifulSoup(page_content, "html5lib")
+
+	# This gives a list of franchise numbers in the order that they're matched up
+	franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
+	points_list = []
+	projected_list = []
+
+	# The if statement tests to see if the matchup is ongoing (returns true if so) or already completed (returns false if so)
+	if re.search('tmTotalPts_', str(soup)):
+		for i in franchise_number_list:
+			points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
+			projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
+	else:
+		points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
+		projected_list = 'GAME COMPLETED'
+		sys.stdout.write('nestled into a completed game. no projs')
+
+	########## Put into ClearDb
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+
+	cur.execute("DROP TABLE temporary_scraped_matchups;")
+	con.commit()
+	cur.execute("CREATE TABLE temporary_scraped_matchups (game INT, franchise INT, points DECIMAL(4,1), projected DECIMAL(4,1), PRIMARY KEY(game);")
+	con.commit()
+
+	if projected_list != 'GAME COMPLETED':
+		for i in range(0,12):
+			cur.execute("INSERT INTO  temporary_scraped_matchups VALUES(%s, %s, %s, %s);", (i, franchise_number_list[i], points_list[i], projected_list[i]))
+			con.commit()
+	else:
+		for i in range(0,12):
+			cur.execute("INSERT INTO temporary_scraped_matchups VALUES(%s, %s, %s, %s);", (i, franchise_number_list[i], points_list[i], 999.9))
+			con.commit()
+
+	con.close()
+	return('ok',200)
+
 
 if __name__ == '__main__':
 	app.run()
