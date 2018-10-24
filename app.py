@@ -163,7 +163,7 @@ def parse(sender, text):
 	elif re.search('score', text, re.I): #re.search('all', text, re.I) and
 		franchise, message_type = text_id_franchise(text)
 		# get_data(franchise, message_type)
-		get_data_no_webdriver(franchise, 1)
+		get_data_no_webdriver(franchise, message_type)
 		return('ok',200)
 
 	# 3   ...   @bot my mwm score
@@ -716,31 +716,35 @@ def message_to_sandbox(msg):
 
 
 def get_data_no_webdriver(franchise_number, message_type):
-	from bs4 import BeautifulSoup
-	from urllib.request import urlopen
+	try:
+		from bs4 import BeautifulSoup
+		from urllib.request import urlopen
 
-	season = 2018
-	week = database_access('settings', 'week')
+		season = 2018
+		week = database_access('settings', 'week')
 
-	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
-	page = urlopen(url)
-	page_content = page.read()
-	soup = BeautifulSoup(page_content, "lxml")
+		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
+		page = urlopen(url)
+		page_content = page.read()
+		soup = BeautifulSoup(page_content, "lxml")
 
-	# This gives a list of franchise numbers in the order that they're matched up
-	franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
-	points_list = []
-	projected_list = []
+		# This gives a list of franchise numbers in the order that they're matched up
+		franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
+		points_list = []
+		projected_list = []
 
-	# The if statement tests to see if the matchup is ongoing (returns true if so) or already completed (returns false if so)
-	if re.search('tmTotalPts_', str(soup)):
-		for i in franchise_number_list:
-			points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
-			projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
-	else:
-		points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
-		projected_list = 'GAME COMPLETED'
-		sys.stdout.write('nestled into a completed game. no projs')
+		# The if statement tests to see if the matchup is ongoing (returns true if so) or already completed (returns false if so)
+		if re.search('tmTotalPts_', str(soup)):
+			for i in franchise_number_list:
+				points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
+				projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
+		else:
+			points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
+			projected_list = 'GAME COMPLETED'
+			sys.stdout.write('nestled into a completed game. no projs')
+	except:
+		send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
+		return('get_data_no_webdriver failed')
 
 	########## Put into ClearDb
 	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
@@ -804,12 +808,13 @@ def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
 		game_data_list = []
 		for i in range(0,12):
 			cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
-			game_data_list.append(cur.fetchall())
+			holder = cur.fetchall()[0]
+			game_data_list.append(holder)
 			con.commit()
 
 			con.close()
 
-			create_game_data_message(game_data_list, message_type, games_over)
+			create_game_data_message_all(game_data_list, games_over)
 			return('ok',200)
 
 def create_game_data_message_single(franchise, opponent, games_over):
@@ -827,6 +832,39 @@ def create_game_data_message_single(franchise, opponent, games_over):
 		send_message(single_game_ongoing_score)
 		return('ok',200)
 		# WORKED C
+
+def create_game_data_message_all(game_data, games_over):
+	week = database_access('settings', 'week')
+	if games_over == 'no':
+		live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
+		for i in range(0,12)[0::2]:
+			live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(game_data[i][2], get_franchise_name(game_data[i][1]), game_data[i][3], game_data[i+1][2], get_franchise_name(game_data[i+1][1]), game_data[i+1][3])
+			send_message(live_scoreboard)
+			return('ok',200)
+			# live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
+			# formatted_points_list = []
+			# formatted_franchise_list = []
+			# formatted_proj_list = []
+			# line_break = '=== === ===\n'
+			# for i in range(len(franchise_number_list)):
+			# 	formatted_points_list[i] = '{} -'.format(points_list[i])
+			# 	formatted_franchise_list[i] = '{} '.format(get_franchise_name(int(franchise_number_list[i])))
+			# 	formatted_proj_list[i] = 'proj: {}'.format(projected_list[i])
+
+			# for i in range(len(franchise_number_list))[0::2]:
+			# 	live_scoreboard = live_scoreboard + '{:7}{:16}{:>13}\n'.format(formatted_points_list[i],formatted_franchise_list[i],formatted_proj_list[i],formatted_points_list[i+1],formatted_franchise_list[i+1],formatted_proj_list[i+1]) + '{:^35}'.format(line_break)
+			# send_message(live_scoreboard)
+			# return('ok',200)
+			# WORKED A
+		else:
+			final_scoreboard = '*** Week %i Final Scoreboard ***\n' % week
+			for i in range(len(franchise_number_list))[0::2]:
+				final_scoreboard = final_scoreboard + '{} - {}\n{} - {}\n===== ===== =====\n'.format(game_data[i][2], get_franchise_name(game_data[i][1]), game_data[i+1][2], get_franchise_name(game_data[i+1][1]))
+			send_message(final_scoreboard)
+			return('ok',200)
+			# WORKED C after pinging a different message and trying again
+
+
 
 
 
