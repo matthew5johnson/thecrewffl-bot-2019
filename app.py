@@ -150,7 +150,10 @@ def parse(sender, text):
 		return('ok',200)
 	# 1   ...   @bot franchise summary
 	elif re.search('summary', text, re.I):
-		franchise, message_type = text_id_franchise(text)
+		if re.search('my', text, re.I):
+			franchise = get_franchise_number(sender)
+		else:
+			franchise, message_type = text_id_franchise(text)
 		franchise_summary(franchise)
 		return('ok',200)
 	
@@ -504,7 +507,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -590,7 +593,7 @@ def text_id_franchise(text):
 		return(10, 1)
 	elif re.search('nick', text, re.I) or re.search('mickey', text, re.I):
 		return(11, 1)
-	elif re.search('joseph', text, re.I) or re.search('craig', text, re.I) or re.search('mike', text, re.I):
+	elif re.search('joseph', text, re.I) or re.search('craig', text, re.I) or re.search('mike', text, re.I) or re.search('black', text, re.I) or re.search('trading', text, re.I):
 		return(12, 1)
 	else: 
 		return('none', 2)
@@ -666,15 +669,6 @@ def franchise_summary(franchise_number):
 			message = ">> {} Summary <<\n\n{:^32}\n{:^32}\n\n'15   '16   '17  (Modern Era)\n#{}   #{}   #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}   |   Avg Draft Pick: {}\n\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, champion, champion_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, avg_draft_pick, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)
 		else:
 			message = ">> {} Summary <<\n\n{:^32}\n{:^32}\n\n### Sacko: {}\n\n'15   '16   '17  (Modern Era)\n#{}   #{}   #{}\n{:^32}\n{:^32}\n{:^32}\n{:^32}\n\nHighest Score: {}    ({}/{})\nBest Season: {} PPG    ({})\nBest Record: {}    ({})\nLargest Margin: {}    ({}/{})\nRivalry: {}   |   Avg Draft Pick: {}\n\n{:^32}\nQB - {} {}\nRB - {} {}\nWR - {} {}\nTE - {} {}\nD/ST - {} {}\nK - {} {}".format(franchise_name, champion, champion_message, sacko_message, ranking_2015, ranking_2016, ranking_2017, divider_dashes, avgrankrow, divider_dashes, ppgrow, highest_score, highest_score_year, highest_score_week, best_ppg_season, best_ppg_season_year, best_record, best_record_year, largest_margin, largest_margin_year, largest_margin_week, rivalry_record, avg_draft_pick, bestperformancesrow, qb_name, qb_points, rb_name, rb_points, wr_name, wr_points, te_name, te_points, dst_name, dst_points, k_name, k_points)  
-
-
-
-
-
-
-
-
-
 
 	# message = 'ok {} << franchise'.format(franchise_number)
 	send_message(message)
