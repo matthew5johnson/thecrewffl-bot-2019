@@ -717,8 +717,13 @@ def get_data_no_webdriver(franchise, message_type):
 	from bs4 import BeautifulSoup
 	from urllib.request import urlopen
 
-	season = 2018
-	week = database_access('settings', 'week')
+	# season = 2018
+	# week = database_access('settings', 'week')
+
+	season = 2017
+	week = 14
+
+
 
 	url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
 	page = urlopen(url)
@@ -759,7 +764,29 @@ def get_data_no_webdriver(franchise, message_type):
 			con.commit()
 
 	con.close()
+
+	get_games_from_temp_cleardb(franchise)
+
+
 	return('ok',200)
+
+# def get_games_from_temp_cleardb(franchise):
+# 	########## Get from ClearDb
+# 	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+# 	cur = con.cursor()
+
+# 	cur.execute("SELECT projected FROM temporary_scraped_matchups WHERE game=0;")
+# 	ongoing_games = cur.fetchall()[0]
+# 	con.commit()
+
+# 	### If games are still going on, get projected scores. Otherwise, don't
+# 	if ongoing_games[0] != 999.9:
+# 		for i in range
+# 	cur.execute("CREATE TABLE temporary_scraped_matchups (game INT, franchise INT, points DECIMAL(4,1), projected DECIMAL(4,1), PRIMARY KEY(game));")
+# 	con.commit()
+
+
+
 
 
 if __name__ == '__main__':
