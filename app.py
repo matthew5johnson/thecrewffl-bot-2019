@@ -776,7 +776,7 @@ def get_games_from_temp_cleardb(franchise_number, message_type):
 	ongoing_games = cur.fetchall()[0]
 	con.commit()
 	games_over = 'place holder'
-	if ongoing_games == 999.9:
+	if ongoing_games[0] == 999.9:
 		games_over = 'yes'
 	else:
 		games_over = 'no'
