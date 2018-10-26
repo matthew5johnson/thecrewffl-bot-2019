@@ -754,7 +754,7 @@ def message_to_sandbox(msg):
 	return('ok',200)
 
 
-def get_data_no_webdriver(franchise_number, message_type, standings):
+def get_data_no_webdriver(franchise_number, message_type):
 	try:
 		from bs4 import BeautifulSoup
 		from urllib.request import urlopen
