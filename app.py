@@ -535,7 +535,27 @@ def get_faab():
 		cur.execute("INSERT INTO temporary_faab VALUES(%s, %s);", (i+1, faab_list[i]))
 		con.commit()
 	con.close()
+
+
+	faab_from_db()
 	return('ok',200)
+
+def faab_from_db():
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+	cur.execute("SELECT * FROM temporary_faab ORDER BY faab desc;")
+	faab_holder = cur.fetchall()
+	con.commit()
+	con.close()
+
+	faab_message = "Current FAAB Budgets:\n"
+	for i in range(0,12):
+		faab_message = faab_message + "{}. {}: ${}\n".format(i+1, faab_holder[i][0], faab_holder[i][1])
+	send_message(faab_message)
+	return('ok',200)
+
+
+
 
 
 
@@ -549,7 +569,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
