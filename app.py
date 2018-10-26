@@ -227,7 +227,7 @@ def parse(sender, text):
 
 	# help   ...   and posts response
 	elif re.search('help', text, re.I):
-		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n'@bot help' = this help message\n--- --- ---\n1. '@bot (franchise) summary' = franchise stats\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n=====\nOTHER:\n6. '@bot bets' = spreads & O/Us\n----\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Kmish - FAAB, Gilhop - franchise summary, Scott - NCAA spreads"
+		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n'@bot help' = this help message\n--- --- ---\n1. '@bot (franchise) summary' = franchise stats\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n6. '@bot faab' = FAAB remaining\n=====\nOTHER:\n'@bot bets' = spreads & O/Us\n----\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Scott - NCAA spreads"
 		send_message(help_message)
 		return('ok',200)
 	#    ...   @bot remove bob   ...   and posts vote tally
@@ -569,7 +569,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
