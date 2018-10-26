@@ -550,7 +550,7 @@ def faab_from_db():
 
 	faab_message = "Current FAAB Budgets:\n"
 	for i in range(0,12):
-		faab_message = faab_message + "{}. {}: ${}\n".format(i+1, faab_holder[i][0], faab_holder[i][1])
+		faab_message = faab_message + "{}. {}: ${}\n".format(i+1, get_franchise_name(faab_holder[i][0]), faab_holder[i][1])
 	send_message(faab_message)
 	return('ok',200)
 
