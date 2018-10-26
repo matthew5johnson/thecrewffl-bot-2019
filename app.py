@@ -810,6 +810,8 @@ def get_data_no_webdriver(franchise_number, message_type):
 	else:
 		games_over = 'no'
 
+	standings = 2
+
 	if standings == 1:
 		get_standings()
 		return('ok',200)
