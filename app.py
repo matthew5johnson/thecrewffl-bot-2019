@@ -520,6 +520,8 @@ def get_faab():
 			soup = BeautifulSoup(page_content, "lxml")
 			holding = re.findall(r'(?<=leagueId=133377">\$)[0-9]*', str(soup))
 			faab_list.append(holding[0])
+	except:
+		return('error getting faab')
 	########## Put into ClearDb
 	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
 	cur = con.cursor()
