@@ -532,7 +532,7 @@ def get_faab():
 	con.commit()
 
 	for i in range(0,12):
-		cur.execute("INSERT INTO  temporary_faab VALUES(%s, %s);", (i+1, faab_list[i]))
+		cur.execute("INSERT INTO temporary_faab VALUES(%s, %s);", (i+1, faab_list[i]))
 		con.commit()
 	con.close()
 	return('ok',200)
