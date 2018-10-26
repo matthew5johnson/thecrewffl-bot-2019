@@ -830,6 +830,7 @@ def get_data_no_webdriver(franchise_number, message_type):
 	else:
 		games_over = 'no'
 
+	#### Make sure to get rid of this artifact when refactoring into proper modules
 	standings = 2
 
 	if standings == 1:
