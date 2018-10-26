@@ -213,6 +213,11 @@ def parse(sender, text):
 		send_message(message)
 		return('ok',200) 
 
+	# 4   ...   @bot faab
+	elif re.search('faab', text, re.I):
+		get_faab()
+		return('ok',200)
+
 	#### Stock responses. ** Remember to add or statements to the first if test above to exclude bot responses from generating an infinite loop of responses
 	
 	# Get list of NFL bets
@@ -500,6 +505,38 @@ def get_bets():
 	send_message(message)
 	return('ok',200)
 
+def get_faab():
+	try:
+		from bs4 import BeautifulSoup
+		from urllib.request import urlopen
+
+		season = 2018
+		faab_list = []
+
+		for team_id in range(1,13):
+			url = 'http://games.espn.com/ffl/clubhouse?leagueId=133377&teamId=%s&seasonId=%s' % (team_id, season)
+			page = urlopen(url)
+			page_content = page.read()
+			soup = BeautifulSoup(page_content, "lxml")
+			holding = re.findall(r'(?<=leagueId=133377">\$)[0-9]*', str(soup))
+			faab_list.append(holding[0])
+	########## Put into ClearDb
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+
+	cur.execute("DROP TABLE temporary_faab;")
+	con.commit()
+	cur.execute("CREATE TABLE temporary_faab (franchise INT, faab INT, PRIMARY KEY(franchise));")
+	con.commit()
+
+	for i in range(0,12):
+		cur.execute("INSERT INTO  temporary_faab VALUES(%s, %s);", (i+1, faab_list[i]))
+		con.commit()
+	con.close()
+	return('ok',200)
+
+
+
 
 
 
@@ -715,7 +752,7 @@ def message_to_sandbox(msg):
 	return('ok',200)
 
 
-def get_data_no_webdriver(franchise_number, message_type):
+def get_data_no_webdriver(franchise_number, message_type, standings):
 	try:
 		from bs4 import BeautifulSoup
 		from urllib.request import urlopen
@@ -771,8 +808,12 @@ def get_data_no_webdriver(franchise_number, message_type):
 	else:
 		games_over = 'no'
 
-	get_games_from_temp_cleardb(franchise_number, message_type, games_over)
-	return('ok',200)
+	if standings == 1:
+		get_standings()
+		return('ok',200)
+	else:
+		get_games_from_temp_cleardb(franchise_number, message_type, games_over)
+		return('ok',200)
 
 
 
