@@ -13,6 +13,9 @@ from flask import Flask, request
 import re
 import pymysql
 
+import scrape
+import message
+
 
 app = Flask(__name__)
 
@@ -33,7 +36,11 @@ def webhook():
 		# text = data['text']
 		# sys.stdout.write('sent into testing environment')
 		# sandbox_testing(text)
-		get_data_no_webdriver(9,1)
+		# get_data_no_webdriver(9,1)
+		games_over = scrape.update_scores(1, 1)
+		text = message.get_scores(1, 2, games_over)
+		message_to_sandbox(text)
+
 		return('ok',200)
 	else: return('ok',200)
 
