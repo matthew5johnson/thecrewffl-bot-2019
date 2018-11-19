@@ -173,6 +173,10 @@ def parse(sender, text):
 		get_data_no_webdriver(franchise, message_type)
 		return('ok',200)
 
+	elif re.search('standings', text, re.I): #re.search('all', text, re.I) and
+		get_standings()
+		return('ok',200)
+
 	# 3   ...   @bot my mwm score
 	# elif re.search('my', text, re.I) and re.search('mwm', text, re.I) and re.search('score', text, re.I):
 	# 	franchise = get_franchise_number(sender)
@@ -576,7 +580,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -959,6 +963,181 @@ def create_game_data_message_single(franchise, opponent, games_over):
 # 			# WORKED C after pinging a different message and trying again
 
 
+
+
+
+def get_standings():
+	try:
+		from bs4 import BeautifulSoup
+		from urllib.request import urlopen
+
+		season = 2018
+		week = database_access('settings', 'week')
+
+		url = 'http://games.espn.com/ffl/scoreboard?leagueId=133377&matchupPeriodId=%s&seasonId=%s' % (week, season)
+		page = urlopen(url)
+		page_content = page.read()
+		soup = BeautifulSoup(page_content, "lxml")
+
+		# This gives a list of franchise numbers in the order that they're matched up
+		franchise_number_list = re.findall(r'(?<=id="teamscrg_)[0-9]*', str(soup)) # confirmed: this creates a list
+		points_list = []
+		projected_list = []
+
+		# The if statement tests to see if the matchup is ongoing (returns true if so) or already completed (returns false if so)
+		if re.search('tmTotalPts_', str(soup)):
+			for i in franchise_number_list:
+				points_list.append(soup.select_one('#tmTotalPts_%s' % (i)).text)
+				projected_list.append(soup.select_one('#team_liveproj_%s' % (i)).text)
+		else:
+			points_list = re.findall(r'(?<=width="18%">)[0-9]*[.]?[0-9]', str(soup))
+			projected_list = 'GAME COMPLETED'
+			sys.stdout.write('nestled into a completed game. no projs')
+	except:
+		# send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
+		return('get_data_no_webdriver failed')
+
+	########## Put into ClearDb
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+
+	cur.execute("DROP TABLE temporary_scraped_matchups;")
+	con.commit()
+	cur.execute("CREATE TABLE temporary_scraped_matchups (game INT, franchise INT, points DECIMAL(4,1), projected DECIMAL(4,1), PRIMARY KEY(game));")
+	con.commit()
+
+	if projected_list != 'GAME COMPLETED':
+		for i in range(0,12):
+			cur.execute("INSERT INTO  temporary_scraped_matchups VALUES(%s, %s, %s, %s);", (i, franchise_number_list[i], points_list[i], projected_list[i]))
+			con.commit()
+	else:
+		for i in range(0,12):
+			cur.execute("INSERT INTO temporary_scraped_matchups VALUES(%s, %s, %s, 999.9);", (i, franchise_number_list[i], points_list[i]))
+			con.commit()
+
+	con.close()
+
+	get_standings_2()
+	return('ok',200)
+
+def get_standings_2():
+	import pymysql
+
+	def result_generator(a_score, b_score):
+	    if a_score > b_score:
+	        return('W', 'L')
+	    elif a_score < b_score:
+	        return('L', 'W')
+	    else:
+	        return('T', 'T')
+
+
+	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	cur = con.cursor()
+
+	cur.execute("DROP TABLE temporary_intermediate_standings;")
+	con.commit()
+	cur.execute("CREATE TABLE temporary_intermediate_standings (franchise INT, intermediate_points DECIMAL(3,1), intermediate_result VARCHAR(10), PRIMARY KEY(franchise));")
+	con.commit()
+
+	cur.execute("DROP TABLE temporary_live_standings;")
+	con.commit()
+	cur.execute("CREATE TABLE temporary_live_standings (franchise INT, live_win_pct DECIMAL(6,5), live_points DECIMAL(5,1), live_wins INT, live_losses INT, live_ties INT, PRIMARY KEY(franchise));")
+	con.commit()
+	con.close()
+
+	#cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE franchise=3;")
+	#cur.execute("SELECT wins, losses, ties, sum_points FROM temporary_scrape_standings WHERE franchise=%s;", (1))
+	#data = cur.fetchall()
+	#con.commit()
+
+	#   data[0][0] == wins  ; data[0][1] == losses  data[0][2] == ties   data[0][3] == sum_points
+
+	for game in range(0,12,2):
+	    con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	    cur = con.cursor()
+	    cur.execute("SELECT franchise, points FROM temporary_scraped_matchups WHERE game=%s;", (game))
+	    team_a_tuple = cur.fetchall()[0]
+	    con.commit()
+	    team_a_franchise = team_a_tuple[0]
+	    team_a_score = team_a_tuple[1]
+	    cur.execute("SELECT franchise, points FROM temporary_scraped_matchups WHERE game=%s;", (game+1))
+	    team_b_tuple = cur.fetchall()[0]
+	    con.commit()
+
+	    team_b_franchise = team_b_tuple[0]
+	    team_b_score = team_b_tuple[1]
+	    a_result, b_result = result_generator(team_a_score, team_b_score)
+	    
+	    cur.execute("INSERT INTO temporary_intermediate_standings (franchise, intermediate_points, intermediate_result) VALUES (%s, %s, %s);", (team_a_franchise, team_a_score, a_result))
+	    con.commit()
+	    cur.execute("INSERT INTO temporary_intermediate_standings (franchise, intermediate_points, intermediate_result) VALUES (%s, %s, %s);", (team_b_franchise, team_b_score, b_result))
+	    con.commit()
+	    con.close()
+	    
+
+	for franchise in range(1,13):
+	    con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	    cur = con.cursor()
+	    cur.execute("SELECT intermediate_points, intermediate_result FROM temporary_intermediate_standings WHERE franchise=%s;", (franchise))
+	    data_tuple = cur.fetchall()[0]
+	    con.commit()
+	    
+	    intermediate_points = data_tuple[0]
+	    intermediate_result = data_tuple[1]
+	    
+	    cur.execute("SELECT wins, losses, ties, sum_points FROM temporary_scrape_standings WHERE franchise=%s;", (franchise))
+	    weekly_scrape_tuple = cur.fetchall()[0]
+	    con.commit()
+	    
+	    old_wins = weekly_scrape_tuple[0]
+	    old_losses = weekly_scrape_tuple[1]
+	    old_ties = weekly_scrape_tuple[2]
+	    old_sum_points = weekly_scrape_tuple[3]
+	    
+	    if intermediate_result == 'W':
+	        wins = old_wins + 1
+	        losses = old_losses
+	        ties = old_ties
+	    elif intermediate_result == 'L':
+	        wins = old_wins
+	        losses = old_losses + 1
+	        ties = old_ties
+	    else:
+	        wins = old_wins
+	        losses = old_losses
+	        ties = old_ties + 1
+	    
+	    live_win_pct = (wins + (ties * 0.5)) / (wins + losses + ties)
+	    live_points = old_sum_points + intermediate_points
+	    
+	    cur.execute("INSERT INTO temporary_live_standings (franchise, live_win_pct, live_points, live_wins, live_losses, live_ties) VALUES (%s, %s, %s, %s, %s, %s);", (franchise, "%.5f"%live_win_pct, live_points, wins, losses, ties))
+	    con.commit()
+	    
+	    
+	    cur.execute("SELECT franchise, live_wins, live_losses, live_ties FROM temporary_live_standings ORDER BY live_win_pct, live_points;")
+	    standings_tuple = cur.fetchall()
+	    con.commit()
+	    
+	    con.close()
+	    
+	    craft_standings_message(standings_tuple)
+	    return('ok',200)
+		#con.close()
+		# number 1 team == 11  ... down to number 12 team being index 0
+		#print(standings_tuple[11][0]) == franchise number
+		# [1] == wins
+		# [2] == losses
+		# [3] == ties
+
+def craft_standings_message(standings_tuple):
+	live_standings = '*** Current Live Standings ***\n' 
+			for i in range(11,-1,-1):
+				live_standings = live_standings + '{}. {} {}-{}-{}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3])
+				if i == 6:
+					live_standings = live_standings + '===============\n'
+	send_message(live_standings)
+	return('ok',200)
 
 
 
