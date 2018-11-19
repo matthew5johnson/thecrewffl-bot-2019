@@ -1133,7 +1133,7 @@ def get_standings_2():
 def craft_standings_message(standings_tuple):
 	live_standings = '*** Current Live Standings ***\n'
 	for i in range(11,-1,-1):
-		live_standings = live_standings + '{}. {} {}-{}-{}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3])
+		live_standings = live_standings + '{} {}-{}-{}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3])
 		
 		if i == 6:
 			live_standings = live_standings + '===============\n'
