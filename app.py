@@ -389,40 +389,6 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 			# WORKED C after pinging a different message and trying again
 
 
-# def mwm(message_request, sender):
-# 	# message_request will be: 3. mine, 4. Scores, 5. Standings, 6. Schedule
-# 	if message_request == 'mine':
-# 		franchise_number_list, points_list, projected_list = get_data()
-# 		position = franchise_number_list.index(str(sender))
-# 		franchise_score = points_list[position]
-# 		# sys.stdout.write(franchise_score)
-		
-# 		# Tests to see if the game is already over. 'GAME COMPLETED' projected list means it's over and there are no longer projections available
-# 		if projected_list != 'GAME COMPLETED':
-# 			franchise_proj = projected_list[position]
-# 			# sys.stdout.write(franchise_proj)
-# 		opponent_franchise = #### LEAVING OFF HERE --- write a function that takes week & sender, and spits out the opponent. Easier to store each teams schedule as a list, and find week's opponent via index slicing the list. Then apply that to :: int(franchise_number_list[opponent_position])
-# 		## Need to find opponent_position in the franchise_number_list. Same way we did for franchise above
-# 		opponent_score = points_list[opponent_position]
-# 		# sys.stdout.write('opponent score')
-		
-# 		# Tests to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
-# 		if projected_list != 'GAME COMPLETED':
-# 			opponent_proj = projected_list[opponent_position]
-# 			# sys.stdout.write(opponent_proj)
-
-# 		# Test to see if the game is already over. 'N/A' projected list means it's over and there are no longer projections available
-# 		if projected_list != 'GAME COMPLETED':
-# 			my_ongoing_matchup = '{} - {} | proj: {}\n{} - {} | proj: {}'.format(franchise_score, get_franchise_name(franchise), franchise_proj, opponent_score, get_franchise_name(opponent_franchise), opponent_proj)
-# 			send_message(my_ongoing_matchup)
-# 			return('ok',200)
-# 			# WORKED B
-# 		else: 
-# 			my_completed_matchup = '{} - {}\n{} - {}'.format(franchise_score, get_franchise_name(franchise), opponent_score, get_franchise_name(opponent_franchise))
-# 			sys.stdout.write('It should send my score from last week')
-# 			send_message(my_completed_matchup)
-# 			return('ok',200)
-# 			# WORKED C
 	
 # def get_vegas_lines(text):
 # 	try:
