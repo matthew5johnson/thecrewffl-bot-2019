@@ -580,7 +580,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -1127,7 +1127,7 @@ def get_standings_2():
 		live_standings = live_standings + '{} {}-{}-{} pts: {}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
 		
 		if i == 10:
-			live_standings = live_standings + '----- Byes ----- '
+			live_standings = live_standings + '----- Top 2 = Byes -----\n'
 		if i == 6:
 			live_standings = live_standings + '=====  Playoff cut line  =====\n'
 
