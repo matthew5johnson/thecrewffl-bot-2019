@@ -580,7 +580,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
@@ -967,6 +967,7 @@ def create_game_data_message_single(franchise, opponent, games_over):
 
 
 def get_standings():
+	# When refactoring all of the code, be sure to put an if statement in so that anything in week 1 gives a message 'No games played yet', and 'N/A' for playoff weeks
 	try:
 		from bs4 import BeautifulSoup
 		from urllib.request import urlopen
@@ -1121,10 +1122,10 @@ def get_standings_2():
 	    
 	    con.close()
 	    
-    
+    rankings_headers = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 	live_standings = '*** Live Standings - based on current live scores ***\n'
 	for i in range(11,-1,-1):
-		live_standings = live_standings + '{} {}-{}-{} pts: {}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
+		live_standings = live_standings + '{}. {} {}-{}-{} pts: {}\n'.format(rankings_headers[i], get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
 		
 		if i == 10:
 			live_standings = live_standings + '----- Top 2 = Byes -----\n'
