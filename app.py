@@ -1037,7 +1037,7 @@ def get_standings_2():
 
 	cur.execute("DROP TABLE temporary_intermediate_standings;")
 	con.commit()
-	cur.execute("CREATE TABLE temporary_intermediate_standings (franchise INT, intermediate_points DECIMAL(3,1), intermediate_result VARCHAR(10), PRIMARY KEY(franchise));")
+	cur.execute("CREATE TABLE temporary_intermediate_standings (franchise INT, intermediate_points DECIMAL(4,1), intermediate_result VARCHAR(10), PRIMARY KEY(franchise));")
 	con.commit()
 
 	cur.execute("DROP TABLE temporary_live_standings;")
@@ -1121,8 +1121,21 @@ def get_standings_2():
 	    
 	    con.close()
 	    
-	    craft_standings_message(standings_tuple)
-	    return('ok',200)
+    
+    live_standings = '*** Current Live Standings ***\n'
+	for i in range(11,-1,-1):
+		live_standings = live_standings + '{} {}-{}-{}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3])
+	
+		if i == 6:
+			live_standings = live_standings + '===============\n'
+
+	send_message(live_standings)
+	return('ok',200)
+
+
+
+	    # craft_standings_message(standings_tuple)
+	    # return('ok',200)
 		#con.close()
 		# number 1 team == 11  ... down to number 12 team being index 0
 		#print(standings_tuple[11][0]) == franchise number
@@ -1130,16 +1143,16 @@ def get_standings_2():
 		# [2] == losses
 		# [3] == ties
 
-def craft_standings_message(standings_tuple):
-	live_standings = '*** Current Live Standings ***\n'
-	for i in range(11,-1,-1):
-		live_standings = live_standings + '{} {}-{}-{}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3])
+# def craft_standings_message(standings_tuple):
+	# live_standings = '*** Current Live Standings ***\n'
+	# for i in range(11,-1,-1):
+	# 	live_standings = live_standings + '{} {}-{}-{}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3])
 		
-		if i == 6:
-			live_standings = live_standings + '===============\n'
+	# 	if i == 6:
+	# 		live_standings = live_standings + '===============\n'
 
-	send_message(live_standings)
-	return('ok',200)
+	# send_message(live_standings)
+	# return('ok',200)
 
 
 
