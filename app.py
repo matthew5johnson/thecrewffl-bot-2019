@@ -1122,7 +1122,7 @@ def get_standings_2():
 	    con.close()
 	    
     
-    live_standings = '*** Current Live Standings ***\n'
+	live_standings = '*** Current Live Standings ***\n'
 	for i in range(11,-1,-1):
 		live_standings = live_standings + '{} {}-{}-{}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3])
 	
