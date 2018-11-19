@@ -238,7 +238,7 @@ def parse(sender, text):
 
 	# help   ...   and posts response
 	elif re.search('help', text, re.I):
-		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n'@bot help' = this help message\n--- --- ---\n1. '@bot (franchise) summary' = franchise stats\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n6. '@bot faab' = FAAB remaining\n=====\nOTHER:\n'@bot bets' = spreads & O/Us\n----\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Ross - live standings, Scott - NCAA spreads"
+		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n'@bot help' = this help message\n--- --- ---\n1. '@bot (franchise) summary' = franchise stats\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n6. '@bot faab' = FAAB remaining\n=====\nOTHER:\n'@bot bets' = spreads & O/Us\n----\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Scott - NCAA spreads"
 		send_message(help_message)
 		return('ok',200)
 	#    ...   @bot remove bob   ...   and posts vote tally
@@ -1115,19 +1115,21 @@ def get_standings_2():
 	    con.commit()
 	    
 	    
-	    cur.execute("SELECT franchise, live_wins, live_losses, live_ties FROM temporary_live_standings ORDER BY live_win_pct, live_points;")
+	    cur.execute("SELECT franchise, live_wins, live_losses, live_ties, live_points FROM temporary_live_standings ORDER BY live_win_pct, live_points;")
 	    standings_tuple = cur.fetchall()
 	    con.commit()
 	    
 	    con.close()
 	    
     
-	live_standings = '*** Current Live Standings ***\n'
+	live_standings = '*** Live Standings - based on current live scores ***\n'
 	for i in range(11,-1,-1):
-		live_standings = live_standings + '{} {}-{}-{}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3])
-	
+		live_standings = live_standings + '{} {}-{}-{} pts: {}\n'.format(get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
+		
+		if i == 10:
+			live_standings = live_standings + '----- Byes ----- '
 		if i == 6:
-			live_standings = live_standings + '===============\n'
+			live_standings = live_standings + '=====  Playoff cut line  =====\n'
 
 	send_message(live_standings)
 	return('ok',200)
