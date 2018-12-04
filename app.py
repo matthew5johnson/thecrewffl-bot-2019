@@ -19,6 +19,11 @@ import message
 
 app = Flask(__name__)
 
+
+
+###################################### Instructions: 
+###################################### Find/replace for 'season', comment out/comment in standings command for regular season only, add features to help message
+
 @app.route('/', methods=['POST'])
 def webhook():
 	data = request.get_json()
@@ -174,7 +179,8 @@ def parse(sender, text):
 		return('ok',200)
 
 	elif re.search('standings', text, re.I): #re.search('all', text, re.I) and
-		get_standings()
+		send_message('It\'s the postseason. Check out the playoff bracket and consolation ladder')
+		# get_standings()  # <<<-- uncomment this out again for the regular season. I commented it out for postseason.
 		return('ok',200)
 
 	# 3   ...   @bot my mwm score
@@ -238,7 +244,7 @@ def parse(sender, text):
 
 	# help   ...   and posts response
 	elif re.search('help', text, re.I):
-		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n'@bot help' = this help message\n--- --- ---\n1. '@bot (franchise) summary' = franchise stats\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n6. '@bot faab' = FAAB remaining\n=====\nOTHER:\n'@bot bets' = spreads & O/Us\n----\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: Scott - NCAA spreads"
+		help_message = "All scores are scraped in real-time\n-----   Commands   -----\n'@bot help' = this help message\n--- --- ---\n1. '@bot (franchise) summary' = franchise stats\n2. '@bot scores' = live scores\n3. '@bot my score' = your live score\n4. '@bot (franchise) score' = enter any franchise name\n5. '@bot records' = record book\n6. '@bot faab' = FAAB remaining\n=====\n7. '@bot standings' = live regular season standings\n=====\nOTHER:\n'@bot bets' = spreads & O/Us\n----\nWe can add pretty much any other features you think of. Post any other cool ideas that you've got, and we'll add them to the wish list. Wishlist: n/a"
 		send_message(help_message)
 		return('ok',200)
 	#    ...   @bot remove bob   ...   and posts vote tally
@@ -546,7 +552,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
