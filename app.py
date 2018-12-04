@@ -816,16 +816,18 @@ def get_data_no_webdriver(franchise_number, message_type):
 	#### Make sure to get rid of this artifact when refactoring into proper modules
 	standings = 2
 
+	length_of_data = len(franchise_number_list)
+
 	if standings == 1:
 		get_standings()
 		return('ok',200)
 	else:
-		get_games_from_temp_cleardb(franchise_number, message_type, games_over)
+		get_games_from_temp_cleardb(franchise_number, message_type, games_over, length_of_data)
 		return('ok',200)
 
 
 
-def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
+def get_games_from_temp_cleardb(franchise_number, message_type, games_over, length_of_data):
 	########## Get from ClearDb
 	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
 	cur = con.cursor()
@@ -858,7 +860,7 @@ def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
 		if games_over == 'yes':
 			week = database_access('settings', 'week')
 			final_scoreboard = '*** Week %i Final Scoreboard ***\n' % week
-			for i in range(0,12)[::2]:
+			for i in range(length_of_data)[::2]:  # range(0,12)
 				cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
 				first_line_raw = cur.fetchall()[0]
 				con.commit()
@@ -874,7 +876,7 @@ def get_games_from_temp_cleardb(franchise_number, message_type, games_over):
 		elif games_over == 'no':
 			week = database_access('settings', 'week')
 			live_scoreboard = '*** Week %i Live Scoreboard ***\n' % week
-			for i in range(0,12)[::2]:
+			for i in range(length_of_data)[::2]:   # range(0,12)
 				cur.execute("SELECT game, franchise, points, projected FROM temporary_scraped_matchups WHERE game=%s;", (i))
 				first_line_raw = cur.fetchall()[0]
 				con.commit()
