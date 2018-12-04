@@ -798,11 +798,11 @@ def get_data_no_webdriver(franchise_number, message_type):
 	con.commit()
 
 	if projected_list != 'GAME COMPLETED':
-		for i in range(0,12):
+		for i in range(len(franchise_number_list)):  # range(0,12)
 			cur.execute("INSERT INTO  temporary_scraped_matchups VALUES(%s, %s, %s, %s);", (i, franchise_number_list[i], points_list[i], projected_list[i]))
 			con.commit()
 	else:
-		for i in range(0,12):
+		for i in range(len(franchise_number_list)):   # range(0,12)
 			cur.execute("INSERT INTO temporary_scraped_matchups VALUES(%s, %s, %s, 999.9);", (i, franchise_number_list[i], points_list[i]))
 			con.commit()
 
