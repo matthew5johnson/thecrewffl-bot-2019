@@ -183,6 +183,11 @@ def parse(sender, text):
 		# get_standings()  # <<<-- uncomment this out again for the regular season. I commented it out for postseason.
 		return('ok',200)
 
+	elif re.search('@everyone', text, re.I): #re.search('all', text, re.I) and
+		send_message('return: everyone -- in progress')
+		# get_standings()  # <<<-- uncomment this out again for the regular season. I commented it out for postseason.
+		return('ok',200)
+
 	# 3   ...   @bot my mwm score
 	# elif re.search('my', text, re.I) and re.search('mwm', text, re.I) and re.search('score', text, re.I):
 	# 	franchise = get_franchise_number(sender)
@@ -855,6 +860,7 @@ def get_games_from_temp_cleardb(franchise_number, message_type, games_over, leng
 		create_game_data_message_single(franchise_data, opponent_data, games_over)
 		return('ok',200)
 
+		########################### This weekend: within the games_over if's, split again. if week < 14: what you have now  ... elif week == 14: split for into === Playoffs === for i in range(0, 4) and === Consolation Ladder === for i in range(4, length_of_whatver) ...  elif week == 15: split for into === Playoffs === for i in range(0, 4) and === Consolation Ladder === for i in range(6, length_of_whatver) .....  if week == 16: for i in range(0,2): =====\n === League Championship === .. for i in range(yaddayadda) === 3rd Place Game .. 5th Place Game  Consolation Ladder Championship .. 9th Place Game .. Sacko Game
 	######### For whole scoreboard
 	elif message_type == 2:
 		if games_over == 'yes':
