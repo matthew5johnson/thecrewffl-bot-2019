@@ -184,7 +184,7 @@ def parse(sender, text):
 		return('ok',200)
 
 	elif re.search('@everyone', text, re.I): #re.search('all', text, re.I) and
-		send_message('return: everyone -- in progress')
+		send_message('testing: @JamesMadison2019')
 		# get_standings()  # <<<-- uncomment this out again for the regular season. I commented it out for postseason.
 		return('ok',200)
 
