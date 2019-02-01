@@ -183,10 +183,6 @@ def parse(sender, text):
 		# get_standings()  # <<<-- uncomment this out again for the regular season. I commented it out for postseason.
 		return('ok',200)
 
-	elif re.search('@everyone', text, re.I): #re.search('all', text, re.I) and
-		send_message('testing: @JamesMadison2019')
-		# get_standings()  # <<<-- uncomment this out again for the regular season. I commented it out for postseason.
-		return('ok',200)
 
 	# 3   ...   @bot my mwm score
 	# elif re.search('my', text, re.I) and re.search('mwm', text, re.I) and re.search('score', text, re.I):
