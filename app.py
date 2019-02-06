@@ -50,7 +50,7 @@ def webhook():
 	else: return('ok',200)
 
 def database_access(table, command):
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 
 
@@ -130,7 +130,7 @@ def database_change_week(direction):
 	elif direction == 'minus':
 		week -= 1
 
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 	cur.execute("UPDATE settings SET settings_week=%s WHERE description='main';", (week))
 	con.commit()
@@ -141,7 +141,7 @@ def database_remove_bob():
 	rb_votes = database_access('settings', 'rb')
 	rb_votes += 1
 
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 	cur.execute("UPDATE settings SET settings_rbvotes=%s WHERE description='main';", (rb_votes))
 	con.commit()
@@ -475,7 +475,7 @@ def generate_message(franchise, message_type, franchise_number_list, points_list
 # 		send_message('Error. Our combination of free cloud hosting + webdriver is lagging like a noob. Try a different command, or retry the same command in a few mintues.')
 
 def get_bets():
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 	cur.execute("SELECT * FROM betting_table;")
 	bets = cur.fetchall()
@@ -508,7 +508,7 @@ def get_faab():
 	except:
 		return('error getting faab')
 	########## Put into ClearDb
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 
 	cur.execute("DROP TABLE temporary_faab;")
@@ -526,7 +526,7 @@ def get_faab():
 	return('ok',200)
 
 def faab_from_db():
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 	cur.execute("SELECT * FROM temporary_faab ORDER BY faab desc;")
 	faab_holder = cur.fetchall()
@@ -651,7 +651,7 @@ def franchise_summary(franchise_number):
 	# Pull from db
 	franchise_index = franchise_number - 1
 	franchise_name_list = ['Matt & Ross', 'Scott & James', 'Doug', 'Crockett', 'Blake', 'Kfish', 'Kyle', 'Gaudet & Cameron', 'Gilhop & MJ', 'Mitch', 'Nick & Mickey', 'Joseph & Mike']
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 	cur.execute("SELECT * FROM temporary_franchise_summary WHERE franchise=%s;", (franchise_name_list[franchise_index]))
 	all_temporary_data = cur.fetchall()[0]
@@ -791,7 +791,7 @@ def get_data_no_webdriver(franchise_number, message_type):
 		return('get_data_no_webdriver failed')
 
 	########## Put into ClearDb
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 
 	cur.execute("DROP TABLE temporary_scraped_matchups;")
@@ -831,7 +831,7 @@ def get_data_no_webdriver(franchise_number, message_type):
 
 def get_games_from_temp_cleardb(franchise_number, message_type, games_over, length_of_data):
 	########## Get from ClearDb
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 
 	###### Get single score
@@ -976,7 +976,7 @@ def get_standings():
 		return('get_data_no_webdriver failed')
 
 	########## Put into ClearDb
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 
 	cur.execute("DROP TABLE temporary_scraped_matchups;")
@@ -1010,7 +1010,7 @@ def get_standings_2():
 	        return('T', 'T')
 
 
-	con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	cur = con.cursor()
 
 	cur.execute("DROP TABLE temporary_intermediate_standings;")
@@ -1032,7 +1032,7 @@ def get_standings_2():
 	#   data[0][0] == wins  ; data[0][1] == losses  data[0][2] == ties   data[0][3] == sum_points
 
 	for game in range(0,12,2):
-	    con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	    cur = con.cursor()
 	    cur.execute("SELECT franchise, points FROM temporary_scraped_matchups WHERE game=%s;", (game))
 	    team_a_tuple = cur.fetchall()[0]
@@ -1055,7 +1055,7 @@ def get_standings_2():
 	    
 
 	for franchise in range(1,13):
-	    con = pymysql.connect(host='us-cdbr-iron-east-01.cleardb.net', user='bc01d34543e31a', password='02cdeb05', database='heroku_29a4da67c47b565')
+	    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
 	    cur = con.cursor()
 	    cur.execute("SELECT intermediate_points, intermediate_result FROM temporary_intermediate_standings WHERE franchise=%s;", (franchise))
 	    data_tuple = cur.fetchall()[0]
