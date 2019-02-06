@@ -122,6 +122,7 @@ def database_access(table, command):
 		sys.stdout.write('entered db access but no relevant command')
 		return('ok',200)
 
+# change to env variables
 def database_change_week(direction):
 	week = database_access('settings', 'week')
 	if direction == 'plus':
