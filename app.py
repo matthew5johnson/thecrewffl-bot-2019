@@ -6,10 +6,10 @@ import sys
 from urllib.request import Request, urlopen
 from urllib.parse import urlencode
 from flask import Flask, request
-# from bs4 import BeautifulSoup
-# from selenium import webdriver
-# from selenium.webdriver.chrome.options import Options 
-# import selenium.webdriver.chrome.service as service
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options 
+import selenium.webdriver.chrome.service as service
 import re
 import pymysql
 
@@ -44,7 +44,7 @@ def webhook():
 		# get_data_no_webdriver(9,1)
 		games_over = scrape.update_scores(1, 1)
 		text = message.get_scores(1, 2, games_over)
-		message_to_sandbox(text)
+		message_to_sandbox("this test is complete")
 
 		return('ok',200)
 	else: return('ok',200)
