@@ -61,11 +61,11 @@ def scrape_scores(arg, sender, text):
 		target_index = matchups.index(str(target))
 		my_scoreboard = ""
 		if target_index % 2 == 0:
-			my_scoreboard = my_scoreboard + '{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(target), projected[target_index], scores[target_index+1], get_franchise_name(int(scores[target_index+1])), projected[target_index+1])
+			my_scoreboard = my_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(target), projected[target_index], scores[target_index+1], get_franchise_name(int(matchups[target_index+1])), projected[target_index+1])
 			send_message(my_scoreboard)
 			return('ok',200)
 		else:
-			my_scoreboard = my_scoreboard + '{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(target), projected[target_index], scores[target_index-1], get_franchise_name(int(scores[target_index-1])), projected[target_index-1])
+			my_scoreboard = my_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(target), projected[target_index], scores[target_index-1], get_franchise_name(int(matchups[target_index-1])), projected[target_index-1])
 			send_message(my_scoreboard)
 			return('ok',200)
 
