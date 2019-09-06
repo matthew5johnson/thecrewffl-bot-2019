@@ -35,7 +35,7 @@ def scrape_scores():
 	driver.get(website)
 	sleep(3)
 	html = driver.page_source
-	soup = BeautifulSoup(html, "html5")
+	soup = BeautifulSoup(html, "lxml")
 	driver.close()
 
 	final = str(soup)
