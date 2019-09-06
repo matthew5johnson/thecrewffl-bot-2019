@@ -19,12 +19,7 @@ def webhook():
 	if '@bot' in data['text']:
 		sender = data['user_id']
 		text = data['text']
-		# parse(sender, text)
-        send_message("testing message")
-		return('ok',200)
-
-	elif '@testing' in data['text']:
-		message_to_sandbox("this test is complete")
+		send_message(sender)
 		return('ok',200)
 
 	else: return('ok',200)
