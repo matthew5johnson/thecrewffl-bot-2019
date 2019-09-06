@@ -57,6 +57,7 @@ def scrape_scores():
 			# live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n'.format(scores[i], get_franchise_name(matchups[i]), projected[i])
 	# message = "franchises: {}, proj: {}, scores: {}".format(len(matchups), len(projected), len(scores))
 
+	
 	send_message(matchups)
 	return('ok',200)
 
