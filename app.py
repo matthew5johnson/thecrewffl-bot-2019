@@ -49,10 +49,39 @@ def scrape_scores():
 
 	matchups = franchises[12::3]
 
-	send_message(projected[0])
+	live_scoreboard = '*** Week 1 Live Scoreboard ***\n'
+	for i in range(0,12)[::2]:
+		live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(scores[i], get_franchise_name(matchups[i]), projected[i], scores[i+1], get_franchise_name(matchups[i+1]), projected[i+1])
+
+	send_message(live_scoreboard)
 	return('ok',200)
 
 
+def get_franchise_name(franchise):
+	if franchise == 1:
+		return('Matt & Ross')
+	elif franchise == 2:
+		return('Scott & James')
+	elif franchise == 3:
+		return('Doug')
+	elif franchise == 4:
+		return('Crockett')
+	elif franchise == 5:
+		return('Blake')
+	elif franchise == 6:
+		return('Kfish')
+	elif franchise == 7:
+		return('Kyle')
+	elif franchise == 8:
+		return('Gaudet & Cameron')
+	elif franchise == 9:
+		return('RTRO')
+	elif franchise == 10:
+		return('Mitch')
+	elif franchise == 11:
+		return('Nick & Mickey')
+	elif franchise == 12:
+		return('Joseph & Mike')
 
 
 def send_message(msg):
