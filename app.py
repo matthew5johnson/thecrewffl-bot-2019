@@ -24,7 +24,7 @@ def webhook():
 			target = text_id_franchise(text)
 			if "my" in text:
 				scrape_scores(1, sender, text)
-			elif target !== "none":
+			elif target != "none":
 				scrape_scores(2, target, text)
 			else:
 				scrape_scores(3, sender, text)
