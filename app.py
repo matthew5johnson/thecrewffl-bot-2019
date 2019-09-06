@@ -56,6 +56,7 @@ def scrape_scores(arg, sender, text):
 
 	matchups = franchises[12::3]
 
+	## my score
 	if arg == 1:
 		target = get_franchise_number(sender)
 		target_index = matchups.index(str(target))
@@ -71,20 +72,22 @@ def scrape_scores(arg, sender, text):
 			send_message(my_scoreboard)
 			return('ok',200)
 
+	## franchise score
 	elif arg == 2:
 		target_index = matchups.index(str(sender))
 		their_scoreboard = ""
-		if target_index % 2 == 0:
+		if target_index % 2 == 0 or target_index == 0:
 			opponent_index = target_index + 1
 			their_scoreboard = their_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(sender), projected[target_index], scores[opponent_index], get_franchise_name(int(scores[opponent_index])), projected[opponent_index])
 			send_message(their_scoreboard)
 			return('ok',200)
 		else:
 			opponent_index = target_index - 1
-			their_scoreboard = their_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(target), projected[target_index], scores[opponent_index], get_franchise_name(int(scores[opponent_index])), projected[opponent_index])
+			their_scoreboard = their_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(sender), projected[target_index], scores[opponent_index], get_franchise_name(int(scores[opponent_index])), projected[opponent_index])
 			send_message(their_scoreboard)
 			return('ok',200)
 
+	## scores
 	elif arg == 3:
 		live_scoreboard = '*** Week 1 Live Scoreboard ***\n'
 		for i in range(0,12):
