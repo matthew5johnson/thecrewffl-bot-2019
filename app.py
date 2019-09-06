@@ -26,6 +26,7 @@ def webhook():
 	else: return('ok',200)
 
 def scrape_scores():
+	website = "https://fantasy.espn.com/football/league/scoreboard?leagueId=133377&weekID=1"
 	chrome_options = Options()
 	chrome_options.add_argument('--disable-gpu')
 	chrome_options.add_argument('--no-sandbox')
@@ -49,6 +50,8 @@ def scrape_scores():
 	matchups = franchises[12::3]
 
 	send_message(projected[0])
+	return('ok',200)
+
 
 
 
