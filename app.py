@@ -17,7 +17,7 @@ app = Flask(__name__)
 @app.route('/', methods=['POST'])
 def webhook():
 	data = request.get_json()
-	if '@bot' in data['text']:
+	if '@bot' in data['text'] and "scor" in data['text']:
 		sender = data['user_id']
 		text = data['text']
 		scrape_scores()
@@ -55,6 +55,7 @@ def scrape_scores():
 			live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n'.format(scores[i], get_franchise_name(franchise), projected[i])
 			if i == 1 or i == 3 or i == 5 or i == 7 or i == 9:
 				live_scoreboard = live_scoreboard + "===== ===== =====\n"
+			live_scoreboard = live_scoreboard +"-- -- --\nESPN is trash, thus the numerous projected points of 0"
 
 	send_message(live_scoreboard)
 	return('ok',200)
