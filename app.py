@@ -78,12 +78,12 @@ def scrape_scores(arg, sender, text):
 		their_scoreboard = ""
 		if target_index % 2 == 0 or target_index == 0:
 			opponent_index = target_index + 1
-			their_scoreboard = their_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(sender), projected[target_index], scores[opponent_index], get_franchise_name(int(scores[opponent_index])), projected[opponent_index])
+			their_scoreboard = their_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(sender), projected[target_index], scores[opponent_index], get_franchise_name(int(matchups[opponent_index])), projected[opponent_index])
 			send_message(their_scoreboard)
 			return('ok',200)
 		else:
 			opponent_index = target_index - 1
-			their_scoreboard = their_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(sender), projected[target_index], scores[opponent_index], get_franchise_name(int(scores[opponent_index])), projected[opponent_index])
+			their_scoreboard = their_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(scores[target_index], get_franchise_name(sender), projected[target_index], scores[opponent_index], get_franchise_name(int(matchups[opponent_index])), projected[opponent_index])
 			send_message(their_scoreboard)
 			return('ok',200)
 
