@@ -51,7 +51,7 @@ def scrape_scores():
 
 	live_scoreboard = '*** Week 1 Live Scoreboard ***\n'
 	for i in range(0,12):
-			franchise = get_franchise_name(int(matchups[i]))
+			franchise = int(matchups[i])
 			# live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(scores[i], get_franchise_name(matchups[i]), projected[i])
 			# franchise = get_franchise_name(int(matchups[i]))
 			# live_scoreboard = live_scoreboard + franchise
