@@ -1,12 +1,12 @@
 import pymysql
 
 def change_week(direction):
-	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
     cur = con.cursor()
     cur.execute("SELECT settings_week FROM settings WHERE description='main';")
-	current_week = cur.fetchall()
+    current_week = cur.fetchall()
     con.commit()
-    
+
     if direction == 'next':
         week = int(current_week[0][0]) + 1
     elif direction == 'last':
@@ -14,13 +14,13 @@ def change_week(direction):
 
     cur.execute("UPDATE settings SET settings_week=%s WHERE description='main';", (week))
     con.commit()
-	con.close()
+    con.close()
 
     if direction == 'next':
         return("Welcome to week {}.".format(week))
     elif direction == 'last':
         return("Going back to week {}.".format(week))
- 
+
  
  
     
