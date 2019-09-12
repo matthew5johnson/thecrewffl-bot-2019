@@ -1,4 +1,4 @@
-import mypysql
+import pymysql
 from supporting_fxns import get_franchise_name
 
 def pull_scores(target):
