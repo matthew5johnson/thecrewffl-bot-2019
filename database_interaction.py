@@ -148,9 +148,9 @@ def pull_live_standings():
         live_standings = live_standings + '{}. {} {}-{}-{} ({})\n'.format(rankings_headers[i], get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
         
         if i == 10:
-            live_standings = live_standings + '----- Top 2 = Byes -----\n\n'
+            live_standings = live_standings + '----- Top 2 = Byes -----\n'
         if i == 6:
-            live_standings = live_standings + '=====  Playoff cut line  =====\n\n'
+            live_standings = live_standings + '=====  Playoff cut line  =====\n'
 
     return(live_standings)
 
