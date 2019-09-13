@@ -10,11 +10,11 @@ def pull_scores(target):
     cur.execute("SELECT settings_week FROM settings WHERE description='main';")
     current_week = cur.fetchall()
     con.commit()
-    con.close()
+
     week = int(current_week[0][0])
 
-    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
-    cur = con.cursor()
+    # con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+    # cur = con.cursor()
     cur.execute("SELECT * FROM temporary_scraped_matchups ORDER BY game asc;")
     all_scores = cur.fetchall()
     con.commit()
@@ -62,8 +62,8 @@ def pull_live_standings():
     elif week > 13:
         return("The postseason is here. Checkout the playoff bracket and consolation ladder.")
 
-    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
-    cur = con.cursor()
+    # con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+    # cur = con.cursor()
     cur.execute("DROP TABLE temporary_intermediate_standings;")
     con.commit()
     cur.execute("CREATE TABLE temporary_intermediate_standings (franchise INT, intermediate_points DECIMAL(4,1), intermediate_result VARCHAR(10), PRIMARY KEY(franchise));")
@@ -75,8 +75,8 @@ def pull_live_standings():
 
 
 
-    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
-    cur = con.cursor()
+    # con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+    # cur = con.cursor()
     cur.execute("SELECT * FROM temporary_scraped_matchups ORDER BY game asc;")
     all_scores = cur.fetchall()
     con.commit()
@@ -143,13 +143,84 @@ def pull_live_standings():
     con.close()
 
     rankings_headers = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-    live_standings = '^v^v^v^ Live Standings ^v^v^v^\nbased on current live scores\n\n'
+    live_standings = '^v^v^v^ Live Standings ^v^v^v^\n\n'
     for i in range(11,-1,-1):
         live_standings = live_standings + '{}. {} {}-{}-{} ({})\n'.format(rankings_headers[i], get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
         
         if i == 10:
-            live_standings = live_standings + '----- Top 2 = Byes -----\n'
+            live_standings = live_standings + '----- Top 2 = Byes -----\n\n'
         if i == 6:
-            live_standings = live_standings + '=====  Playoff cut line  =====\n'
+            live_standings = live_standings + '=====  Playoff cut line  =====\n\n'
 
     return(live_standings)
+
+
+def pull_league_cup_standings():
+    determined_week = construct_temporary_league_cup_table()
+    
+    if determined_week == "not started":
+        return("No games have been played yet. The League Cup will begin after week 1 is complete")
+    
+    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+    cur = con.cursor()
+    cur.execute("SELECT franchise, league_cup_points, total_points FROM cleardb_matchuptable WHERE season=2019 AND week=%s ORDER BY league_cup_points, total_points asc;", (determined_week))
+    cup_standings = cur.fetchall()
+    con.commit()
+    con.close()
+
+    if determined_week == 13:
+        league_cup_standings = "FINAL Finch Howe League Cup Standings\n\n"
+    else:
+        league_cup_standings = "Finch Howe League Cup Standings\n\n"
+    
+    rankings_headers = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+    for i in range(11,-1,-1):
+        league_cup_standings = league_cup_standings + '{}. {} ... [{}]\n'.format(rankings_headers[i], cup_standings[i][0], cup_standings[i][1])
+
+    return(league_cup_standings)
+
+
+def construct_temporary_league_cup_table():
+    # Get the current week
+    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+    cur = con.cursor()
+    cur.execute("SELECT settings_week FROM settings WHERE description='main';")
+    current_week = cur.fetchall()
+    con.commit()
+
+    week = int(current_week[0][0])
+
+    if week == 1:
+        return("not started")
+    elif week > 13:
+        determined_week = 13
+    elif week < 14:
+        determined_week = week - 1
+
+    cur.execute("SELECT franchise, league_cup_points FROM cleardb_matchuptable WHERE season=2019 AND week=%s ORDER BY league_cup_points asc;", (determined_week))
+    league_cup_points = cur.fetchall()
+    con.commit()
+
+    cur.execute("SELECT franchise, SUM(points_scored) as points FROM cleardb_matchuptable WHERE season=2019 AND week<%s GROUP BY franchise ORDER BY franchise desc;", (week))
+    total_points = cur.fetchall()
+    con.commit()
+
+    cur.execute("DROP TABLE temporary_league_cup;")
+    con.commit()
+    cur.execute("CREATE TABLE temporary_league_cup (franchise VARCHAR(50), total_points DECIMAL(4,1), league_cup_points INT, PRIMARY KEY(franchise));")
+    con.commit()
+
+
+    for i in range(0,12):
+        franchise = league_cup_points[i][0]
+        for j in range(0,12):
+            if franchise == total_points[j][0]:
+                if franchise == "Gilhop & MJ":
+                    insert_franchise = "RTRO"
+                else:
+                    insert_franchise = franchise
+            cur.execute("INSERT INTO temporary_league_cup (franchise, total_points, league_cup_points) VALUES (%s, %s, %s);", (insert_franchise, total_points[j][1], league_cup_points[i][1]))
+            con.commit()
+
+    con.close()
+    return(determined_week)

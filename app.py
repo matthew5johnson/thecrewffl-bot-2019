@@ -9,7 +9,7 @@ import pymysql
 
 from supporting_fxns import change_week, text_id_franchise, get_franchise_number, remove_bob
 from scraper import scrape_scores
-from database_interaction import pull_scores, pull_live_standings
+from database_interaction import pull_scores, pull_live_standings, pull_league_cup_standings
 
 app = Flask(__name__)
 
@@ -34,8 +34,9 @@ def webhook():
 			return('ok',200)
 
 
-		elif re.search('cup', text, re.I) or re.search('fhlc', text, re.I):
-			# pull_league_cup_standings()
+		elif re.search('cup', text, re.I) or re.search('fhlc', text, re.I) or re.search('finch', text, re.I) or re.search('howe', text, re.I):
+			message = pull_league_cup_standings()
+			send_message(message)
 			return('ok',200)
 
 
@@ -45,7 +46,7 @@ def webhook():
 			send_message(message)
 			return('ok',200)
 
-		elif re.search('mwm', text, re.I) or re.search('width', text, re.I) or re.search('marathon', text, re.I) or re.search('stage', text, re.I):
+		elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('width', text, re.I) or re.search('marathon', text, re.I) or re.search('stage', text, re.I):
 			message = "To qualify for the 2020 MWM Stage:\n1) Win a Semifinal game in week 15\n2) Win the 3rd Place Game in week 16\n3) Win the 5th Place Game in week 16\n4) Win the Consolation Ladder"
 			send_message(message)
 			return('ok',200)
