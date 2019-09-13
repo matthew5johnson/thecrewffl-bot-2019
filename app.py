@@ -4,15 +4,10 @@ import sys
 from urllib.request import Request, urlopen
 from urllib.parse import urlencode
 from flask import Flask, request
-from bs4 import BeautifulSoup
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options 
-import selenium.webdriver.chrome.service as service
 import re
 import pymysql
-from time import sleep
 
-from supporting_fxns import change_week, text_id_franchise, get_franchise_number
+from supporting_fxns import change_week, text_id_franchise, get_franchise_number, remove_bob
 from scraper import scrape_scores
 from database_interaction import pull_scores
 
@@ -32,10 +27,26 @@ def webhook():
 				requested_score = get_franchise_number(sender)
 			else:
 				requested_score = text_id_franchise(text)
-			
+			# and now we pull the scores in the format that we need from the db			
 			message = pull_scores(requested_score)
 			send_message(message)
 			
+			return('ok',200)
+
+
+		elif re.search('cup', text, re.I) or re.search('fhlc', text, re.I):
+			# pull_league_cup_standings()
+			return('ok',200)
+
+
+		elif re.search('standing', text, re.I) or re.search('rank', text, re.I):
+			scrape_scores()
+			message = pull_live_standings()
+			send_message(message)
+			return('ok',200)
+
+		elif re.search('mwm', text, re.I) or re.search('width', text, re.I) or re.search('marathon', text, re.I) or re.search('stage', text, re.I):
+			# write a placeholder message with qualification details
 			return('ok',200)
 			
 
@@ -48,12 +59,19 @@ def webhook():
 			send_message(settings_message)
 			return('ok',200)
 		elif re.search('next week', text, re.I) or re.search('last week', text, re.I):
-			message = "Get up on outta heeerrrreeee with my eyeholes. I'm the eyehole man"
+			message = "Get up on outta here with my eyeholes. I'm the eyehole man"
 			send_message(message)
 			return('ok',200)
 
+
+		elif re.search('remove', text, re.I) or re.search('#rb', text, re.I):
+			message = remove_bob()
+			send_message(message)
+			return('ok',200)
+
+
 		elif re.search('echo', text, re.I) and sender == '7435972':
-			message = text[9:]
+			message = text[10:]
 			send_message(message)
 			return('ok',200)
 
@@ -69,7 +87,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()

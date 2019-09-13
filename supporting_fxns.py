@@ -23,30 +23,23 @@ def change_week(direction):
     elif direction == 'last':
         return("Going back to week {}".format(week))
 
- 
- 
+
+def remove_bob():
+	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+	cur = con.cursor()
+	cur.execute("SELECT settings_rbvotes FROM settings WHERE description='main';")
+	rbvotes = cur.fetchall()
+	con.commit()
+
+	updated_rbvotes = int(rbvotes[0][0]) + 1
+
+	cur.execute("UPDATE settings SET settings_rbvotes=%s WHERE description='main';", (updated_rbvotes))
+	con.commit()
+	con.close()
+
+	return("You have voted to remove Bob.\nTotal #RB votes: {}".format(updated_rbvotes))    
+
     
-    
-    
-
-# 	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
-# 	cur = con.cursor()
-# 	cur.execute("UPDATE settings SET settings_week=%s WHERE description='main';", (week))
-# 	con.commit()
-# 	con.close()
-# 	return('Week updated to %s') % (week)
-
-# def database_remove_bob():
-# 	rb_votes = database_access('settings', 'rb')
-# 	rb_votes += 1
-
-# 	con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
-# 	cur = con.cursor()
-# 	cur.execute("UPDATE settings SET settings_rbvotes=%s WHERE description='main';", (rb_votes))
-# 	con.commit()
-# 	con.close()
-# 	return('Total #RB votes: %s') % (rb_votes)
-
 
 def text_id_franchise(text):
 	if re.search('mattjohn', text, re.I) or re.search('matt john', text, re.I) or re.search('gilhop', text, re.I) or re.search('jordan', text, re.I) or re.search('bob', text, re.I) or re.search('rtro', text, re.I) or re.search('retro', text, re.I):
