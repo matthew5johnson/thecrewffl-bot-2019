@@ -157,7 +157,7 @@ def pull_live_standings():
 
 def pull_league_cup_standings():
     determined_week = construct_temporary_league_cup_table()
-    
+
     if determined_week == "not started":
         return("No games have been played yet. The League Cup will begin after week 1 is complete")
     
@@ -219,8 +219,9 @@ def construct_temporary_league_cup_table():
                     insert_franchise = "RTRO"
                 else:
                     insert_franchise = franchise
-            cur.execute("INSERT INTO temporary_league_cup (franchise, total_points, league_cup_points) VALUES (%s, %s, %s);", (insert_franchise, total_points[j][1], league_cup_points[i][1]))
-            con.commit()
+            
+                cur.execute("INSERT INTO temporary_league_cup (franchise, total_points, league_cup_points) VALUES (%s, %s, %s);", (insert_franchise, total_points[j][1], league_cup_points[i][1]))
+                con.commit()
 
     con.close()
     return(determined_week)
