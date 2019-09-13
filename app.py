@@ -52,8 +52,8 @@ def webhook():
 			send_message(message)
 			return('ok',200)
 
-		elif re.search('@echo', text, re.I) and sender == '7435972':
-			message = "immediate response"
+		elif re.search('echo', text, re.I) and sender == '7435972':
+			message = text[9:]
 			send_message(message)
 			return('ok',200)
 
