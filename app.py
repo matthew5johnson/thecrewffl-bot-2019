@@ -9,7 +9,7 @@ import pymysql
 
 from supporting_fxns import change_week, text_id_franchise, get_franchise_number, remove_bob
 from scraper import scrape_scores
-from database_interaction import pull_scores
+from database_interaction import pull_scores, pull_live_standings
 
 app = Flask(__name__)
 

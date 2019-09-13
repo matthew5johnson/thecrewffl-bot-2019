@@ -96,60 +96,60 @@ def pull_live_standings():
             live_result = 'T'
 
         cur.execute("INSERT INTO temporary_intermediate_standings (franchise, intermediate_points, intermediate_result) VALUES (%s, %s, %s);", (all_scores[i][1], all_scores[i][2], live_result))
-	    con.commit()
+        con.commit()
 
     for franchise in range(1,13):
 	    
-	    cur.execute("SELECT intermediate_points, intermediate_result FROM temporary_intermediate_standings WHERE franchise=%s;", (franchise))
-	    data_tuple = cur.fetchall()[0]
-	    con.commit()
-	    
-	    intermediate_points = data_tuple[0]
-	    intermediate_result = data_tuple[1]
-	    
-	    cur.execute("SELECT wins, losses, ties, sum_points FROM temporary_scrape_standings WHERE franchise=%s;", (franchise))
-	    weekly_scrape_tuple = cur.fetchall()[0]
-	    con.commit()
-	    
-	    old_wins = weekly_scrape_tuple[0]
-	    old_losses = weekly_scrape_tuple[1]
-	    old_ties = weekly_scrape_tuple[2]
-	    old_sum_points = weekly_scrape_tuple[3]
+        cur.execute("SELECT intermediate_points, intermediate_result FROM temporary_intermediate_standings WHERE franchise=%s;", (franchise))
+        data_tuple = cur.fetchall()[0]
+        con.commit()
+
+        intermediate_points = data_tuple[0]
+        intermediate_result = data_tuple[1]
+
+        cur.execute("SELECT wins, losses, ties, sum_points FROM temporary_scrape_standings WHERE franchise=%s;", (franchise))
+        weekly_scrape_tuple = cur.fetchall()[0]
+        con.commit()
+
+        old_wins = weekly_scrape_tuple[0]
+        old_losses = weekly_scrape_tuple[1]
+        old_ties = weekly_scrape_tuple[2]
+        old_sum_points = weekly_scrape_tuple[3]
 
         if intermediate_result == 'W':
-	        wins = old_wins + 1
-	        losses = old_losses
-	        ties = old_ties
-	    elif intermediate_result == 'L':
-	        wins = old_wins
-	        losses = old_losses + 1
-	        ties = old_ties
-	    else:
-	        wins = old_wins
-	        losses = old_losses
-	        ties = old_ties + 1
-	    
-	    live_win_pct = (wins + (ties * 0.5)) / (wins + losses + ties)
-	    live_points = old_sum_points + intermediate_points
-	    
-	    cur.execute("INSERT INTO temporary_live_standings (franchise, live_win_pct, live_points, live_wins, live_losses, live_ties) VALUES (%s, %s, %s, %s, %s, %s);", (franchise, "%.5f"%live_win_pct, live_points, wins, losses, ties))
-	    con.commit()
-	    
+            wins = old_wins + 1
+            losses = old_losses
+            ties = old_ties
+        elif intermediate_result == 'L':
+            wins = old_wins
+            losses = old_losses + 1
+            ties = old_ties
+        elif intermediate_result == 'T':
+            wins = old_wins
+            losses = old_losses
+            ties = old_ties + 1
+
+        live_win_pct = (wins + (ties * 0.5)) / (wins + losses + ties)
+        live_points = old_sum_points + intermediate_points
+
+        cur.execute("INSERT INTO temporary_live_standings (franchise, live_win_pct, live_points, live_wins, live_losses, live_ties) VALUES (%s, %s, %s, %s, %s, %s);", (franchise, "%.5f"%live_win_pct, live_points, wins, losses, ties))
+        con.commit()
+
 	    
     cur.execute("SELECT franchise, live_wins, live_losses, live_ties, live_points FROM temporary_live_standings ORDER BY live_win_pct, live_points;")
     standings_tuple = cur.fetchall()
     con.commit()
-    
+
     con.close()
 
     rankings_headers = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-	live_standings = '*** Live Standings - based on current live scores ***\n\n'
-	for i in range(11,-1,-1):
-		live_standings = live_standings + '{}. {} {}-{}-{} pts: {}\n'.format(rankings_headers[i], get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
-		
-		if i == 10:
-			live_standings = live_standings + '----- Top 2 = Byes -----\n'
-		if i == 6:
-			live_standings = live_standings + '=====  Playoff cut line  =====\n'
+    live_standings = '*** Live Standings - based on current live scores ***\n\n'
+    for i in range(11,-1,-1):
+        live_standings = live_standings + '{}. {} {}-{}-{} pts: {}\n'.format(rankings_headers[i], get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
+        
+        if i == 10:
+            live_standings = live_standings + '----- Top 2 = Byes -----\n'
+        if i == 6:
+            live_standings = live_standings + '=====  Playoff cut line  =====\n'
 
     return(live_standings)
