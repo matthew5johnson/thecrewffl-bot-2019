@@ -25,7 +25,7 @@ def scrape_scores():
     chrome_options.add_argument('--headless')
     driver = webdriver.Chrome(executable_path=os.environ['CHROMEDRIVER_PATH'], chrome_options=chrome_options)
     driver.get(website)
-    sleep(3)
+    sleep(6)
     html = driver.page_source
     soup = BeautifulSoup(html, "lxml")
     driver.close()

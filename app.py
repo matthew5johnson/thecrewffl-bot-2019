@@ -46,7 +46,8 @@ def webhook():
 			return('ok',200)
 
 		elif re.search('mwm', text, re.I) or re.search('width', text, re.I) or re.search('marathon', text, re.I) or re.search('stage', text, re.I):
-			# write a placeholder message with qualification details
+			message = "To qualify for the 2020 MWM Stage:\n1) Win a Semifinal game in week 15\n2) Win the 3rd Place Game in week 16\n3) Win the 5th Place Game in week 16\n4) Win the Consolation Ladder"
+			send_message(message)
 			return('ok',200)
 			
 
