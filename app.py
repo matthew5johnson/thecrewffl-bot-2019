@@ -79,7 +79,7 @@ def webhook():
 
 		
 		elif re.search('help', text, re.I):
-			message = "Ask me to do any of the following:\n(Typed commands don't need to be exact)\n\n> my score\n> -insert franchise- score\n> scores/scoreboard (for full league scores)\n> standings\n> Finch Howe League Cup\n(ask about FHLC or league cup)\n> Maze's Width Marathon\n(ask about MWM, Marathon, or Stage)"
+			message = "The bot can now handle 6 commands:\n(typed commands don't need to be exact)\n\n> my score\n> -insert franchise- score\n> scores/scoreboard (for full league scores)\n> standings\n> Finch Howe League Cup\n(ask about FHLC or league cup)\n> Maze's Width Marathon\n(ask about MWM, Marathon, or Stage)"
 			send_message(message)
 			return('ok',200)
 
@@ -96,7 +96,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOX_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
