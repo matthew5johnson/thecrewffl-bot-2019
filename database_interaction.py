@@ -1,6 +1,7 @@
 import pymysql
 import os
 from supporting_fxns import get_franchise_name
+import re
 
 def pull_scores(target):
     # Get the current week
@@ -24,7 +25,7 @@ def pull_scores(target):
         live_scoreboard = '*** Week {} Live Scoreboard ***\n'.format(week)
         for i in range(0, len(all_scores), 2):
             opponent_index = i + 1
-            live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(all_scores[i][2], get_franchise_name(int(all_scores[i][1])), all_scores[i][3], all_scores[opponent_index][2], all_scores[opponent_index][1], all_scores[opponent_index][3])
+            live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(all_scores[i][2], get_franchise_name(int(all_scores[i][1])), all_scores[i][3], all_scores[opponent_index][2], get_franchise_name(int(all_scores[opponent_index][1])), all_scores[opponent_index][3])
 
         return(live_scoreboard)
 
@@ -38,7 +39,7 @@ def pull_scores(target):
                 else:
                     opponent_index = index - 1
                 my_scoreboard = ""
-                my_scoreboard = my_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(all_scores[index][2], all_scores[index][1], all_scores[index][3], all_scores[opponent_index][2], all_scores[opponent_index][1], all_scores[opponent_index][3])
+                my_scoreboard = my_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n'.format(all_scores[index][2], get_franchise_name(int(all_scores[index][1])), all_scores[index][3], all_scores[opponent_index][2], get_franchise_name(int(all_scores[opponent_index][1])), all_scores[opponent_index][3])
                 
                 return(my_scoreboard)
                 break

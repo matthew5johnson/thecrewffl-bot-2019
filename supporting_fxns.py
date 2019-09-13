@@ -1,5 +1,6 @@
 import pymysql
 import os
+import re
 
 def change_week(direction):
     con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
@@ -18,9 +19,9 @@ def change_week(direction):
     con.close()
 
     if direction == 'next':
-        return("Welcome to week {}.".format(week))
+        return("Welcome to week {}".format(week))
     elif direction == 'last':
-        return("Going back to week {}.".format(week))
+        return("Going back to week {}".format(week))
 
  
  
