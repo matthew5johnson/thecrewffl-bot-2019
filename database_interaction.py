@@ -169,13 +169,13 @@ def pull_league_cup_standings():
     con.close()
 
     if determined_week == 13:
-        league_cup_standings = "FINAL Finch Howe League Cup Standings\n\n"
+        league_cup_standings = "FINAL Finch Howe League Cup Standings\n--tiebreaker is total points scored--\n\nFHLC CHAMPION\n"
     else:
-        league_cup_standings = "Finch Howe League Cup Standings\n\n"
+        league_cup_standings = "Finch Howe League Cup Standings\n--tiebreaker is total points scored--\n\n"
     
     rankings_headers = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
     for i in range(11,-1,-1):
-        league_cup_standings = league_cup_standings + '{}. {} ... [{}]\n'.format(rankings_headers[i], cup_standings[i][0], cup_standings[i][1])
+        league_cup_standings = league_cup_standings + '{}. {} - {}\n'.format(rankings_headers[i], cup_standings[i][1], cup_standings[i][0])
 
     return(league_cup_standings)
 
