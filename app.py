@@ -7,7 +7,7 @@ from flask import Flask, request
 import re
 import pymysql
 
-from supporting_fxns import change_week, text_id_franchise, get_franchise_number, remove_bob
+from supporting_fxns import change_week, text_id_franchise, get_franchise_number, remove_bob, get_franchise_name
 from scraper import scrape_scores
 from database_interaction import pull_scores, pull_live_standings, pull_league_cup_standings, ordered_scores
 
@@ -34,7 +34,8 @@ def webhook():
 				return('ok',200)
 			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('stage', text, re.I) or re.search('marathon', text, re.I):
 				requested_franchise = get_franchise_number(sender)
-				message = "{} has won 0 MWM Stages, and needs 2 to win the Marathon.\n=====\nTo qualify for the 2020 Stage of Maze's Width Marathon:\n1) Win a Semifinal (week 15)\n2) Win the 3rd Place Game (week 16)\n3) Win the 5th Place Game (week 16)\n4) Win the Consolation Ladder Championship (week 16)".format(requested_franchise)
+				insert_franchise = get_franchise_name(requested_franchise)
+				message = "The {} franchise has won 0 MWM Stages, and needs 2 to win the Marathon.\n=====\nTo qualify for the 2020 Stage of Maze's Width Marathon:\n1) Win a Semifinal (week 15)\n2) Win the 3rd Place Game (wk 16)\n3) Win the 5th Place Game (wk 16)\n4) Win the Consolation Ladder (wk 16)".format(insert_franchise)
 				send_message(message)
 				return('ok',200)
 			else:
@@ -108,7 +109,7 @@ def webhook():
 
 		
 		elif re.search('help', text, re.I) or re.search('command', text, re.I) or re.search('menu', text, re.I) or re.search('summary', text, re.I):
-			message = "Available Commands:\n(typed commands don't need to be exact)\n\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard' or '@bot matchups'\n\n== Competitions ==\n'@bot standings'\nfor Playoff Standings\n\n'@bot mwm' or '@bot marathon'\nfor Maze's Width Marathon\n\n@bot league cup' or '@bot fhlc' or '@bot finch'\nfor Finch Howe League Cup table\n\n'@bot shield' or '@bot community shield'\nfor Community Shield"
+			message = "Commands:\n\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\nor\n'@bot matchups'\n\n== Four Major Competitions ==\n'@bot competitions'\n\n1. Playoff Championship\n'@bot standings'\n\n2. Maze's Width Marathon\n'@bot mwm'\n'@bot marathon'\n\n3. Finch Howe League Cup\n@bot fhlc'\n'@bot league cup'\n'@bot live fhlc'\n^^ live points in order\n\n4. Community Shield\n@bot community shield'"
 			send_message(message)
 			return('ok',200)
 
