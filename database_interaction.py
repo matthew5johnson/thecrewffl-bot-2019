@@ -181,6 +181,7 @@ def pull_league_cup_standings():
             franchise_fill = cup_standings[i][0]
         league_cup_standings = league_cup_standings + '{} - {}\n'.format(cup_standings[i][1], franchise_fill) # rankings_headers[i],
 
+    league_cup_standings = league_cup_standings + "\n\nAsk for '@bot fhlc live' for ordered scores"
     return(league_cup_standings)
 
 
@@ -248,18 +249,19 @@ def ordered_scores():
     con.commit()
     con.close()
 
-    live_ordered = "Week {} ordered scores\nProjected score | [Current score] - Franchise\n\n".format(week)
+    live_ordered = "Week {} ordered scores\n\n proj | [actual]\n\n.... 3 League Cup Points ....\n".format(week)
 
     for i in range(0, len(all_scores)):
         if i == 1:
-            live_ordered = live_ordered + "~~~  +$10 to weekly high score ~~~\n"
+            live_ordered = live_ordered + "~  +$10 to high score  ~\n"
         elif i == 4:
-            live_ordered = live_ordered + "\n^ top 4 earn 3 League Cup Points ^\n\n"
+            live_ordered = live_ordered + "\n.... 1 League Cup Point ....\n"
         elif i == 8:
-            live_ordered = live_ordered + "\n^ mid 4 earn 1 League Cup Point ^\n\n"
+            live_ordered = live_ordered + "\n.... 0 League Cup Points ....\n\n"
         elif i == len(all_scores)-1:
-            live_ordered = live_ordered + "~~~  -$10 "
+            live_ordered = live_ordered + "~  -$10 from low score  ~\n"
 
         live_ordered = live_ordered + "{} | [{}] - {}\n".format(all_scores[i][3], all_scores[i][2], get_franchise_name(int(all_scores[i][1])))
         
+    live_ordered = live_ordered + "\n\nAsk for '@bot fhlc' to see the League Cup table"
     return(live_ordered)

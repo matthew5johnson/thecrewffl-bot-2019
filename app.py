@@ -35,7 +35,7 @@ def webhook():
 			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('stage', text, re.I) or re.search('marathon', text, re.I):
 				requested_franchise = get_franchise_number(sender)
 				insert_franchise = get_franchise_name(requested_franchise)
-				message = "The {} franchise has won 0 MWM Stages, and needs 2 to win the Marathon.\n=====\nTo qualify for the 2020 Stage of Maze's Width Marathon:\n1) Win a Semifinal (week 15)\n2) Win the 3rd Place Game (wk 16)\n3) Win the 5th Place Game (wk 16)\n4) Win the Consolation Ladder (wk 16)".format(insert_franchise)
+				message = "The {} franchise has won 0 MWM Stages, and needs 2 to win the Marathon.\n=====\nTo qualify for the 2020 Stage of Maze's Width Marathon:\n1) Win a Semifinal (week 15)\n2) Win the 3rd Place Game (wk 16)\n3) Win the 5th Place Game (wk 16)\n4) Win the Consolation Ladder".format(insert_franchise)
 				send_message(message)
 				return('ok',200)
 			else:
@@ -109,7 +109,7 @@ def webhook():
 
 		
 		elif re.search('help', text, re.I) or re.search('command', text, re.I) or re.search('menu', text, re.I) or re.search('summary', text, re.I):
-			message = "Commands:\n\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\nor\n'@bot matchups'\n\n== Four Major Competitions ==\n'@bot competitions'\n\n1. Playoff Championship\n'@bot standings'\n\n2. Maze's Width Marathon\n'@bot mwm'\n'@bot marathon'\n\n3. Finch Howe League Cup\n@bot fhlc'\n'@bot league cup'\n'@bot live fhlc'\n^^ live points in order\n\n4. Community Shield\n@bot community shield'"
+			message = "Commands:\n\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n\n== Four Major Competitions ==\n('@bot competitions')\n\n************\n1. Playoff Championship\n************\n'@bot standings'\n'@bot playoff details'\n\n************\n2. Maze's Width Marathon\n************\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n************\n3. Finch Howe League Cup\n************\n@bot fhlc'\n'@bot league cup'\n'@bot live fhlc'\n^^ live points in order\n'@bot fhlc details\n\n************\n4. Community Shield\n************\n'@bot community shield'"
 			send_message(message)
 			return('ok',200)
 
