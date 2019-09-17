@@ -163,7 +163,7 @@ def pull_league_cup_standings():
     
     con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
     cur = con.cursor()
-    cur.execute("SELECT franchise, league_cup_points, total_points FROM cleardb_matchuptable WHERE season=2019 AND week=%s ORDER BY league_cup_points, total_points asc;", (determined_week))
+    cur.execute("SELECT franchise, league_cup_points, total_points FROM temporary_league_cup ORDER BY league_cup_points, total_points asc;")
     cup_standings = cur.fetchall()
     con.commit()
     con.close()
