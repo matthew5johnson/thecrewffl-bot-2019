@@ -64,7 +64,7 @@ def webhook():
 
 		# Get Finch Howe League Cup table
 		elif re.search('cup', text, re.I) or re.search('fhlc', text, re.I) or re.search('finch', text, re.I) or re.search('howe', text, re.I):
-			message = pull_league_cup_standings() +"\n\n'@bot scores' or '@bot fhlc live' for live ordered scores" 
+			message = pull_league_cup_standings() 
 			send_message(message)
 			return('ok',200)
 
@@ -109,7 +109,7 @@ def webhook():
 
 		
 		elif re.search('help', text, re.I) or re.search('command', text, re.I) or re.search('menu', text, re.I) or re.search('summary', text, re.I):
-			message = "Commands:\n\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n\n== Four Major Competitions ==\n('@bot competitions')\n\n************\n1. Playoff Championship\n************\n'@bot standings'\n'@bot playoff details'\n\n************\n2. Maze's Width Marathon\n************\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n************\n3. Finch Howe League Cup\n************\n@bot fhlc'\n'@bot league cup'\n'@bot live fhlc'\n^^ live points in order\n'@bot fhlc details\n\n************\n4. Community Shield\n************\n'@bot community shield'"
+			message = "Commands:\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n\n== Four Major Competitions ==\n************\n1. Playoff Championship\n************\n'@bot standings'\n'@bot playoff details'\n\n************\n2. Maze's Width Marathon\n************\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n************\n3. Finch Howe League Cup\n************\n'@bot fhlc'\n'@bot league cup'\n'@bot live fhlc'\n'@bot fhlc details'\n\n************\n4. Community Shield\n************\n'@bot community shield'"
 			send_message(message)
 			return('ok',200)
 
