@@ -31,11 +31,11 @@ def webhook():
 				send_message(message)
 				return('ok',200)
 			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('marathon', text, re.I) or re.search('width', text, re.I) or re.search('stage', text, re.I):
-				message = "Maze's Width Marathon\nwww.kylelogic.com/marathon\n\nPrize: $300 to $2,400\n-Win the Marathon by winning 2 Stages\n-A Sacko deletes a Stage win\n-Stage qualification required\n\nHistory of Stage Winners:\n'20 - "
+				message = "Maze's Width Marathon\nwww.kylelogic.com/marathon\n\nPrize: $300 to $2,400\n-Win the Marathon by winning 2 Stages\n-A Sacko deletes a Stage win\n-Must qualify for Stage\n-Stage winner qualifies for next Community Shield\n\nHistory of Stage Winners:\n'20 - "
 				send_message(message)
 				return('ok',200)
 			elif re.search('fhlc', text, re.I) or re.search('cup', text, re.I):
-				message = "Finch Howe League Cup\nwww.kylelogic.com/leaguecup\n\nEach week the top 4 scorers get 3 League Cup Points, the middle 4 scorers get 1 League Cup Point, and the bottom 4 scorers get 0 Cup Points. The franchise with the most League Cup Points at the end of the 13 week regular season will hoist the Finch Howe League Cup.\n\nHistory of League Cups:\n'19 - "
+				message = "Finch Howe League Cup\nwww.kylelogic.com/leaguecup\n\nEach week the top 4 scorers get 3 League Cup Points, the middle 4 scorers get 1 League Cup Point, and the bottom 4 scorers get 0 Cup Points. The franchise with the most League Cup Points at the end of the 13 week regular season will hoist the Finch Howe League Cup and qualify for the next Community Shield.\n\nHistory of League Cups:\n'19 - "
 				send_message(message)
 				return('ok',200)
 			elif re.search('shield', text, re.I) or re.search('commun', text, re.I):

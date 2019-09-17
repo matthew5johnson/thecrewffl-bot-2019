@@ -143,7 +143,7 @@ def pull_live_standings():
     con.close()
 
     rankings_headers = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-    live_standings = ' Live Playoff Standings\n\nNote: Kyle & Crockett have $200 riding on who finishes higher\n\n'
+    live_standings = ' Live Playoff Standings\nwww.kylelogic.com/playoffs\n\nNote: Kyle & Crockett have $200 riding on who finishes higher\n\n'
     for i in range(11,-1,-1):
         live_standings = live_standings + '{}. {} {}-{}-{} ({})\n'.format(rankings_headers[i], get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
         
@@ -171,7 +171,7 @@ def pull_league_cup_standings():
     if determined_week == 13:
         league_cup_standings = "FINAL Finch Howe League Cup\n--tiebreaker is total points scored--\n\nFHLC WINNER\n"
     else:
-        league_cup_standings = "Finch Howe League Cup\n--tiebreaker is total points scored--\n\n"
+        league_cup_standings = "Finch Howe League Cup\n--tiebreaker is total points scored--\nwww.kylelogic.com/leaguecup\n\n"
     
     # rankings_headers = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
     for i in range(11,-1,-1):
@@ -249,7 +249,7 @@ def ordered_scores():
     con.commit()
     con.close()
 
-    live_ordered = "Week {} live ordered scores\n\n proj | [actual]\n\n.... 3 League Cup Points ....\n".format(week)
+    live_ordered = "Week {} live ordered scores\nwww.kylelogic.com/leaguecup\n\n proj | [actual]\n\n.... 3 League Cup Points ....\n".format(week)
 
     for i in range(0, len(all_scores)):
         if i == 1:
