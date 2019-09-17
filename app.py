@@ -31,7 +31,7 @@ def webhook():
 				send_message(message)
 				return('ok',200)
 			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('marathon', text, re.I) or re.search('width', text, re.I) or re.search('stage', text, re.I):
-				message = "Maze's Width Marathon\nhttp://thecrewffl.weebly.com/marathon.html\n\nPrize: $300 to $2,400\n-Win the Marathon by winning 2 Stages\n-A Sacko deletes a Stage win\n-Stage qualification required\n\nHistory of Stage Winners:\n'20 - "
+				message = "Maze's Width Marathon\nwww.kylelogic.com/marathon\n\nPrize: $300 to $2,400\n-Win the Marathon by winning 2 Stages\n-A Sacko deletes a Stage win\n-Stage qualification required\n\nHistory of Stage Winners:\n'20 - "
 				send_message(message)
 				return('ok',200)
 			elif re.search('fhlc', text, re.I) or re.search('cup', text, re.I):
@@ -69,6 +69,7 @@ def webhook():
 			# if a specific franchise's score is being asked for
 			if requested_score != "none":
 				message = pull_scores(requested_score)
+				send_message(message)
 				return('ok',200)
 			else:
 				message = ordered_scores()
@@ -90,7 +91,7 @@ def webhook():
 			return('ok',200)
 
 		# Get Playoff Standings
-		elif re.search('standing', text, re.I) or re.search('rank', text, re.I):
+		elif re.search('standing', text, re.I) or re.search('rank', text, re.I) or re.search('playoff', text, re.I):
 			scrape_scores()
 			message = pull_live_standings()
 			send_message(message)
@@ -134,7 +135,7 @@ def webhook():
 			return('ok',200)
 
 		elif re.search('help', text, re.I) or re.search('commands', text, re.I) or re.search('menu', text, re.I) or re.search('summary', text, re.I):
-			message = "Commands:\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n\n== Four Major Competitions ==\nwww.kylelogic.com/competitions\n\n1. Playoff Championship\n***************\n'@bot standings'\n'@bot playoff details'\n\n2. Maze's Width Marathon\n***************\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n3. Finch Howe League Cup\n***************\n'@bot fhlc'\n'@bot league cup'\n'@bot live fhlc'\n'@bot fhlc details'\n\n4. Community Shield\n***************\n'@bot community shield'"
+			message = "Commands:\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n\n== Four Major Competitions ==\nwww.kylelogic.com/competitions\n\n1. Playoff Championship\nwww.kylelogic.com/playoffs\n'@bot standings'\n'@bot playoff details'\n\n2. Maze's Width Marathon\nwww.kylelogic.com/marathon\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n3. Finch Howe League Cup\nwww.kylelogic.com/leaguecup\n'@bot fhlc'\n'@bot live fhlc'\n'@bot fhlc details'\n\n4. Community Shield\nwww.kylelogic.com/communityshield\n'@bot community shield details'"
 			send_message(message)
 			return('ok',200)
 
