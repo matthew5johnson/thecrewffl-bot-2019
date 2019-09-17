@@ -54,7 +54,7 @@ def webhook():
 				return('ok',200)
 
 		# Get scoreboard
-		elif re.search('board', text, re.I) or ('matchup', text, re.I):
+		elif re.search('board', text, re.I) or re.search('matchup', text, re.I):
 			scrape_scores()
 			target = "none"
 			message = pull_scores(target)
