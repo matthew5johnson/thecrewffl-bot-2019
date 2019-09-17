@@ -25,7 +25,7 @@ def webhook():
 			return('ok',200)
 		
 		# Get my score and my MWM
-		if re.search('my', text, re.I):
+		elif re.search('my', text, re.I):
 			if re.search('score', text, re.I):
 				scrape_scores()
 				requested_score = get_franchise_number(sender)
@@ -59,6 +59,7 @@ def webhook():
 			target = "none"
 			message = pull_scores(target)
 			send_message(message)
+			return('ok',200)
 
 		# Get Finch Howe League Cup table
 		elif re.search('cup', text, re.I) or re.search('fhlc', text, re.I) or re.search('finch', text, re.I) or re.search('howe', text, re.I):
