@@ -229,3 +229,37 @@ def construct_temporary_league_cup_table():
 
     con.close()
     return(determined_week)
+
+
+def ordered_scores():
+    # Get the current week
+    con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+    cur = con.cursor()
+    cur.execute("SELECT settings_week FROM settings WHERE description='main';")
+    current_week = cur.fetchall()
+    con.commit()
+
+    week = int(current_week[0][0])
+
+    # con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
+    # cur = con.cursor()
+    cur.execute("SELECT * FROM temporary_scraped_matchups ORDER BY projected desc;")
+    all_scores = cur.fetchall()
+    con.commit()
+    con.close()
+
+    live_ordered = "Live week {} ordered scores\nProjected score | [Current score] - Franchise\n\n".format(week)
+
+    for i in range(0, len(all_scores)):
+        if i == 0:
+            live_ordered = live_ordered + "+$10 "
+        elif i == 4:
+            live_ordered = live_ordered + "\n -- top 4 teams get 3 League Cup Points --\n\n"
+        elif i == 8:
+            live_ordered = live_ordered + "\n -- middle 4 teams get 1 League Cup Point --\n\n"
+        elif i == len(all_scores):
+            live_ordered = live_ordered + "-$10 "
+
+        live_ordered = live_ordered + "{} | [{}] - {}\n".format(all_scores[i][3], all_scores[i][2], get_franchise_name(int(all_scores[i][1])))
+        
+    return(live_ordered)
