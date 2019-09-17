@@ -32,7 +32,7 @@ def webhook():
 				message = pull_scores(requested_score)
 				send_message(message)
 				return('ok',200)
-			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('stage', text, re.I) or or re.search('marathon', text, re.I):
+			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('stage', text, re.I) or re.search('marathon', text, re.I):
 				requested_franchise = get_franchise_number(sender)
 				message = "{} has won 0 MWM Stages, and needs 2 to win the Marathon.\n=====\nTo qualify for the 2020 Stage of Maze's Width Marathon:\n1) Win a Semifinal (week 15)\n2) Win the 3rd Place Game (week 16)\n3) Win the 5th Place Game (week 16)\n4) Win the Consolation Ladder Championship (week 16)".format(requested_franchise)
 				send_message(message)
