@@ -107,7 +107,31 @@ def webhook():
 			send_message(message)
 			return('ok',200)
 
-		
+		elif re.search('details', text, re.I):
+			if re.search('playoff', text, re.I):
+				message = "Past Playoff Champions:\n'18 - Doug\n'17 - Doug\n'16 - RTRO\n'15 - RTRO\n'14 - ZJs\n'13 - Garner & Doyle\n'12 - Matt & Ross\n'11 - Mitch\n'10 - ZJs\n'09 - ZJs\n'08 - Matt & Ross\n'07 - Matt & Ross"
+				send_message(message)
+				return('ok',200)
+			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('marathon', text, re.I) or re.search('width', text, re.I) or re.search('stage', text, re.I):
+				message = "Maze's Width Marathon\n\nwww.kylelogic.com/marathon\nPrize: $300 to $2,400\n-Win the Marathon by winning 2 Stages\n-A Sacko deletes a Stage win\n-Qualification required each Stage"
+				send_message(message)
+				return('ok',200)
+			elif re.search('fhlc', text, re.I) or re.search('cup', text, re.I):
+				message = "Finch Howe League Cup\n\nwww.kylelogic.com/leaguecup\nEach week, the top 4 scorers get 3 League Cup Points, the middle 4 scorers get 1 League Cup Point, and the bottom 4 scorers get 0 Cup Points. The franchise with the most League Cup Points at the end of the 13 week regular season will hoist the Finch Howe League Cup."
+				send_message(message)
+				return('ok',200)
+			elif re.search('shield', text, re.I) or re.search('commun', text, re.I):
+				message = "Community Shield:\n\nwww.kylelogic.com/communityshield\nThe Community Shield is a one-week head-to-head game during week 3 each season that pits the MWM Stage winner against the League Cup holder. The first Community Shield will take place in 2021"
+				send_message(message)
+				return('ok',200)
+			else:
+				return('ok',200)
+
+		elif re.search('shield', text, re.I) or re.search('community', text, re.I):
+			message = "Community Shield:\n\nwww.kylelogic.com/communityshield\nThe Community Shield is a one-week head-to-head game during week 3 each season that pits the MWM Stage winner against the League Cup holder. The first Community Shield will take place in 2021"
+			send_message(message)
+			return('ok',200)
+
 		elif re.search('help', text, re.I) or re.search('command', text, re.I) or re.search('menu', text, re.I) or re.search('summary', text, re.I):
 			message = "Commands:\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n\n== Four Major Competitions ==\n************\n1. Playoff Championship\n************\n'@bot standings'\n'@bot playoff details'\n\n************\n2. Maze's Width Marathon\n************\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n************\n3. Finch Howe League Cup\n************\n'@bot fhlc'\n'@bot league cup'\n'@bot live fhlc'\n'@bot fhlc details'\n\n************\n4. Community Shield\n************\n'@bot community shield'"
 			send_message(message)

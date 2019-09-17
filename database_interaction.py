@@ -263,5 +263,5 @@ def ordered_scores():
 
         live_ordered = live_ordered + "{} | [{}] - {}\n".format(all_scores[i][3], all_scores[i][2], get_franchise_name(int(all_scores[i][1])))
         
-    live_ordered = live_ordered + "\n\nAsk for '@bot fhlc' to see the League Cup table"
+    live_ordered = live_ordered + "\n\n'@bot fhlc' to see the League Cup table"
     return(live_ordered)
