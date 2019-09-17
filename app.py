@@ -41,7 +41,7 @@ def webhook():
 				return('ok',200)
 
 		# Get ordered scores
-		elif re.search('score', text, re.I) or re.search('order', text, re.I) or re.search('points', text, re.I) or re.search('live'):
+		elif re.search('score', text, re.I) or re.search('order', text, re.I) or re.search('points', text, re.I) or re.search('live', text, re.I):
 			scrape_scores()
 			requested_score = text_id_franchise(text)
 			# if a specific franchise's score is being asked for
