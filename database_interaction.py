@@ -44,7 +44,7 @@ def pull_scores(target):
                 return(my_scoreboard)
                 break
         
-        return('went through the specific score pathway in database_interaction')
+        return('ESPN is loading too slowly right now ...')
 
 
 def pull_live_standings():
@@ -181,7 +181,7 @@ def pull_league_cup_standings():
             franchise_fill = cup_standings[i][0]
         league_cup_standings = league_cup_standings + '{} - {}\n'.format(cup_standings[i][1], franchise_fill) # rankings_headers[i],
 
-    league_cup_standings = league_cup_standings + "\n\n\n'@bot scores' or '@bot fhlc live' for live ordered scores\n\n'@bot fhlc details' for more"
+    league_cup_standings = league_cup_standings + "\n\n'@bot scores' or '@bot fhlc live' for this week's live ordered scores\n\n'@bot fhlc details' for more"
     return(league_cup_standings)
 
 
