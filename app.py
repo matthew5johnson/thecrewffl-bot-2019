@@ -99,7 +99,7 @@ def webhook():
 
 		# Get Maze's Width Marathon
 		elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('width', text, re.I) or re.search('marathon', text, re.I) or re.search('stage', text, re.I):
-			message = "To qualify for the 2020 MWM Stage:\n1) Win a Semifinal game in week 15\n2) Win the 3rd Place Game in week 16\n3) Win the 5th Place Game in week 16\n4) Win the Consolation Ladder"
+			message = "To qualify for the 2020 MWM Stage:\n1) Win a Semifinal game in week 15\n2) Win the 3rd Place Game in week 16\n3) Win the 5th Place Game in week 16\n4) Win the Consolation Ladder\n\n'@bot mwm details' for more"
 			send_message(message)
 			return('ok',200)
 			
@@ -135,7 +135,7 @@ def webhook():
 			return('ok',200)
 
 		elif re.search('help', text, re.I) or re.search('commands', text, re.I) or re.search('menu', text, re.I) or re.search('summary', text, re.I):
-			message = "Commands:\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n\n== Four Major Competitions ==\nwww.kylelogic.com/competitions\n\n1. Playoff Championship\nwww.kylelogic.com/playoffs\n'@bot standings'\n'@bot playoff details'\n\n2. Maze's Width Marathon\nwww.kylelogic.com/marathon\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n3. Finch Howe League Cup\nwww.kylelogic.com/leaguecup\n'@bot fhlc'\n'@bot live fhlc'\n'@bot fhlc details'\n\n4. Community Shield\nwww.kylelogic.com/communityshield\n'@bot community shield details'"
+			message = "Commands:\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n'@bot scores'\n\n== Four Major Competitions ==\nwww.kylelogic.com/competitions\n\n1. Playoff Championship\nwww.kylelogic.com/playoffs\n'@bot standings'\n'@bot playoff details'\n\n2. Maze's Width Marathon\nwww.kylelogic.com/marathon\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n3. Finch Howe League Cup\nwww.kylelogic.com/leaguecup\n'@bot fhlc'\n'@bot live fhlc'\n'@bot fhlc details'\n\n4. Community Shield\nwww.kylelogic.com/communityshield\n'@bot community shield details'"
 			send_message(message)
 			return('ok',200)
 

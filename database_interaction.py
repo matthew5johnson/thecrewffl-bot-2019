@@ -143,7 +143,7 @@ def pull_live_standings():
     con.close()
 
     rankings_headers = [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
-    live_standings = ' Live Playoff Standings\nwww.kylelogic.com/playoffs\n\nNote: Kyle & Crockett have $200 riding on who finishes higher\n\n'
+    live_standings = ' Live Playoff Championship Standings\nwww.kylelogic.com/playoffs\n\nNote: Kyle & Crockett have $200 riding on who finishes higher\n\n'
     for i in range(11,-1,-1):
         live_standings = live_standings + '{}. {} {}-{}-{} ({})\n'.format(rankings_headers[i], get_franchise_name(standings_tuple[i][0]), standings_tuple[i][1], standings_tuple[i][2], standings_tuple[i][3], standings_tuple[i][4])
         
