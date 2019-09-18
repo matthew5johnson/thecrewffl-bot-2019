@@ -181,7 +181,7 @@ def pull_league_cup_standings():
             franchise_fill = cup_standings[i][0]
         league_cup_standings = league_cup_standings + '{} - {}\n'.format(cup_standings[i][1], franchise_fill) # rankings_headers[i],
 
-    league_cup_standings = league_cup_standings + "\n\n'@bot scores' or '@bot fhlc live' for this week's live ordered scores\n\n'@bot fhlc details' for more"
+    league_cup_standings = league_cup_standings + "\n\n'@bot scores' or '@bot live fhlc' for current live ordered scores\n'@bot fhlc details' for more"
     return(league_cup_standings)
 
 
