@@ -22,7 +22,7 @@ def scrape_scores(*args):
         added_delay = args[0]
     else:
         added_delay = 0    
-    delay = 3 + added_delay
+    delay = 2 + added_delay
 
     
     website = "https://fantasy.espn.com/football/league/scoreboard?leagueId=133377&matchupPeriodId={}&mSPID={}".format(week, week)
@@ -71,5 +71,5 @@ def scrape_scores(*args):
         scrape_scores(4)
         print("!!! needed 4 extra seconds to scrape !!!")
     else:
-        print("scraped on the first try")
+        print("scrape_scores was successfully scraped in {} seconds".format(delay))
         return('ok', 200)
