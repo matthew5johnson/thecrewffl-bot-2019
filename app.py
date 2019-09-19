@@ -48,9 +48,9 @@ def webhook():
 		# Get my score and my MWM
 		elif re.search('my', text, re.I):
 			if re.search('score', text, re.I):
-				message = scrape_scores(13)
-				# requested_score = get_franchise_number(sender)
-				# message = pull_scores(requested_score)
+				scrape_scores()
+				requested_score = get_franchise_number(sender)
+				message = pull_scores(requested_score)
 				send_message(message)
 				return('ok',200)
 			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('stage', text, re.I) or re.search('marathon', text, re.I):
