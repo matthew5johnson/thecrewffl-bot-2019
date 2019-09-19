@@ -18,7 +18,7 @@ def scrape_scores(*args):
     week = int(current_week[0][0])
 
 
-    if args[0] > 0:
+    if len(args) > 0:
         added_delay = args[0]
     else:
         added_delay = 0    
