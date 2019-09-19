@@ -48,7 +48,7 @@ def webhook():
 		# Get my score and my MWM
 		elif re.search('my', text, re.I):
 			if re.search('score', text, re.I):
-				scrape_scores()
+				scrape_scores(13)
 				requested_score = get_franchise_number(sender)
 				message = pull_scores(requested_score)
 				send_message(message)
