@@ -39,7 +39,7 @@ def webhook():
 				send_message(message)
 				return('ok',200)
 			elif re.search('shield', text, re.I) or re.search('commun', text, re.I):
-				message = "Community Shield:\nwww.kylelogic.com/communityshield\n\nThe Community Shield is a head-to-head game during week 3 each season that pits the MWM Stage winner against the League Cup holder. The first Community Shield will take place in 2021.\n\nHistory of Community Shields:\n'21 - "
+				message = "Community Shield:\nwww.kylelogic.com/communityshield\n\nThe Community Shield is a head-to-head game during week 3 each season that pits the MWM Stage winner against the League Cup holder. The first Community Shield will take place between this year's Playoff Champion and Finch Howe League Cup holder\n\nHistory of Community Shields:\n'21 - "
 				send_message(message)
 				return('ok',200)
 			else:
@@ -48,9 +48,9 @@ def webhook():
 		# Get my score and my MWM
 		elif re.search('my', text, re.I):
 			if re.search('score', text, re.I):
-				scrape_scores(13)
-				requested_score = get_franchise_number(sender)
-				message = pull_scores(requested_score)
+				message = scrape_scores(13)
+				# requested_score = get_franchise_number(sender)
+				# message = pull_scores(requested_score)
 				send_message(message)
 				return('ok',200)
 			elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('stage', text, re.I) or re.search('marathon', text, re.I):
@@ -130,7 +130,7 @@ def webhook():
 			return('ok',200)
 
 		elif re.search('shield', text, re.I) or re.search('community', text, re.I):
-			message = "Community Shield:\nwww.kylelogic.com/communityshield\n\nThe Community Shield is a head-to-head game during week 3 each season that pits the MWM Stage winner against the League Cup holder. The first Community Shield will take place in 2021"
+			message = "Community Shield:\nwww.kylelogic.com/communityshield\n\nThe Community Shield is a head-to-head game during week 3 each season that pits the MWM Stage winner against the League Cup holder. The first Community Shield will take place between this year's Playoff Champion and Finch Howe League Cup holder"
 			send_message(message)
 			return('ok',200)
 

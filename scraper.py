@@ -7,8 +7,6 @@ import pymysql
 import os
 from time import sleep
 
-from app import send_message
-
 def scrape_scores(*args):
     # Get the current week
     con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
@@ -23,8 +21,7 @@ def scrape_scores(*args):
     # delay = 12
     added_delay = args[0]
 
-    send_message(added_delay)
-    return('ok',200)
+    return(added_delay)
     
     # delay = 4 + added_delay
     
