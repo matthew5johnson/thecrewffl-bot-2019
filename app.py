@@ -62,6 +62,14 @@ def webhook():
 			else:
 				return('ok',200)
 
+		# Get scoreboard
+		elif re.search('board', text, re.I) or re.search('matchup', text, re.I):
+			scrape_scores()
+			target = "none"
+			message = pull_scores(target)
+			send_message(message)
+			return('ok',200)
+
 		# Get ordered scores
 		elif re.search('score', text, re.I) or re.search('order', text, re.I) or re.search('points', text, re.I) or re.search('live', text, re.I):
 			scrape_scores()
@@ -75,14 +83,6 @@ def webhook():
 				message = ordered_scores()
 				send_message(message)
 				return('ok',200)
-
-		# Get scoreboard
-		elif re.search('board', text, re.I) or re.search('matchup', text, re.I):
-			scrape_scores()
-			target = "none"
-			message = pull_scores(target)
-			send_message(message)
-			return('ok',200)
 
 		# Get Finch Howe League Cup table
 		elif re.search('cup', text, re.I) or re.search('fhlc', text, re.I) or re.search('finch', text, re.I) or re.search('howe', text, re.I):
@@ -155,7 +155,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['SANDBOX_TOKEN'] 
+		'bot_id': os.environ['GROUPME_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()
