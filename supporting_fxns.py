@@ -48,9 +48,9 @@ def text_id_franchise(text):
 		return(1)
 	elif re.search('scott', text, re.I) or re.search('james', text, re.I) or re.search('choice', text, re.I) or re.search('tpc', text, re.I):
 		return(2)
-	elif re.search('doug', text, re.I) or re.search('coach o', text, re.I) or re.search('face', text, re.I):
+	elif re.search('doug', text, re.I) or re.search('coach o', text, re.I) or re.search('face', text, re.I) or re.search('the champ', text, re.I):
 		return(3)
-	elif re.search('crocket', text, re.I) or re.search('taylor', text, re.I):
+	elif re.search('crocket', text, re.I) or re.search('taylor', text, re.I) or re.search('gray', text, re.I) or re.search('grey', text, re.I):
 		return(4)
 	elif re.search('blake', text, re.I) or re.search('marmalade', text, re.I):
 		return(5)
