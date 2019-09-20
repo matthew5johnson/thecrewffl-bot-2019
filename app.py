@@ -22,10 +22,13 @@ def webhook():
 		
 		# Ignore the '@bot' instructions in the help/command message
 		if re.search("'@bot", text, re.I):
+			print("... bot invoked ...")
 			return('ok',200)
 
 		# Get competition detials
 		elif re.search('details', text, re.I):
+			print("USER requested details")
+
 			if re.search('playoff', text, re.I):
 				message = "History of Playoff Champions:\nwww.kylelogic.com/playoffs\n\n'18 - Doug\n'17 - Doug\n'16 - RTRO\n'15 - RTRO\n'14 - ZJs\n'13 - Garner & Doyle\n'12 - Matt & Ross\n'11 - Mitch\n'10 - ZJs\n'09 - ZJs\n'08 - Matt & Ross\n'07 - Matt & Ross"
 				send_message(message)
@@ -48,6 +51,8 @@ def webhook():
 		# Get my score and my MWM
 		elif re.search('my', text, re.I):
 			if re.search('score', text, re.I):
+				print("USER requested 'my score'")
+				
 				scrape_scores()
 				requested_score = get_franchise_number(sender)
 				message = pull_scores(requested_score)
@@ -64,6 +69,8 @@ def webhook():
 
 		# Get scoreboard
 		elif re.search('board', text, re.I) or re.search('matchup', text, re.I):
+			print("USER requested 'scoreboard'")
+			
 			scrape_scores()
 			target = "none"
 			message = pull_scores(target)
@@ -72,26 +79,35 @@ def webhook():
 
 		# Get ordered scores
 		elif re.search('score', text, re.I) or re.search('order', text, re.I) or re.search('points', text, re.I) or re.search('live', text, re.I):
+			print("USER requested scores")
+
 			scrape_scores()
 			requested_score = text_id_franchise(text)
 			# if a specific franchise's score is being asked for
 			if requested_score != "none":
+				print("USER requested a specific franchise score")
 				message = pull_scores(requested_score)
 				send_message(message)
 				return('ok',200)
 			else:
+				print("USER requested ordered scores")
+				
 				message = ordered_scores()
 				send_message(message)
 				return('ok',200)
 
 		# Get Finch Howe League Cup table
 		elif re.search('cup', text, re.I) or re.search('fhlc', text, re.I) or re.search('finch', text, re.I) or re.search('howe', text, re.I):
+			print("USER requested FHLC")
+			
 			message = pull_league_cup_standings() 
 			send_message(message)
 			return('ok',200)
 
 		# Get Playoff Standings
 		elif re.search('standing', text, re.I) or re.search('rank', text, re.I) or re.search('playoff', text, re.I):
+			print("USER requested standings")
+
 			scrape_scores()
 			message = pull_live_standings()
 			send_message(message)
@@ -99,6 +115,8 @@ def webhook():
 
 		# Get Maze's Width Marathon
 		elif re.search('mwm', text, re.I) or re.search('maze', text, re.I) or re.search('width', text, re.I) or re.search('marathon', text, re.I) or re.search('stage', text, re.I):
+			print("USER requested mwm")
+			
 			message = "To qualify for the 2020 MWM Stage:\n1) Win a Semifinal game in week 15\n2) Win the 3rd Place Game in week 16\n3) Win the 5th Place Game in week 16\n4) Win the Consolation Ladder\n\n'@bot mwm details' for more"
 			send_message(message)
 			return('ok',200)
@@ -155,7 +173,7 @@ def send_message(msg):
 	# os.environ['GROUPME_TOKEN']   ...   os.environ['SANDBOX_TOKEN']
 	message = {
 		'text': msg,  
-		'bot_id': os.environ['GROUPME_TOKEN'] 
+		'bot_id': os.environ['SANDBOx_TOKEN'] 
 		}
 	request = Request(url, urlencode(message).encode())
 	json = urlopen(request).read().decode()

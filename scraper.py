@@ -69,7 +69,7 @@ def scrape_scores(*args):
 
     if len(successful_scrape_test) < 9:
         scrape_scores(2)
-        print("!!! needed 4 extra seconds to scrape !!!")
+        print("!!! needed 2 extra seconds to scrape !!!")
     else:
         print("scrape_scores was successfully scraped in {} seconds".format(delay))
         return('ok', 200)

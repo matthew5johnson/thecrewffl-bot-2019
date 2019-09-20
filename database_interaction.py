@@ -27,6 +27,7 @@ def pull_scores(target):
             opponent_index = i + 1
             live_scoreboard = live_scoreboard + '{} - {} | proj: {}\n{} - {} | proj: {}\n===== ===== =====\n'.format(all_scores[i][2], get_franchise_name(int(all_scores[i][1])), all_scores[i][3], all_scores[opponent_index][2], get_franchise_name(int(all_scores[opponent_index][1])), all_scores[opponent_index][3])
 
+        print("got the full league scoreboard")
         return(live_scoreboard)
 
     else:
@@ -44,6 +45,7 @@ def pull_scores(target):
                 return(my_scoreboard)
                 break
         
+        print("got the requested franchise score")
         return('ESPN is loading too slowly right now ...')
 
 
