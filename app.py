@@ -24,8 +24,8 @@ def webhook():
 		if re.search("'@bot", text, re.I):
 			print("... bot invoked ...")
 			return('ok',200)
-
-		# Get competition detials
+		
+		# Get competition details
 		elif re.search('details', text, re.I):
 			print("USER requested details")
 
@@ -151,6 +151,21 @@ def webhook():
 			message = "Community Shield:\nwww.kylelogic.com/communityshield\n\nThe Community Shield is a head-to-head game during week 3 each season that pits the MWM Stage winner against the League Cup holder. The first Community Shield will take place between this year's Playoff Champion and Finch Howe League Cup holder"
 			send_message(message)
 			return('ok',200)
+
+		# Get franchise stats
+		# elif re.search('franchise', text, re.I):
+		# 	print("USER requested franchise")
+
+		# 	target_franchise = text_id_franchise(text)
+		# 	# if a specific franchise's score is being asked for
+		# 	if target_franchise != "none":
+		# 		print("USER requested a specific franchise stats")
+		# 		message = pull_franchise_stats(target_franchise)
+		# 		send_message(message)
+		# 		return('ok',200)
+		# 	else:
+		# 		print("USER requested ordered scores")
+		# 		return('ok',200)
 
 		elif re.search('help', text, re.I) or re.search('commands', text, re.I) or re.search('menu', text, re.I) or re.search('summary', text, re.I):
 			message = "Commands:\n'@bot my score'\n'@bot -franchise- score'\n'@bot scoreboard'\n'@bot matchups'\n'@bot scores'\n\n== Four Major Competitions ==\nwww.kylelogic.com/competitions\n\n1. Playoff Championship\nwww.kylelogic.com/playoffs\n'@bot standings'\n'@bot playoff details'\n\n2. Maze's Width Marathon\nwww.kylelogic.com/marathon\n'@bot mwm'\n'@bot my mwm'\n'@bot mwm details'\n\n3. Finch Howe League Cup\nwww.kylelogic.com/leaguecup\n'@bot fhlc'\n'@bot live fhlc'\n'@bot fhlc details'\n\n4. Community Shield\nwww.kylelogic.com/communityshield\n'@bot community shield details'"

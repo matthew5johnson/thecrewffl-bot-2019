@@ -265,5 +265,16 @@ def ordered_scores():
 
         live_ordered = live_ordered + "{} | [{}] - {}\n".format(all_scores[i][3], all_scores[i][2], get_franchise_name(int(all_scores[i][1])))
         
-    live_ordered = live_ordered + "\n\n'@bot fhlc' to see the League Cup table"
+    live_ordered = live_ordered + "\n\n'@bot fhlc' for League Cup table"
     return(live_ordered)
+
+
+def pull_franchise_stats(target_franchise):
+    # pull from the temporarily constructed db table with SQL command "WHERE franchise = {} << target_franchise (number)"
+
+    # pull current Playoff Standings and FHLC Table position from cleardb_matchuptable WHERE franchise = {} 
+
+    # message = "{}\nNet Franchise Earnings = ${}\n\nQualified for ... \n'20 MWM Stage = Not qualified\n'20 Community Shield = Not qualified\n::: This season :::\nPPG: {} | Against: {}\nPlayoff Standings:{}\nFHLC Table: {}\n\n::: Franchise History :::\nPlayoff Champion: {} .... etc".format(franchise_lookup(target_franchise), earnings, etc)
+
+    # if target_franchise == 1:
+    #     message = "Matt & Ross\nNet Franchise Earnings = $340\n\nPlayoff Championship: 3\nMWM Stages: 0\nLeague Cup: 0\nCommunity Shield: 0\n\nQualified for:\n2020 MWM Stage: No\n2020 Community Shield: No"
