@@ -244,6 +244,10 @@ def ordered_scores():
 
     week = int(current_week[0][0])
 
+    if week > 13:
+        message = "The Finch Howe League Cup has concluded for the season.\n'@bot fhlc' for final Table\n\nQualifying for the 2020 Maze's Width Marathon Stage has begun"
+        return(message)
+
     # con = pymysql.connect(host=os.environ['DB_ACCESS_HOST'], user=os.environ['DB_ACCESS_USER'], password=os.environ['DB_ACCESS_PASSWORD'], database=os.environ['DB_ACCESS_DATABASE'])
     # cur = con.cursor()
     cur.execute("SELECT * FROM temporary_scraped_matchups ORDER BY projected desc;")
